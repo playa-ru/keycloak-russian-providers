@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+*.iml
+target/
+/docker-compose.yml
+/keycloak-russian.iml
+/log
