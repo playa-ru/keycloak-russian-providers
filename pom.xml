@@ -128,7 +128,7 @@
                         <artifactId>dockerfile-maven-plugin</artifactId>
                         <version>1.4.0</version>
                         <configuration>
-                            <repository>playaru/keycloak-russian</repository>
+                            <repository>playaru/${artifactId}</repository>
                             <tag>${version.keycloak}</tag>
                             <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                         </configuration>
@@ -139,7 +139,7 @@
                                     <goal>build</goal>
                                     <!--<goal>push</goal>-->
                                 </goals>
-                                <phase>install</phase>
+                                <phase>package</phase>
                             </execution>
                         </executions>
                     </plugin>
