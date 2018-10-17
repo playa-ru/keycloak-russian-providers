@@ -24,8 +24,8 @@
   </properties>
 
   <scm>
-    <url>scm:git:git@gl.playa.ru:playa-public/keycloak-themes.git</url>
-    <developerConnection>scm:git:git@gl.playa.ru:playa-public/keycloak-themes.git</developerConnection>
+    <url>scm:git:git@github.com:playa-ru/keycloak-russian-providers.git</url>
+    <developerConnection>scm:git:git@github.com:playa-ru/keycloak-russian-providers.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

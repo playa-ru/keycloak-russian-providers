@@ -1,24 +1,24 @@
 # Темы авторизации для Keycloak.
 
-Данный проект содержит две темы:
-+ **Playa** - тема с приоритетом логин/пароль.
-+ **PlayaSocialFirst** - тема с приоритетом социальных сетей.
+Проект содержит две темы:
++ **Playa** - тема с приоритетом логина через форму.
++ **PlayaSocialFirst** - тема с приоритетом логина через социальные сети.
 
 # Развертывание тем.
 
 Существует два способа развертывания тем:
 
 + Путем копирования собранного jar файла в папку `${keycloak.home.dir}/standalone/deployments`.
-+ Путем копирования папок `\src\main\resources\theme\Playa` и `\src\main\resources\theme\PlayaSocialFirst` в папку `${keycloak.home.dir}/themes/`.
++ Путем копирования папок `/src/main/resources/theme/Playa` и `/src/main/resources/theme/PlayaSocialFirst` в папку `${keycloak.home.dir}/themes/`.
 
 # Изменение логотипа приложения на странице логина
 
 Для того что бы изменить логотип приложения для темы **с приоритетом 
-логин/пароль**. Необходимо скопировать свой логотип в папку `\src\main\resources\theme\Playa\login\resources\img`
+логин/пароль**. Необходимо скопировать свой логотип в папку `/src/main/resources/theme/Playa/login/resources/img`
 с названием `logo_login` формат логотипа должен быть `png`. При необходимости заменить существующий файл.
 
 Для того что бы изменить логотип приложения для темы **с приоритетом 
-социальных сетей**. Необходимо скопировать свой логотип в папку `\src\main\resources\theme\PlayaSocialFirst\login\resources\img`
+социальных сетей**. Необходимо скопировать свой логотип в папку `/src/main/resources/theme/PlayaSocialFirst/login/resources/img`
 с названием `logo_login` формат логотипа должен быть `png`. При необходимости заменить существующий файл.
 
 **Размер логотипа** должен быть 300x80 px.
