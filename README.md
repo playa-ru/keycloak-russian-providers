@@ -16,15 +16,21 @@
 
 ## Установка провайдеров авторизации в Keycloak
 
-Если вы используете Docker - соберите проект с профилем `docker`, получится готовый образ.
+Если вы используете Docker:
+
+- вы можете загрузить готовый Keycloak с этим модулем и парой [дополнительных тем](https://github.com/playa-ru/keycloak-playa-themes) с Docker Hub: https://github.com/playa-ru/keycloak-russian
+```
+docker pull playaru/keycloak-russian
+```
+ - или соберите проект с профилем `docker`, получится готовый образ.
 ```
   mvn install -Pdocker
 ```
+Если вы не используете Docker 
 
-Также существует возможность установить библиотеку провайдеров самостоятельно.
-Для этого:
+Можно установить библиотеку провайдеров в ваш Keycloak самостоятельно. Для этого нужно будет вручную выполнить шаги, описанные в [Dockerfile](Dockerfile), в целом [следуя инструкции](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations):
 
-1. Скопируйте `keycloak-russian.jar` в [директорию](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations) `${keycloak.home.dir}/standalone/deployments`.
+1. Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
 2. Скопируйте содержимое директории `${keycloak.home.dir}/src/main/resources/theme/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
 3. В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_en.properties` добавьте следующие строки:
 ```
