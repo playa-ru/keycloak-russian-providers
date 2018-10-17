@@ -1,0 +1,5 @@
+#Russian providers customization
+ok-public-key=Public Key Application
+vk-api-version=API Version
+vk.version.tooltip=Версия API
+ok.public_key.tooltip=Публичный ключ приложения
