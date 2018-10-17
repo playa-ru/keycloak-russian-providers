@@ -1,0 +1,9 @@
+{
+  "themes": [{
+    "name" : "PlayaSocialFirst",
+    "types": [ "account", "admin", "email", "login"]
+  },{
+    "name" : "Playa",
+    "types": [ "account", "admin", "email", "login"]
+  }]
+}
