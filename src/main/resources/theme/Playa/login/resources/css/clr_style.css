@@ -101,10 +101,9 @@ body{margin:0}article,aside,details,figcaption,figure,footer,header,main,menu,na
 .login-text{font-size:0.5rem}
 .login-logo{
   display:block;
-  background: url('../img/logo_login.png') no-repeat;
+  background: url('../img/logo_login.png') no-repeat left bottom;
   width:300px;
   height:80px;
-  margin-bottom:3vw;
 }
 
 .form-group-request{ padding-left:50px; margin-top:1vw; display:block; min-width:340px; }
