@@ -1,4 +1,6 @@
-# Провайдеры авторизации для российских социальных сетей.
+# Провайдеры авторизации российских социальных сетей для Keycloak.
+
+***Please find english version [here](readme_en.md).***
 
 Библиотека провайдеров российских социальных сетей для [Keycloak](https://www.keycloak.org/)
 + [ВКонтакте](docs/vk.md)
@@ -6,11 +8,12 @@
 + [Яндекс](docs/yandex.md)
 + [Мой Мир](docs/mailru.md)
 
-Библиотеку провайдеров скачать можно [здесь](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
+Посмотреть на это в действии [можно здесь](https://elements.playa.ru/) - тут используется [docker образ из нашей директории на Docker Hub](https://github.com/playa-ru/keycloak-russian).
 
 ## Совместимость
 
-Библиотека провайдеров проверялась на следующих версиях:
+Библиотека провайдеров проверялась на следующих версиях Keycloak:
++ 4.5.0.Final
 + 4.4.0.Final
 + 3.4.3.Final
 
@@ -30,18 +33,19 @@ docker pull playaru/keycloak-russian
 
 Можно установить библиотеку провайдеров в ваш Keycloak самостоятельно. Для этого нужно будет вручную выполнить шаги, описанные в [Dockerfile](Dockerfile), в целом [следуя инструкции](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations):
 
-1. Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
-2. Скопируйте содержимое директории `${keycloak.home.dir}/src/main/resources/theme/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
-3. В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_en.properties` добавьте следующие строки:
+* Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
+* Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
+* Скопируйте содержимое директории `/src/main/resources/theme/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
+* В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_en.properties` добавьте следующие строки:
 ```
 ok-public-key=Application's public key
-ok.public_key.tooltip=Public key application
+ok.public_key.tooltip=Application's public key
 vk-api-version=API Version
 vk.version.tooltip=VK API version
 ```
-4. В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_ru.properties` добавьте следующие строки:
+* В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_ru.properties` добавьте следующие строки:
 ```
-ok-public-key=Application's public key
+ok-public-key=Публичный ключ приложения
 ok.public_key.tooltip=Публичный ключ приложения
 vk-api-version=API Version
 vk.version.tooltip=Версия API
