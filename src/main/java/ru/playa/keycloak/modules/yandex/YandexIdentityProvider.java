@@ -1,10 +1,6 @@
 package ru.playa.keycloak.modules.yandex;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.io.IOException;
-
-import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -12,10 +8,11 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
-
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.MessageUtils;
 import ru.playa.keycloak.modules.StringUtils;
+
+import java.io.IOException;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
@@ -24,8 +21,8 @@ import ru.playa.keycloak.modules.StringUtils;
  * @author Anatoliy Pokhresnyi
  */
 public class YandexIdentityProvider
-extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
-implements SocialIdentityProvider<YandexIdentityProviderConfig> {
+        extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
+        implements SocialIdentityProvider<YandexIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -52,7 +49,7 @@ implements SocialIdentityProvider<YandexIdentityProviderConfig> {
      * <a href="https://yandex.ru">Яндекс</a>.
      *
      * @param session Сессия Keycloak.
-     * @param config Конфигурация OAuth-авторизации.
+     * @param config  Конфигурация OAuth-авторизации.
      */
     public YandexIdentityProvider(KeycloakSession session, YandexIdentityProviderConfig config) {
         super(session, config);
@@ -107,7 +104,14 @@ implements SocialIdentityProvider<YandexIdentityProviderConfig> {
     @Override
     protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         try {
-            return extractIdentityFromProfile(null, SimpleHttp.doGet(PROFILE_URL + "?oauth_token=" + accessToken, session).asJson());
+            return extractIdentityFromProfile(
+                    null,
+                    SimpleHttp.doGet(
+                            PROFILE_URL
+                                    + "?oauth_token="
+                                    + accessToken,
+                            session)
+                            .asJson());
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from Yandex: " + e.getMessage(), e);
         }

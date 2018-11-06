@@ -9,20 +9,20 @@ import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuUserAttributeMapper
-extends AbstractJsonUserAttributeMapper {
+        extends AbstractJsonUserAttributeMapper {
 
     /**
      * Список совместимых провайдеров.
      */
-    private static final String[] cp = new String[] { MailRuIdentityProviderFactory.PROVIDER_ID };
+    private static final String[] COMPATIBLE_PROVIDERS = new String[]{MailRuIdentityProviderFactory.PROVIDER_ID};
 
     @Override
     public String[] getCompatibleProviders() {
-        return cp;
+        return COMPATIBLE_PROVIDERS;
     }
 
     @Override
     public String getId() {
-        return "mauiru-user-attribute-mapper";
+        return "mailru-user-attribute-mapper";
     }
 }

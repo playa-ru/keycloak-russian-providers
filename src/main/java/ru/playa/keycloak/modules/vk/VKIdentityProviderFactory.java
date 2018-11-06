@@ -11,8 +11,8 @@ import org.keycloak.models.KeycloakSession;
  * @author Anatoliy Pokhresnyi
  */
 public class VKIdentityProviderFactory
-extends AbstractIdentityProviderFactory<VKIdentityProvider>
-implements SocialIdentityProviderFactory<VKIdentityProvider> {
+        extends AbstractIdentityProviderFactory<VKIdentityProvider>
+        implements SocialIdentityProviderFactory<VKIdentityProvider> {
 
     /**
      * Уникальный идентификатор провайдера.

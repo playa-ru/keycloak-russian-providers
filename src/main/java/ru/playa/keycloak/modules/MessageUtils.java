@@ -21,6 +21,8 @@ public class MessageUtils {
      * @return сообщение об ошибке
      */
     public static String email(String provider) {
-        return String.format("Для авторизации через социальную сеть (%s) необходимо в Вашем профиле соцсети указать Ваш e-mail.", provider);
+        return String.format(
+                "Для авторизации через социальную сеть (%s) необходимо в Вашем профиле соцсети указать Ваш e-mail.",
+                provider);
     }
 }

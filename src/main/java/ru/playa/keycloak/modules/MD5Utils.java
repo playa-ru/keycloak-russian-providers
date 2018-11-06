@@ -12,10 +12,11 @@ import java.security.NoSuchAlgorithmException;
 public class MD5Utils {
 
     private static final char[] DIGITS_LOWER =
-        {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     /**
      * Генерация хеша в формате MD5 для строки.
+     *
      * @param data Строка для котрой необходимо сгенерировать хеш.
      * @return Хеш.
      */

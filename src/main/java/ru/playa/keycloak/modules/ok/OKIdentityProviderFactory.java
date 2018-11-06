@@ -11,8 +11,8 @@ import org.keycloak.models.KeycloakSession;
  * @author Anatoliy Pokhresnyi
  */
 public class OKIdentityProviderFactory
-extends AbstractIdentityProviderFactory<OKIdentityProvider>
-implements SocialIdentityProviderFactory<OKIdentityProvider> {
+        extends AbstractIdentityProviderFactory<OKIdentityProvider>
+        implements SocialIdentityProviderFactory<OKIdentityProvider> {
 
     /**
      * Уникальный идентификатор провайдера.

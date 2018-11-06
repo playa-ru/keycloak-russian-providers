@@ -24,6 +24,9 @@
         <version.source.plugin>2.4</version.source.plugin>
         <version.release.plugin>2.5.3</version.release.plugin>
         <version.assembly.plugin>3.1.0</version.assembly.plugin>
+        <version.pmd.plugin>3.9.0</version.pmd.plugin>
+        <version.checkstyle.plugin>3.0.0</version.checkstyle.plugin>
+        <version.surefire.plugin>2.22.0</version.surefire.plugin>
 
         <version.keycloak>4.5.0.Final</version.keycloak>
 
@@ -64,6 +67,89 @@
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
+
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.surefire.plugin}</version>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+
+            <plugin>
+
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${version.checkstyle.plugin}</version>
+
+                <configuration>
+                    <consoleOutput>true</consoleOutput>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+            <plugin>
+
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${version.pmd.plugin}</version>
+
+                <configuration>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <minimumTokens>100</minimumTokens>
+                    <targetJdk>1.8</targetJdk>
+                    <rulesets>
+                        <ruleset>pmd.xml</ruleset>
+                    </rulesets>
+                    <excludeRoots>
+                        <excludeRoot>target/generated-sources</excludeRoot>
+                    </excludeRoots>
+                    <analysisCache>true</analysisCache>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>pmd-check</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <excludeFromFailureFile>exclude-pmd.properties</excludeFromFailureFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>cpd-check</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>cpd-check</goal>
+                        </goals>
+                        <configuration>
+                            <excludeFromFailureFile>exclude-cpd.properties</excludeFromFailureFile>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>

@@ -9,16 +9,16 @@ import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
  * @author Anatoliy Pokhresnyi
  */
 public class VKUserAttributeMapper
-extends AbstractJsonUserAttributeMapper {
+        extends AbstractJsonUserAttributeMapper {
 
     /**
      * Список совместимых провайдеров.
      */
-    private static final String[] cp = new String[] { VKIdentityProviderFactory.PROVIDER_ID };
+    private static final String[] COMPATIBLE_PROVIDERS = new String[]{VKIdentityProviderFactory.PROVIDER_ID};
 
     @Override
     public String[] getCompatibleProviders() {
-        return cp;
+        return COMPATIBLE_PROVIDERS;
     }
 
     @Override

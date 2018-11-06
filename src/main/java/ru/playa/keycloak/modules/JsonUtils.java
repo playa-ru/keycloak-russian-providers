@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
-import org.keycloak.broker.provider.IdentityBrokerException;
-
 /**
  * Утилитный класс парсинга json.
  *
@@ -17,13 +15,13 @@ public class JsonUtils {
     /**
      * Получает значение указанного поля.
      *
-     * @param json Строка в формате Json.
+     * @param json  Строка в формате Json.
      * @param field Название поля значение, которого необходимо получить.
      * @return Значение выбранного поля.
      */
     public static String getAsString(String json, String field) {
         try {
-            JsonNode root =  new ObjectMapper().readTree(json);
+            JsonNode root = new ObjectMapper().readTree(json);
 
             if (root == null) {
                 return null;

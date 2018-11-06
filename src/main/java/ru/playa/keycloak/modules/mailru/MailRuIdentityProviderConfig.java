@@ -9,7 +9,7 @@ import org.keycloak.models.IdentityProviderModel;
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuIdentityProviderConfig
-extends OAuth2IdentityProviderConfig {
+        extends OAuth2IdentityProviderConfig {
 
     /**
      * Создает объект настроек OAuth-авторизации через

@@ -1,9 +1,6 @@
 package ru.playa.keycloak.modules.vk;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.io.IOException;
-
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -11,11 +8,12 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
-
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.JsonUtils;
 import ru.playa.keycloak.modules.MessageUtils;
 import ru.playa.keycloak.modules.StringUtils;
+
+import java.io.IOException;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -24,8 +22,8 @@ import ru.playa.keycloak.modules.StringUtils;
  * @author Anatoliy Pokhresnyi
  */
 public class VKIdentityProvider
-extends AbstractRussianOAuth2IdentityProvider<VKIdentityProviderConfig>
-implements SocialIdentityProvider<VKIdentityProviderConfig> {
+        extends AbstractRussianOAuth2IdentityProvider<VKIdentityProviderConfig>
+        implements SocialIdentityProvider<VKIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -73,7 +71,9 @@ implements SocialIdentityProvider<VKIdentityProviderConfig> {
 
     @Override
     protected SimpleHttp buildUserInfoRequest(String subjectToken, String userInfoUrl) {
-        return SimpleHttp.doGet(PROFILE_URL + "?v=" + getConfig().getVersion() + "&access_token=" + subjectToken, session);
+        return SimpleHttp.doGet(PROFILE_URL
+                + "?v=" + getConfig().getVersion()
+                + "&access_token=" + subjectToken, session);
     }
 
     @Override
@@ -113,7 +113,7 @@ implements SocialIdentityProvider<VKIdentityProviderConfig> {
     public BrokeredIdentityContext getFederatedIdentity(String response) {
         String accessToken = extractTokenFromResponse(response, getAccessTokenResponseParameter());
         String userId = JsonUtils.getAsString(response, "user_id");
-        String email =  JsonUtils.getAsString(response, "email");
+        String email = JsonUtils.getAsString(response, "email");
 
         if (accessToken == null) {
             throw new IdentityBrokerException("No access token available in OAuth server response: " + response);
@@ -131,13 +131,18 @@ implements SocialIdentityProvider<VKIdentityProviderConfig> {
      */
     private BrokeredIdentityContext doGetFederatedIdentity(String accessToken, String userId, String email) {
         try {
-            String URL = PROFILE_URL
+            String url = PROFILE_URL
                     + "?v=" + getConfig().getVersion()
                     + "&access_token=" + accessToken
                     + "&user_ids=" + userId
                     + "&fields=screen_name&name_case=Nom";
 
-            return extractIdentityFromProfile(SimpleHttp.doGet(URL, session).param("content-type", "application/json; charset=utf-8").asJson(), email);
+            return extractIdentityFromProfile(
+                    SimpleHttp
+                            .doGet(url, session)
+                            .param("content-type", "application/json; charset=utf-8")
+                            .asJson(),
+                    email);
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from VK: " + e.getMessage(), e);
         }
@@ -146,8 +151,10 @@ implements SocialIdentityProvider<VKIdentityProviderConfig> {
     @Override
     protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         try {
-            String URL = PROFILE_URL + "?v=" + getConfig().getVersion() + "&access_token=" + accessToken;
-            return extractIdentityFromProfile(null, SimpleHttp.doGet(URL, session).asJson());
+            String url = PROFILE_URL
+                    + "?v=" + getConfig().getVersion()
+                    + "&access_token=" + accessToken;
+            return extractIdentityFromProfile(null, SimpleHttp.doGet(url, session).asJson());
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from VK: " + e.getMessage(), e);
         }

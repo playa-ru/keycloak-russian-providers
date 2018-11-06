@@ -9,7 +9,7 @@ import org.keycloak.models.IdentityProviderModel;
  * @author Anatoliy Pokhresnyi
  */
 public class YandexIdentityProviderConfig
-extends OAuth2IdentityProviderConfig {
+        extends OAuth2IdentityProviderConfig {
 
     /**
      * Создает объект настроек OAuth-авторизации через

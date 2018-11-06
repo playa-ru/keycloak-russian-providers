@@ -11,8 +11,8 @@ import org.keycloak.models.KeycloakSession;
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuIdentityProviderFactory
-extends AbstractIdentityProviderFactory<MailRuIdentityProvider>
-implements SocialIdentityProviderFactory<MailRuIdentityProvider> {
+        extends AbstractIdentityProviderFactory<MailRuIdentityProvider>
+        implements SocialIdentityProviderFactory<MailRuIdentityProvider> {
 
     /**
      * Уникальный идентификатор провайдера.

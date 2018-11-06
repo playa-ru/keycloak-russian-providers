@@ -1,9 +1,6 @@
 package ru.playa.keycloak.modules.ok;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.io.IOException;
-
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -11,11 +8,11 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
-
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.MD5Utils;
 import ru.playa.keycloak.modules.MessageUtils;
 import ru.playa.keycloak.modules.StringUtils;
+
+import java.io.IOException;
 
 import static ru.playa.keycloak.modules.MD5Utils.md5;
 
@@ -26,8 +23,8 @@ import static ru.playa.keycloak.modules.MD5Utils.md5;
  * @author Anatoliy Pokhresnyi
  */
 public class OKIdentityProvider
-extends AbstractRussianOAuth2IdentityProvider<OKIdentityProviderConfig>
-implements SocialIdentityProvider<OKIdentityProviderConfig> {
+        extends AbstractRussianOAuth2IdentityProvider<OKIdentityProviderConfig>
+        implements SocialIdentityProvider<OKIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -54,7 +51,7 @@ implements SocialIdentityProvider<OKIdentityProviderConfig> {
      * <a href="https://ok.ru/">Одноклассники</a>.
      *
      * @param session Сессия Keycloak.
-     * @param config Конфигурация OAuth-авторизации.
+     * @param config  Конфигурация OAuth-авторизации.
      */
     public OKIdentityProvider(KeycloakSession session, OKIdentityProviderConfig config) {
         super(session, config);
@@ -109,14 +106,18 @@ implements SocialIdentityProvider<OKIdentityProviderConfig> {
     @Override
     protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         try {
-            String params = "application_key=" + getConfig().getPublicKey() + "format=jsonmethod=users.getCurrentUser" + md5(accessToken + getConfig().getClientSecret());
+            String params = "application_key="
+                    + getConfig().getPublicKey()
+                    + "&format=json"
+                    + "&method=users.getCurrentUser"
+                    +  md5(accessToken + getConfig().getClientSecret());
 
             String url = PROFILE_URL
-                         + "?application_key=" + getConfig().getPublicKey()
-                         + "&format=json"
-                         + "&method=users.getCurrentUser"
-                         + "&sig=" + MD5Utils.md5(params)
-                         + "&access_token=" + accessToken;
+                    + "?application_key=" + getConfig().getPublicKey()
+                    + "&format=json"
+                    + "&method=users.getCurrentUser"
+                    + "&sig=" + md5(params)
+                    + "&access_token=" + accessToken;
 
             return extractIdentityFromProfile(null, SimpleHttp.doGet(url, session).asJson());
         } catch (IOException e) {
