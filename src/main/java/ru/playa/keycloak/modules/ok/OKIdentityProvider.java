@@ -110,9 +110,8 @@ public class OKIdentityProvider
         try {
             String params = "application_key="
                     + getConfig().getPublicKey()
-                    + "&format=json"
-                    + "&method=users.getCurrentUser"
-                    +  md5(accessToken + getConfig().getClientSecret());
+                    + "format=jsonmethod=users.getCurrentUser"
+                    + (md5(accessToken + getConfig().getClientSecret()));
 
             String url = PROFILE_URL
                     + "?application_key=" + getConfig().getPublicKey()
@@ -120,6 +119,8 @@ public class OKIdentityProvider
                     + "&method=users.getCurrentUser"
                     + "&sig=" + md5(params)
                     + "&access_token=" + accessToken;
+
+            logger.info("url: " + url);
 
             return extractIdentityFromProfile(null, SimpleHttp.doGet(url, session).asJson());
         } catch (IOException e) {
