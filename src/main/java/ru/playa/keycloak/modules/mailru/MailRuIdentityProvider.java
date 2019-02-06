@@ -79,14 +79,18 @@ public class MailRuIdentityProvider
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
         logger.info("profile: " + profile.toString());
 
-        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "uid"));
+        JsonNode context = profile.get(0);
 
-        String email = getJsonProperty(profile, "email");
+        logger.info("context: " + context.toString());
+
+        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(context, "uid"));
+
+        String email = getJsonProperty(context, "email");
         if (StringUtils.isNullOrEmpty(email)) {
             throw new IllegalArgumentException(MessageUtils.email("MailRu"));
         }
 
-        String nick = getJsonProperty(profile, "nick");
+        String nick = getJsonProperty(context, "nick");
         if (StringUtils.isNullOrEmpty(nick)) {
             user.setUsername(email);
         } else {
@@ -94,13 +98,13 @@ public class MailRuIdentityProvider
         }
 
         user.setEmail(email);
-        user.setFirstName(getJsonProperty(profile, "first_name"));
-        user.setLastName(getJsonProperty(profile, "last_name"));
+        user.setFirstName(getJsonProperty(context, "first_name"));
+        user.setLastName(getJsonProperty(context, "last_name"));
 
         user.setIdpConfig(getConfig());
         user.setIdp(this);
 
-        AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, profile, getConfig().getAlias());
+        AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, context, getConfig().getAlias());
 
         return user;
     }
