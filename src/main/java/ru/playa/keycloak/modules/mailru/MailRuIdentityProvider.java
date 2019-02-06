@@ -77,6 +77,7 @@ public class MailRuIdentityProvider
 
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
+        logger.info("profile: " + profile.toString());
 
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "uid"));
 
