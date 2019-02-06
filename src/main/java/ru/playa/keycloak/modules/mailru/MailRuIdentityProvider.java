@@ -110,9 +110,7 @@ public class MailRuIdentityProvider
         try {
             String params = "app_id="
                     + getConfig().getClientId()
-                    + "&method=users.getInfo"
-                    + "&secure=1"
-                    + "&session_key="
+                    + "method=users.getInfosecure=1session_key="
                     + accessToken
                     + getConfig().getClientSecret();
 
@@ -125,6 +123,8 @@ public class MailRuIdentityProvider
                     + accessToken
                     + "&sig="
                     + md5(params);
+
+            logger.info("url: " + url);
 
             return extractIdentityFromProfile(null, SimpleHttp.doGet(url, session).asJson());
 
