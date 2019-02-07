@@ -89,9 +89,6 @@ public class MailRuIdentityProvider
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(context, "uid"));
 
         String email = getJsonProperty(context, "email");
-        if (StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(MessageUtils.email("MailRu"));
-        }
 
         String nick = getJsonProperty(context, "nick");
         if (StringUtils.isNullOrEmpty(nick)) {
@@ -122,16 +119,6 @@ public class MailRuIdentityProvider
     @Override
     protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         try {
-
-            try {
-                logger.info(
-                    SimpleHttp.doGet("https://oauth.mail.ru/userinfo?access_token?access_token=" + accessToken,
-                                     session)
-                              .asJson());
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            }
-
             String params = "app_id="
                     + getConfig().getClientId()
                     + "method=users.getInfosecure=1session_key="
