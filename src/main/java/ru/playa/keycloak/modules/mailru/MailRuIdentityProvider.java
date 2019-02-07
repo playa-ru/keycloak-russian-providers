@@ -29,17 +29,17 @@ public class MailRuIdentityProvider
     /**
      * Запрос кода подтверждения.
      */
-    private static final String AUTH_URL = "https://connect.mail.ru/oauth/authorize";
+    private static final String AUTH_URL = "https://oauth.mail.ru/login";
 
     /**
      * Обмен кода подтверждения на токен.
      */
-    private static final String TOKEN_URL = "https://connect.mail.ru/oauth/token";
+    private static final String TOKEN_URL = "https://oauth.mail.ru/token";
 
     /**
      * Запрос информации о пользователе.
      */
-    private static final String PROFILE_URL = "http://www.appsmail.ru/platform/api";
+    private static final String PROFILE_URL = "https://oauth.mail.ru/userinfo";
 
     /**
      * Права доступа к данным пользователя по умолчанию.
@@ -137,8 +137,9 @@ public class MailRuIdentityProvider
 
             logger.info("url: " + url);
 
-            return extractIdentityFromProfile(null, SimpleHttp.doGet(url, session).asJson());
-
+            return extractIdentityFromProfile(null,
+                                              SimpleHttp.doGet(PROFILE_URL + "?access_token=" + accessToken, session)
+                                                        .asJson());
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from MailRu: " + e.getMessage(), e);
         }
