@@ -44,7 +44,7 @@ public class MailRuIdentityProvider
     /**
      * Права доступа к данным пользователя по умолчанию.
      */
-    private static final String DEFAULT_SCOPE = "";
+    private static final String DEFAULT_SCOPE = "userinfo";
 
     /**
      * Создает объект OAuth-авторизации через
@@ -107,6 +107,13 @@ public class MailRuIdentityProvider
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, context, getConfig().getAlias());
 
         return user;
+    }
+
+    @Override
+    public BrokeredIdentityContext getFederatedIdentity(String response) {
+        logger.info("response: " + response);
+
+        return super.getFederatedIdentity(response);
     }
 
     @Override
