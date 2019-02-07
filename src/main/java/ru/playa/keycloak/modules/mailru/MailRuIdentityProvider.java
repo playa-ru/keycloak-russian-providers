@@ -72,6 +72,9 @@ public class MailRuIdentityProvider
 
     @Override
     protected SimpleHttp buildUserInfoRequest(String subjectToken, String userInfoUrl) {
+        logger.info("subjectToken: " + subjectToken);
+        logger.info("userInfoUrl: " + userInfoUrl);
+
         return SimpleHttp.doGet(PROFILE_URL + "?access_token=" + subjectToken, session);
     }
 
