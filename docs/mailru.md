@@ -1,6 +1,6 @@
-# Мой Мир.
+# Mail.Ru.
 
-1. Из списка провайдеров выбрать [MailRu](https://mail.ru). 
+1. Из списка провайдеров выбрать [Mail.Ru](https://mail.ru). 
 ![Выбор провайдера](screenshots/mailru_provider_1.png)
 2. Создать приложение в [MailRu](https://api.mail.ru/sites/my/add).
 3. Принимаем *Правила использования*. 

@@ -4,7 +4,7 @@ This is Russian social networks identity providers library for [Keycloak](https:
 With this library you can log in into Keycloak via
 + Yandex [https://yandex.com](https://yandex.com)  
 + VKontakte - [vk.com](http://vk.com)
-+ [Mail.Ru](https://mail.ru)
++ Mail.Ru - [Mail.Ru](https://mail.ru)
 + Odnoklassniki - [ok.ru](https://ok.ru) 
 
 [Live demo](https://elements.playa.ru/) - it uses [docker from our Docker Hub directory](https://github.com/playa-ru/keycloak-russian).
@@ -12,6 +12,7 @@ With this library you can log in into Keycloak via
 ## Keycloak versions
 
 It was tested against Keycloak versions:
++ 4.8.3.Final
 + 4.5.0.Final
 + 4.4.0.Final
 + 3.4.3.Final

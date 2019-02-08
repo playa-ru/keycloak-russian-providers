@@ -6,13 +6,14 @@
 + [ВКонтакте](docs/vk.md)
 + [Однокласники](docs/ok.md)
 + [Яндекс](docs/yandex.md)
-+ [Мой Мир](docs/mailru.md)
++ [Mail.Ru](docs/mailru.md)
 
 Посмотреть на это в действии [можно здесь](https://elements.playa.ru/) - тут используется [docker образ из нашей директории на Docker Hub](https://github.com/playa-ru/keycloak-russian).
 
 ## Совместимость
 
 Библиотека провайдеров проверялась на следующих версиях Keycloak:
++ 4.8.3.Final
 + 4.5.0.Final
 + 4.4.0.Final
 + 3.4.3.Final
