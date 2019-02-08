@@ -13,9 +13,6 @@ import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.StringUtils;
-
-import static ru.playa.keycloak.modules.MD5Utils.md5;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
