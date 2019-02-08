@@ -83,61 +83,26 @@ public class MailRuIdentityProvider
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
         logger.info("profile: " + profile.toString());
 
-        JsonNode context = profile.get(0);
+        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "email"));
 
-        logger.info("context: " + context.toString());
-
-        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(context, "uid"));
-
-        String email = getJsonProperty(context, "email");
-
-        String nick = getJsonProperty(context, "nick");
-        if (StringUtils.isNullOrEmpty(nick)) {
-            user.setUsername(email);
-        } else {
-            user.setUsername(nick);
-        }
+        String email = getJsonProperty(profile, "email");
 
         user.setEmail(email);
-        user.setFirstName(getJsonProperty(context, "first_name"));
-        user.setLastName(getJsonProperty(context, "last_name"));
+        user.setUsername(email);
+        user.setFirstName(getJsonProperty(profile, "first_name"));
+        user.setLastName(getJsonProperty(profile, "last_name"));
 
         user.setIdpConfig(getConfig());
         user.setIdp(this);
 
-        AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, context, getConfig().getAlias());
+        AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, profile, getConfig().getAlias());
 
         return user;
     }
 
     @Override
-    public BrokeredIdentityContext getFederatedIdentity(String response) {
-        logger.info("response: " + response);
-
-        return super.getFederatedIdentity(response);
-    }
-
-    @Override
     protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         try {
-            String params = "app_id="
-                    + getConfig().getClientId()
-                    + "method=users.getInfosecure=1session_key="
-                    + accessToken
-                    + getConfig().getClientSecret();
-
-            String url = PROFILE_URL
-                    + "?method=users.getInfo"
-                    + "&secure=1"
-                    + "&app_id="
-                    + getConfig().getClientId()
-                    + "&session_key="
-                    + accessToken
-                    + "&sig="
-                    + md5(params);
-
-            logger.info("url: " + url);
-
             return extractIdentityFromProfile(null,
                                               SimpleHttp.doGet(PROFILE_URL + "?access_token=" + accessToken, session)
                                                         .asJson());
