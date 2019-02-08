@@ -35,7 +35,7 @@
     <scm>
         <url>scm:git:git@github.com:playa-ru/keycloak-russian-providers.git</url>
         <developerConnection>scm:git:git@github.com:playa-ru/keycloak-russian-providers.git</developerConnection>
-        <tag>v1.0.14</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencies>
