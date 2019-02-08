@@ -1,6 +1,9 @@
 package ru.playa.keycloak.modules.mailru;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import java.io.IOException;
+
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -8,11 +11,9 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
-import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.MessageUtils;
-import ru.playa.keycloak.modules.StringUtils;
 
-import java.io.IOException;
+import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.StringUtils;
 
 import static ru.playa.keycloak.modules.MD5Utils.md5;
 
@@ -29,17 +30,17 @@ public class MailRuIdentityProvider
     /**
      * Запрос кода подтверждения.
      */
-    private static final String AUTH_URL = "https://connect.mail.ru/oauth/authorize";
+    private static final String AUTH_URL = "https://oauth.mail.ru/login";
 
     /**
      * Обмен кода подтверждения на токен.
      */
-    private static final String TOKEN_URL = "https://connect.mail.ru/oauth/token";
+    private static final String TOKEN_URL = "https://oauth.mail.ru/token";
 
     /**
      * Запрос информации о пользователе.
      */
-    private static final String PROFILE_URL = "http://www.appsmail.ru/platform/api";
+    private static final String PROFILE_URL = "https://oauth.mail.ru/userinfo";
 
     /**
      * Права доступа к данным пользователя по умолчанию.
@@ -137,7 +138,9 @@ public class MailRuIdentityProvider
 
             logger.info("url: " + url);
 
-            return extractIdentityFromProfile(null, SimpleHttp.doGet(url, session).asJson());
+            return extractIdentityFromProfile(null,
+                                              SimpleHttp.doGet(PROFILE_URL + "?access_token=" + accessToken, session)
+                                                        .asJson());
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from MailRu: " + e.getMessage(), e);
         }
