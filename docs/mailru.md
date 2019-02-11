@@ -12,7 +12,7 @@
 **Создание провайдера Keycloak**
 1. Из списка провайдеров выбрать [Mail.Ru](https://mail.ru). .
 ![Выбор провайдера](screenshots/mailru_provider_3.png)
-2. Копируем значение *ID приложения* в поле *Client ID* в админке *Keycloak*.
-3. Копируем значение *Защищённый ключ* в поле *Client Secret* в админке *Keycloak*.
+2. Копируем значение *ID Приложения / Client ID* в поле *Client ID* в админке *Keycloak*.
+3. Копируем значение *Секрет / Client Secret* в поле *Client Secret* в админке *Keycloak*.
 4. Нажимаем кнопку *Save* в админке *Keycloak*.
 ![Создание провайдера Keycloak](screenshots/mailru_provider_4.png)
