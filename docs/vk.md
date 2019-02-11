@@ -26,4 +26,4 @@
 4. Заполняем поле **API Version**. Текущую версию можно посмотреть [здесь](https://vk.com/dev/versions).
 5. Нажимаем кнопку *Save* в админке *Keycloak*.
 
-![Создание провайдера Keycloak](screenshots/vk_provider_5.png)
+![Создание провайдера Keycloak](screenshots/vk_provider_4.png)
