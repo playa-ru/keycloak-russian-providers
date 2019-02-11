@@ -1,13 +1,18 @@
 # Mail.Ru.
 
-1. Из списка провайдеров выбрать [Mail.Ru](https://mail.ru). 
-![Выбор провайдера](screenshots/mailru_provider_1.png)
-2. Зарегистрировать сайт в [Mail.Ru](https://oauth.mail.ru/app).
-![Регистрация сайта](screenshots/mailru_provider_2.png)
-+ В открывшемся окне необходимо заполнить поле *Название проекта*.
-+ Значение поля *Все redirect_uri* заполнить значением *Redirect URI* из админки Keycloak. 
-3. Нажимаем кнопку "Подключить сайт", после чего откроется окно с данными приложения.
-![Окно с данными приложения](screenshots/mailru_provider_3.png)
-4. Копируем значение *ID Приложения / Client ID* в поле *Client ID* в админке *Keycloak*.
-5. Копируем значение *Секрет / Client Secret* в поле *Client Secret* в админке *Keycloak*.
-6. Нажимаем кнопку *Save* в админке *Keycloak*.
+**Регистрация сайта в [Mail.Ru](https://oauth.mail.ru/app)**
++ Заполняем поле *Название*.
++ Заполняем поле *Все redirect_uri* - https://${keycloak-host}/auth/realms/${realm-name}/broker/mailru/endpoint, где
+ _keycloak-host_ - домен на котором размещен _Keycloak_,
+ _realm-name_ - название _Realm_ в _Keycloak_.
+![Доверенный redirect URI](screenshots/mailru_provider_1.png)
++ Нажимаем кнопку *Подключить сайт*.
+![Приложение в MailRu](screenshots/mailru_provider_2.png)
+
+**Создание провайдера Keycloak**
+1. Из списка провайдеров выбрать [Mail.Ru](https://mail.ru). .
+![Выбор провайдера](screenshots/mailru_provider_3.png)
+2. Копируем значение *ID приложения* в поле *Client ID* в админке *Keycloak*.
+3. Копируем значение *Защищённый ключ* в поле *Client Secret* в админке *Keycloak*.
+4. Нажимаем кнопку *Save* в админке *Keycloak*.
+![Создание провайдера Keycloak](screenshots/mailru_provider_4.png)
