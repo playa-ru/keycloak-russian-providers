@@ -11,7 +11,7 @@
 ![Создание приложение ВКонтакте](screenshots/vk_provider_1.png)
 
 2. Настрока приложения.
-+ Переходим в раздел **Настройка**.
++ Переходим в раздел **Настройки**.
 + Заполняем поле *Доверенный redirect URI* - https://${keycloak-host}/auth/realms/${realm-name}/broker/vk/endpoint, где
  _keycloak-host_ - домен на котором размещен _Keycloak_,
  _realm-name_ - название _Realm_ в _Keycloak_.
