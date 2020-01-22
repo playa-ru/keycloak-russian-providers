@@ -2,10 +2,10 @@
 
 This is Russian social networks identity providers library for [Keycloak](https://www.keycloak.org/) server.
 With this library you can log in into Keycloak via
-+ Yandex [https://yandex.com](https://yandex.com)  
++ Yandex [https://yandex.com](https://yandex.com)
 + VKontakte - [vk.com](http://vk.com)
 + Mail.Ru - [Mail.Ru](https://mail.ru)
-+ Odnoklassniki - [ok.ru](https://ok.ru) 
++ Odnoklassniki - [ok.ru](https://ok.ru)
 
 [Live demo](https://elements.playa.ru/) - it uses [docker from our Docker Hub directory](https://github.com/playa-ru/keycloak-russian).
 
@@ -30,11 +30,11 @@ docker pull playaru/keycloak-russian
 ```
   mvn install -Pdocker
 ```
-### Without Docker 
+### Without Docker
 
 You can install this library manually, in this case you should follow [instruction](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations) with a few extra steps:
 
-* Build project from source or [get keycloak-russian-providers.jar from our Nexus repo](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
+* Build project from source or [get keycloak-russian-providers.jar from our Nexus repo](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
 * Copy `keycloak-russian-providers.jar` to `${keycloak.home.dir}/standalone/deployments`.
 * Copy files from `/src/main/resources/theme/base/admin/resources/partials` to `${keycloak.home.dir}/themes/base/admin/resources/partials`
 * Add to the file `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_en.properties` the following:
