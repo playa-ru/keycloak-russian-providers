@@ -31,11 +31,11 @@ docker pull playaru/keycloak-russian
 ```
   mvn install -Pdocker
 ```
-Если вы не используете Docker 
+Если вы не используете Docker
 
 Можно установить библиотеку провайдеров в ваш Keycloak самостоятельно. Для этого нужно будет вручную выполнить шаги, описанные в [Dockerfile](Dockerfile), в целом [следуя инструкции](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations):
 
-* Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
+* Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
 * Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
 * Скопируйте содержимое директории `/src/main/resources/theme/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
 * В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_en.properties` добавьте следующие строки:
