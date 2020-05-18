@@ -1,4 +1,4 @@
-FROM jboss/keycloak:8.0.1
+FROM jboss/keycloak:10.0.0
 
 ENV JBOSS_HOME /opt/jboss/keycloak
 ENV THEMES_HOME $JBOSS_HOME/themes/base/admin
