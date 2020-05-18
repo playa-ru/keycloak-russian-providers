@@ -4,6 +4,7 @@ import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
+import ru.playa.keycloak.modules.ok.OKIdentityProviderConfig;
 
 /**
  * Фабрика OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
@@ -27,6 +28,11 @@ public class MailRuIdentityProviderFactory
     @Override
     public MailRuIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
         return new MailRuIdentityProvider(session, new MailRuIdentityProviderConfig(model));
+    }
+
+    @Override
+    public MailRuIdentityProviderConfig createConfig() {
+        return new MailRuIdentityProviderConfig();
     }
 
     @Override

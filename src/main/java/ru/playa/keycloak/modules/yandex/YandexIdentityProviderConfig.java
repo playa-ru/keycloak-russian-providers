@@ -20,4 +20,11 @@ public class YandexIdentityProviderConfig
     public YandexIdentityProviderConfig(IdentityProviderModel model) {
         super(model);
     }
+
+    /**
+     * Создает объект настроек OAuth-авторизации через
+     * <a href="https://yandex.ru">Яндекс</a>.
+     */
+    public YandexIdentityProviderConfig() {
+    }
 }

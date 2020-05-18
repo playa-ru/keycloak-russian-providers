@@ -22,6 +22,13 @@ public class VKIdentityProviderConfig
     }
 
     /**
+     * Создает объект настроек OAuth-авторизации через
+     * <a href="https://vk.com">ВКонтакте</a>.
+     */
+    public VKIdentityProviderConfig() {
+    }
+
+    /**
      * Получает версию API ВКонтакте.
      *
      * @return Версию API ВКонтакте.

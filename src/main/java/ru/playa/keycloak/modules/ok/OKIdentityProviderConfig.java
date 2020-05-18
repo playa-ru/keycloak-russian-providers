@@ -22,6 +22,13 @@ public class OKIdentityProviderConfig
     }
 
     /**
+     * Создает объект настроек OAuth-авторизации через
+     * <a href="https://ok.ru/">Одноклассники</a>.
+     */
+    public OKIdentityProviderConfig() {
+    }
+
+    /**
      * Получения публичного ключа приложения.
      *
      * @return Публичный ключ приложения.

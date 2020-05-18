@@ -20,4 +20,11 @@ public class MailRuIdentityProviderConfig
     public MailRuIdentityProviderConfig(IdentityProviderModel model) {
         super(model);
     }
+
+    /**
+     * Создает объект настроек OAuth-авторизации через
+     * <a href="https://my.mail.ru">Мой Мир</a>.
+     */
+    public MailRuIdentityProviderConfig() {
+    }
 }

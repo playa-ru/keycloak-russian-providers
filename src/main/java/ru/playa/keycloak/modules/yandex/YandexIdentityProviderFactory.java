@@ -1,5 +1,6 @@
 package ru.playa.keycloak.modules.yandex;
 
+import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
@@ -27,6 +28,11 @@ public class YandexIdentityProviderFactory
     @Override
     public YandexIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
         return new YandexIdentityProvider(session, new YandexIdentityProviderConfig(model));
+    }
+
+    @Override
+    public YandexIdentityProviderConfig createConfig() {
+        return new YandexIdentityProviderConfig();
     }
 
     @Override
