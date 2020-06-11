@@ -7,6 +7,7 @@ import org.keycloak.models.IdentityProviderModel;
  * Настройки OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
  *
  * @author Anatoliy Pokhresnyi
+ * @author dmitrymalinin
  */
 public class VKIdentityProviderConfig
         extends OAuth2IdentityProviderConfig {

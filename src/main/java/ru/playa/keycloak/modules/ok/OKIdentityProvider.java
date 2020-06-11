@@ -21,6 +21,7 @@ import static ru.playa.keycloak.modules.MD5Utils.md5;
  * <a href="https://apiok.ru/ext/oauth/">Подробнее</a>.
  *
  * @author Anatoliy Pokhresnyi
+ * @author dmitrymalinin
  */
 public class OKIdentityProvider
         extends AbstractRussianOAuth2IdentityProvider<OKIdentityProviderConfig>
@@ -44,7 +45,7 @@ public class OKIdentityProvider
     /**
      * Права доступа к данным пользователя по умолчанию.
      */
-    private static final String DEFAULT_SCOPE = "GET_EMAIL";
+    private static final String DEFAULT_SCOPE = "";
 
     /**
      * Создает объект OAuth-авторизации через

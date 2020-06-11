@@ -20,6 +20,7 @@ import java.io.IOException;
  * <a href="https://vk.com/dev/access_token">Подробнее</a>.
  *
  * @author Anatoliy Pokhresnyi
+ * @author dmitrymalinin
  */
 public class VKIdentityProvider
         extends AbstractRussianOAuth2IdentityProvider<VKIdentityProviderConfig>
@@ -43,7 +44,7 @@ public class VKIdentityProvider
     /**
      * Права доступа к данным пользователя по умолчанию.
      */
-    private static final String DEFAULT_SCOPE = "email";
+    private static final String DEFAULT_SCOPE = "";
 
     /**
      * Создает объект OAuth-авторизации через

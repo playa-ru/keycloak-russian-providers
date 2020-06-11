@@ -7,6 +7,7 @@ import org.keycloak.models.IdentityProviderModel;
  * Настройки OAuth-авторизации через <a href="https://ok.ru/">Одноклассники</a>.
  *
  * @author Anatoliy Pokhresnyi
+ * @author dmitrymalinin
  */
 public class OKIdentityProviderConfig
         extends OAuth2IdentityProviderConfig {
