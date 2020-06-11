@@ -97,7 +97,7 @@ public class VKIdentityProvider
     private BrokeredIdentityContext extractIdentityFromProfile(JsonNode node, String email) {
         BrokeredIdentityContext user = extractIdentityFromProfile(null, node);
 
-        if (StringUtils.isNullOrEmpty(email)) {
+        if (getConfig().isEmailRequired() && StringUtils.isNullOrEmpty(email)) {
             throw new IllegalArgumentException(MessageUtils.email("VK"));
         }
 

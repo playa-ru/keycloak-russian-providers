@@ -1,5 +1,10 @@
 # Russian providers customization
-vk.version.tooltip=VK API version
-ok.public_key.tooltip=Public key application
-ok-public-key=Public Key Application
+# Messages for keycloak-russian-providers
+ok-public-key=Application's public key
+ok.public_key.tooltip=Application's public key
+ok-email-required=Email required
+ok.email_required.tooltip=Email required in your profile
 vk-api-version=API Version
+vk.version.tooltip=VK API version
+vk-email-required=Email required
+vk.email_required.tooltip=Email required in your profile

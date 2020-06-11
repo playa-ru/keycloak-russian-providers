@@ -83,7 +83,7 @@ public class OKIdentityProvider
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "uid"));
 
         String email = getJsonProperty(profile, "email");
-        if (StringUtils.isNullOrEmpty(email)) {
+        if (getConfig().isEmailRequired() && StringUtils.isNullOrEmpty(email)) {
             throw new IllegalArgumentException(MessageUtils.email("OK"));
         }
 

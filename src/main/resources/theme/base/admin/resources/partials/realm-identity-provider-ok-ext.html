@@ -5,3 +5,10 @@
     </div>
     <kc-tooltip>{{:: 'ok.public_key.tooltip' | translate}}</kc-tooltip>
 </div>
+<div class="form-group">
+    <label class="col-md-2 control-label" for="ok-email-required">{{:: 'ok-email-required' | translate}}</label>
+    <div class="col-md-6">
+        <input ng-model="identityProvider.config.email_required" id="ok-email-required" onoffswitchvalue on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}"/>
+    </div>
+    <kc-tooltip>{{:: 'ok.email_required.tooltip' | translate}}</kc-tooltip>
+</div>

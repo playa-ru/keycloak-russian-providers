@@ -37,4 +37,13 @@ public class OKIdentityProviderConfig
     public String getPublicKey() {
         return getConfig().get("public_key");
     }
+    
+    /**
+     * Требуется email в профиле пользователя.
+     *
+     * @return Требуется email в профиле пользователя.
+     */
+    public boolean isEmailRequired() {
+        return Boolean.parseBoolean(getConfig().getOrDefault("email_required", "false"));
+    }
 }
