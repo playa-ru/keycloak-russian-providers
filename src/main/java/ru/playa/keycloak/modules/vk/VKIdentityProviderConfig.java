@@ -37,13 +37,14 @@ public class VKIdentityProviderConfig
     public String getVersion() {
         return getConfig().get("version");
     }
-    
+
     /**
-     * Требуется email в профиле пользователя
-     * @return
+     * Требуется email в профиле пользователя.
+     *
+     * @return Требуется email в профиле пользователя.
      */
     public boolean isEmailRequired() {
-    	return Boolean.valueOf(getConfig().getOrDefault("email_required", "false")).booleanValue();
+        return Boolean.parseBoolean(getConfig().getOrDefault("email_required", "false"));
     }
 
 }
