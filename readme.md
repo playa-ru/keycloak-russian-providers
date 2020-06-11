@@ -53,3 +53,11 @@ ok.public_key.tooltip=Публичный ключ приложения
 vk-api-version=API Version
 vk.version.tooltip=Версия API
 ```
+* В файл `${keycloak.home.dir}/theme/base/login/messages/messages_en.properties` добавьте следующие строки:
+```
+identityProviderEmailErrorMessage=For authorization through a social network, you must specify your e-mail in your social network profile.
+```
+* В файл `${keycloak.home.dir}/theme/base/login/messages/messages_ru.properties` добавьте следующие строки:
+```
+identityProviderEmailErrorMessage=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail.
+```
