@@ -77,7 +77,6 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                 @QueryParam(AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_CODE) String authorizationCode,
                 @QueryParam(OAuth2Constants.ERROR) String error) {
             if (error != null) {
-                //logger.error("Failed " + getConfig().getAlias() + " broker login: " + error);
                 if (error.equals(ACCESS_DENIED)) {
                     logger.error(ACCESS_DENIED + " for broker login " + getConfig().getProviderId());
                     return callback.cancelled(state);
