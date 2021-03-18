@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
+
     <groupId>ru.playa.keycloak</groupId>
     <artifactId>keycloak-russian-providers</artifactId>
-    <version>1.0.29-SNAPSHOT</version>
+    <version>1.0.30-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <name>
-        Провайдеры OAuth-авторизации через ВКонтакте, Яндекс, Одноклассники, Мой Мир.
-    </name>
+    <name>Keycloak identity providers for Russian Social Networks</name>
+    <description>Yandex.Ru, Vk.Com, Mail.Ru and Ok.ru identity providers for Keycloak</description>
+    <url>https://github.com/playa-ru/keycloak-russian-providers</url>
+
+    <developers>
+        <developer>
+            <name>Anatoliy Pokhresniy</name>
+            <email>a.pohresniy@playa.ru</email>
+            <organization>Playa.Ru</organization>
+            <organizationUrl>https://playa.ru</organizationUrl>
+        </developer>
+        <developer>
+            <name>Sergey Bezrukov</name>
+            <email>s.bezrukov@playa.ru</email>
+            <organization>Playa.Ru</organization>
+            <organizationUrl>https://playa.ru</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
 
@@ -28,7 +57,8 @@
         <version.checkstyle.plugin>3.0.0</version.checkstyle.plugin>
         <version.surefire.plugin>2.22.0</version.surefire.plugin>
 
-        <version.keycloak>12.0.0</version.keycloak>
+        <version.keycloak>12.0.4</version.keycloak>
+
     </properties>
 
     <scm>
@@ -69,6 +99,7 @@
 
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
@@ -155,7 +186,7 @@
                 <version>${version.deploy.plugin}</version>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${version.release.plugin}</version>
                 <configuration>
@@ -170,13 +201,13 @@
                         <version>1.9.5</version>
                     </dependency>
                 </dependencies>
-            </plugin>
+            </plugin>-->
 
         </plugins>
 
     </build>
 
-    <reporting>
+    <!--<reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
@@ -193,15 +224,15 @@
                 </reportSets>
             </plugin>
         </plugins>
-    </reporting>
+    </reporting>-->
 
-    <distributionManagement>
+<!--    <distributionManagement>
         <repository>
             <id>playa-releases</id>
             <name>playa-repositories</name>
             <url>https://nexus.playa.ru/nexus/content/repositories/releases/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
 
     <profiles>
         <profile>
