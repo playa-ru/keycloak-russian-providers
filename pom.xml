@@ -190,7 +190,7 @@
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
-                    <tag>v@{project.version}</tag>
+                    <tag>v${project.version}</tag>
                 </configuration>
             </plugin>
 
