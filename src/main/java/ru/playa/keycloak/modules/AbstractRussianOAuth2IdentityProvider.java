@@ -5,14 +5,18 @@ import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.util.SimpleHttp;
+import org.keycloak.broker.provider.util.IdentityBrokerState;
 import org.keycloak.common.ClientConnection;
 import org.keycloak.events.Errors;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.events.EventType;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.ClientModel;
 import org.keycloak.services.ErrorPage;
 import org.keycloak.services.messages.Messages;
+import org.keycloak.services.managers.ClientSessionCode;
+import org.keycloak.sessions.AuthenticationSessionModel;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.QueryParam;
@@ -79,16 +83,31 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
             if (error != null) {
                 if (error.equals(ACCESS_DENIED)) {
                     logger.error(ACCESS_DENIED + " for broker login " + getConfig().getProviderId());
-                    return callback.cancelled(state);
+                    return callback.cancelled();
                 } else {
                     logger.error(error + " for broker login " + getConfig().getProviderId());
-                    return callback.error(state, Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
+                    return callback.error(Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
                 }
             }
 
             try {
-
                 if (authorizationCode != null) {
+                    IdentityBrokerState idpState = IdentityBrokerState.encoded(state);
+                    String clientId = idpState.getClientId();
+                    String tabId = idpState.getTabId();
+                    if (clientId == null || tabId == null) {
+                        logger.errorf("Invalid state parameter: %s", state);
+                        event.event(EventType.LOGIN);
+                        event.error(Errors.IDENTITY_PROVIDER_LOGIN_FAILURE);
+                        return ErrorPage.error(session, null, Response.Status.BAD_REQUEST, Messages.INVALID_REQUEST);
+                    }
+
+                    ClientModel client = realm.getClientByClientId(clientId);
+                    AuthenticationSessionModel authSession = ClientSessionCode.getClientSession(state, tabId,
+                                                                                    session, realm,
+                                                                                    client, event,
+                                                                                    AuthenticationSessionModel.class);
+
                     String response = generateTokenRequest(authorizationCode).asString();
 
                     BrokeredIdentityContext federatedIdentity = getFederatedIdentity(response);
@@ -97,12 +116,11 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                         // make sure that token wasn't already set by getFederatedIdentity();
                         // want to be able to allow provider to set the token itself.
                         federatedIdentity.setToken(response);
-
                     }
 
                     federatedIdentity.setIdpConfig(getConfig());
                     federatedIdentity.setIdp(AbstractRussianOAuth2IdentityProvider.this);
-                    federatedIdentity.setCode(state);
+                    federatedIdentity.setAuthenticationSession(authSession);
 
                     return callback.authenticated(federatedIdentity);
                 }
