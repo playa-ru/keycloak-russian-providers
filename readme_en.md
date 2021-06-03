@@ -26,6 +26,7 @@ It was tested against Keycloak versions:
 
 |  Version Library  | Version Keycloak | Repository                                       |
 | :---------------: | :--------------: | :----------------------------------------------: |
+|      1.0.37       |    13.0.0        | [Maven Central](https://mvnrepository.com)       |
 |      1.0.32       |    12.0.4        | [Maven Central](https://mvnrepository.com)       |
 |      1.0.28       |    12.0.0        | [Playa Repository](https://nexus.playa.ru/nexus) |
 |      1.0.26       |    12.0.1        | [Playa Repository](https://nexus.playa.ru/nexus) |
