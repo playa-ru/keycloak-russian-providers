@@ -12,6 +12,7 @@ With this library you can log in into Keycloak via
 ## Keycloak versions
 
 It was tested against Keycloak versions:
++ 13.0.0
 + 12.0.1
 + 11.0.3
 + 10.0.0
@@ -20,6 +21,21 @@ It was tested against Keycloak versions:
 + 4.5.0.Final
 + 4.4.0.Final
 + 3.4.3.Final
+
+**Table supported versions:**
+
+|  Version Library  | Version Keycloak | Repository                                       |
+| :---------------: | :--------------: | :----------------------------------------------: |
+|      1.0.37       |    13.0.0        | [Maven Central](https://mvnrepository.com)       |
+|      1.0.32       |    12.0.4        | [Maven Central](https://mvnrepository.com)       |
+|      1.0.28       |    12.0.0        | [Playa Repository](https://nexus.playa.ru/nexus) |
+|      1.0.26       |    12.0.1        | [Playa Repository](https://nexus.playa.ru/nexus) |
+|      1.0.25       |    11.0.3        | [Playa Repository](https://nexus.playa.ru/nexus) | 
+|      1.0.21       |    10.0.0        | [Playa Repository](https://nexus.playa.ru/nexus) |
+|      1.0.17       |    8.0.1         | [Playa Repository](https://nexus.playa.ru/nexus) |
+|      1.0.16       |    6.0.1         | [Playa Repository](https://nexus.playa.ru/nexus) |
+|      1.0.15       |    4.8.3.Final   | [Playa Repository](https://nexus.playa.ru/nexus) |
+|      1.0.1        |    4.5.0.Final   | [Playa Repository](https://nexus.playa.ru/nexus) |
 
 ## How to use it
 

@@ -13,6 +13,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.services.ErrorPage;
 import org.keycloak.services.messages.Messages;
+import org.keycloak.sessions.AuthenticationSessionModel;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.QueryParam;
@@ -41,7 +42,7 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
 
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
-        return new Endpoint(callback, realm, event);
+        return new Endpoint(callback, event);
     }
 
     /**
@@ -51,9 +52,8 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
      */
     protected class Endpoint {
 
-        private AuthenticationCallback callback;
-        private RealmModel realm;
-        private EventBuilder event;
+        private final AuthenticationCallback callback;
+        private final EventBuilder event;
 
         @Context
         private KeycloakSession session;
@@ -64,10 +64,8 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
         @Context
         private HttpHeaders headers;
 
-        public Endpoint(AuthenticationCallback aCallback, RealmModel
-                aRealm, EventBuilder aEvent) {
+        public Endpoint(AuthenticationCallback aCallback, EventBuilder aEvent) {
             this.callback = aCallback;
-            this.realm = aRealm;
             this.event = aEvent;
         }
 
@@ -79,32 +77,29 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
             if (error != null) {
                 if (error.equals(ACCESS_DENIED)) {
                     logger.error(ACCESS_DENIED + " for broker login " + getConfig().getProviderId());
-                    return callback.cancelled(state);
+                    return callback.cancelled();
                 } else {
                     logger.error(error + " for broker login " + getConfig().getProviderId());
-                    return callback.error(state, Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
+                    return callback.error(Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
                 }
             }
 
             try {
+                AuthenticationSessionModel authSession = this.callback.getAndVerifyAuthenticationSession(state);
+                this.session.getContext().setAuthenticationSession(authSession);
 
                 if (authorizationCode != null) {
-                    String response = generateTokenRequest(authorizationCode).asString();
-
+                    String response = this.generateTokenRequest(authorizationCode).asString();
                     BrokeredIdentityContext federatedIdentity = getFederatedIdentity(response);
-
                     if (getConfig().isStoreToken() && federatedIdentity.getToken() == null) {
-                        // make sure that token wasn't already set by getFederatedIdentity();
-                        // want to be able to allow provider to set the token itself.
                         federatedIdentity.setToken(response);
-
                     }
 
                     federatedIdentity.setIdpConfig(getConfig());
                     federatedIdentity.setIdp(AbstractRussianOAuth2IdentityProvider.this);
-                    federatedIdentity.setCode(state);
+                    federatedIdentity.setAuthenticationSession(authSession);
 
-                    return callback.authenticated(federatedIdentity);
+                    return this.callback.authenticated(federatedIdentity);
                 }
             } catch (WebApplicationException e) {
                 return e.getResponse();
