@@ -13,6 +13,7 @@
 ## Совместимость
 
 Библиотека провайдеров проверялась на следующих версиях Keycloak:
++ 15.0.2
 + 13.0.0
 + 12.0.1
 + 11.0.3
@@ -27,6 +28,7 @@
 
 | Версия библиотеки | Версия Keycloak | Репозиторий                                      |
 | :---------------: | :-------------: | :----------------------------------------------: |
+|      1.0.38       |    15.0.2       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.37       |    13.0.0       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.32       |    12.0.4       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.28       |    12.0.0       | [Playa Repository](https://nexus.playa.ru/nexus) |
