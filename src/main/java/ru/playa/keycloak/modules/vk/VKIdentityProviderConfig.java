@@ -47,4 +47,13 @@ public class VKIdentityProviderConfig
         return Boolean.parseBoolean(getConfig().getOrDefault("email_required", "false"));
     }
 
+    /**
+     * Дополнительные поля из профиля пользователя
+     *
+     * @return Дополнительные поля из профиля пользователя
+     */
+    public String getFetchedFields() {
+        return getConfig().get("fetchedFields");
+    }
+
 }

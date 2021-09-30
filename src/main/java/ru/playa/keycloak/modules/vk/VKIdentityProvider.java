@@ -136,7 +136,9 @@ public class VKIdentityProvider
                     + "?v=" + getConfig().getVersion()
                     + "&access_token=" + accessToken
                     + "&user_ids=" + userId
-                    + "&fields=screen_name&name_case=Nom";
+                    + "&fields=screen_name"
+                    + (getConfig().getFetchedFields().isEmpty() ? "" : "," + getConfig().getFetchedFields())
+                    + "&name_case=Nom";
 
             return extractIdentityFromProfile(
                     SimpleHttp
