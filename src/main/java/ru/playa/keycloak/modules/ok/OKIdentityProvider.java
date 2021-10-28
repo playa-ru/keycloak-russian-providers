@@ -87,7 +87,7 @@ public class OKIdentityProvider
             throw new IllegalArgumentException(MessageUtils.email("OK"));
         }
 
-        String username = getJsonProperty(profile, "login");
+        String username = getConfig().getAlias() + "." + getJsonProperty(profile, "uid");
         if (StringUtils.isNullOrEmpty(username)) {
             user.setUsername(email);
         } else {
