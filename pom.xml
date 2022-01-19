@@ -57,7 +57,7 @@
         <version.checkstyle.plugin>3.0.0</version.checkstyle.plugin>
         <version.surefire.plugin>2.22.0</version.surefire.plugin>
 
-        <version.keycloak>15.0.2</version.keycloak>
+        <version.keycloak>16.1.0</version.keycloak>
 
     </properties>
 
