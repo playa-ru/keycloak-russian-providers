@@ -74,6 +74,10 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                 @QueryParam(AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_STATE) String state,
                 @QueryParam(AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_CODE) String authorizationCode,
                 @QueryParam(OAuth2Constants.ERROR) String error) {
+            logger.infof(
+                    "Endpoint AuthResponse. State: %s. Code: %s. Error %s", state, authorizationCode, error
+            );
+
             if (error != null) {
                 if (error.equals(ACCESS_DENIED)) {
                     logger.error(ACCESS_DENIED + " for broker login " + getConfig().getProviderId());
@@ -88,8 +92,13 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                 AuthenticationSessionModel authSession = this.callback.getAndVerifyAuthenticationSession(state);
                 this.session.getContext().setAuthenticationSession(authSession);
 
+                logger.info("Authentication session is set");
+
                 if (authorizationCode != null) {
                     String response = this.generateTokenRequest(authorizationCode).asString();
+
+                    logger.infof("Get token. Response %s", response);
+
                     BrokeredIdentityContext federatedIdentity = getFederatedIdentity(response);
                     if (getConfig().isStoreToken() && federatedIdentity.getToken() == null) {
                         federatedIdentity.setToken(response);
