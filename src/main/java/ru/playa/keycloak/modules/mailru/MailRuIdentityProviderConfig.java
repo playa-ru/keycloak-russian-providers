@@ -1,6 +1,6 @@
 package ru.playa.keycloak.modules.mailru;
 
-import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
+import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
 import org.keycloak.models.IdentityProviderModel;
 
 /**
@@ -9,7 +9,7 @@ import org.keycloak.models.IdentityProviderModel;
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuIdentityProviderConfig
-        extends OAuth2IdentityProviderConfig {
+        extends OIDCIdentityProviderConfig {
 
     /**
      * Создает объект настроек OAuth-авторизации через

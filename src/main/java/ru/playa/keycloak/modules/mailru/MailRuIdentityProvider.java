@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 
+import org.keycloak.broker.oidc.OIDCIdentityProvider;
+import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -12,8 +14,6 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 
-import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-
 /**
  * Провайдер OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
  * <a href="https://api.mail.ru/docs/guides/oauth/">Подробнее</a>.
@@ -21,8 +21,8 @@ import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuIdentityProvider
-        extends AbstractRussianOAuth2IdentityProvider<MailRuIdentityProviderConfig>
-        implements SocialIdentityProvider<MailRuIdentityProviderConfig> {
+        extends OIDCIdentityProvider
+        implements SocialIdentityProvider<OIDCIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
