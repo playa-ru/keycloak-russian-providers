@@ -136,12 +136,13 @@ public class VKIdentityProvider
      */
     private BrokeredIdentityContext doGetFederatedIdentity(String accessToken, String userId, String email) {
         try {
+            String fields = StringUtils.isNullOrEmpty(getConfig().getFetchedFields())
+                ? "" : "," + getConfig().getFetchedFields();
             String url = PROFILE_URL
                     + "?v=" + getConfig().getVersion()
                     + "&access_token=" + accessToken
                     + "&user_ids=" + userId
-                    + "&fields=screen_name"
-                    + (getConfig().getFetchedFields().isEmpty() ? "" : "," + getConfig().getFetchedFields())
+                    + "&fields=screen_name" + fields
                     + "&name_case=Nom";
 
             return extractIdentityFromProfile(
