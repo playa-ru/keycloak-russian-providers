@@ -27,6 +27,7 @@ It was tested against Keycloak versions:
 
 |  Version Library  | Version Keycloak | Repository                                       |
 | :---------------: | :--------------: | :----------------------------------------------: |
+|      1.0.43       |    17.0.0        | [Maven Central](https://mvnrepository.com)       |
 |      1.0.42       |    16.1.1        | [Maven Central](https://mvnrepository.com)       |
 |      1.0.38       |    15.0.2        | [Maven Central](https://mvnrepository.com)       |
 |      1.0.37       |    13.0.0        | [Maven Central](https://mvnrepository.com)       |
