@@ -2,9 +2,9 @@
 # Messages for keycloak-russian-providers
 ok-public-key=Публичный ключ приложения
 ok.public_key.tooltip=Публичный ключ приложения
-ok-email-required=Наличие email
+ok-email-required=Электронная почта обязательна
 ok.email_required.tooltip=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail
 vk-api-version=API Version
 vk.version.tooltip=Версия API
-vk-email-required=Наличие email
+vk-email-required=Электронная почта обязательна
 vk.email_required.tooltip=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail

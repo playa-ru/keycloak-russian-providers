@@ -88,10 +88,15 @@ public class OKIdentityProvider
         }
 
         String username = getJsonProperty(profile, "login");
-        if (StringUtils.isNullOrEmpty(username)) {
+
+        if (StringUtils.nonNullOrEmpty(email)) {
             user.setUsername(email);
         } else {
-            user.setUsername(username);
+            if (StringUtils.nonNullOrEmpty(username)) {
+                user.setUsername(username);
+            } else {
+                user.setUsername("ok." + user.getId());
+            }
         }
 
         user.setEmail(email);

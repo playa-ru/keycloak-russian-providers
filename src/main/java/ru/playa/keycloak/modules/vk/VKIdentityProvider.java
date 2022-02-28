@@ -101,8 +101,12 @@ public class VKIdentityProvider
             throw new IllegalArgumentException(MessageUtils.email("VK"));
         }
 
-        if (StringUtils.isNullOrEmpty(user.getUsername())) {
+        if (StringUtils.nonNullOrEmpty(email)) {
             user.setUsername(email);
+        } else {
+            if (StringUtils.isNullOrEmpty(user.getUsername())) {
+                user.setUsername("vk." + user.getId());
+            }
         }
 
         user.setEmail(email);
