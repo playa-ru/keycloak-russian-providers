@@ -61,15 +61,15 @@ You can install this library manually, in this case you should follow [instructi
 
 * Build project from source or [get keycloak-russian-providers.jar from our Nexus repo](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
 * Copy `keycloak-russian-providers.jar` to `${keycloak.home.dir}/standalone/deployments`.
-* Copy files from `/src/main/resources/theme/base/admin/resources/partials` to `${keycloak.home.dir}/themes/base/admin/resources/partials`
-* Add to the file `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_en.properties` the following:
+* Copy files from `/src/main/resources/themes/base/admin/resources/partials` to `${keycloak.home.dir}/themes/base/admin/resources/partials`
+* Add to the file `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_en.properties` the following:
 ```
 ok-public-key=Application's public key
 ok.public_key.tooltip=Application's public key
 vk-api-version=API Version
 vk.version.tooltip=VK API version
 ```
-* Add to the file `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_ru.properties` the following:
+* Add to the file `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_ru.properties` the following:
 ```
 ok-public-key=Публичный ключ приложения
 ok.public_key.tooltip=Публичный ключ приложения

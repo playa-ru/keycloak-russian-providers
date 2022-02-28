@@ -62,26 +62,26 @@ docker pull playaru/keycloak-russian
 
 * Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
 * Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
-* Скопируйте содержимое директории `/src/main/resources/theme/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
-* В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_en.properties` добавьте следующие строки:
+* Скопируйте содержимое директории `/src/main/resources/themes/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
+* В файл `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_en.properties` добавьте следующие строки:
 ```
 ok-public-key=Application's public key
 ok.public_key.tooltip=Application's public key
 vk-api-version=API Version
 vk.version.tooltip=VK API version
 ```
-* В файл `${keycloak.home.dir}/theme/base/admin/messages/admin-messages_ru.properties` добавьте следующие строки:
+* В файл `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_ru.properties` добавьте следующие строки:
 ```
 ok-public-key=Публичный ключ приложения
 ok.public_key.tooltip=Публичный ключ приложения
 vk-api-version=API Version
 vk.version.tooltip=Версия API
 ```
-* В файл `${keycloak.home.dir}/theme/base/login/messages/messages_en.properties` добавьте следующие строки:
+* В файл `${keycloak.home.dir}/themes/base/login/messages/messages_en.properties` добавьте следующие строки:
 ```
 identityProviderEmailErrorMessage=For authorization through a social network, you must specify your e-mail in your social network profile.
 ```
-* В файл `${keycloak.home.dir}/theme/base/login/messages/messages_ru.properties` добавьте следующие строки:
+* В файл `${keycloak.home.dir}/themes/base/login/messages/messages_ru.properties` добавьте следующие строки:
 ```
 identityProviderEmailErrorMessage=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail.
 ```
