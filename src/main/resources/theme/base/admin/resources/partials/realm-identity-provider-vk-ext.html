@@ -5,6 +5,13 @@
     </div>
     <kc-tooltip>{{:: 'vk.version.tooltip' | translate}}</kc-tooltip>
 </div>
+<div class="form-group ng-scope">
+    <label class="col-md-2 control-label" for="fetchedFields">{{:: 'vk-fetched-fields' | translate}}</label>
+    <div class="col-md-6">
+        <input ng-model="identityProvider.config.fetchedFields" id="fetchedFields" class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+    </div>
+    <kc-tooltip>{{:: 'vk.fetched-fields.tooltip' | translate}}</kc-tooltip>
+</div>
 <div class="form-group">
     <label class="col-md-2 control-label" for="vk-email-required">{{:: 'vk-email-required' | translate}}</label>
     <div class="col-md-6">

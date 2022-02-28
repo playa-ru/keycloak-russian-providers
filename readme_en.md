@@ -68,6 +68,8 @@ ok-public-key=Application's public key
 ok.public_key.tooltip=Application's public key
 vk-api-version=API Version
 vk.version.tooltip=VK API version
+vk-fetched-fields=Additional user's profile fields
+vk.fetched-fields.tooltip=Provide additional fields which would be fetched using the profile request
 ```
 * Add to the file `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_ru.properties` the following:
 ```
@@ -75,4 +77,6 @@ ok-public-key=Публичный ключ приложения
 ok.public_key.tooltip=Публичный ключ приложения
 vk-api-version=API Version
 vk.version.tooltip=Версия API
+vk-fetched-fields=Дополнительные поля из профиля пользователя
+vk.fetched-fields.tooltip=Запрашивать дополнительные поля
 ```

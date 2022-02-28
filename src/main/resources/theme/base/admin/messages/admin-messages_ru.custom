@@ -8,3 +8,5 @@ vk-api-version=API Version
 vk.version.tooltip=Версия API
 vk-email-required=Электронная почта обязательна
 vk.email_required.tooltip=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail
+vk-fetched-fields=Дополнительные поля из профиля пользователя
+vk.fetched-fields.tooltip=Запрашивать дополнительные поля
