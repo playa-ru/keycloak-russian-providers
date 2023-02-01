@@ -120,6 +120,14 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                 return ErrorPage.error(session, null,
                         Response.Status.BAD_GATEWAY,
                         MessageUtils.EMAIL);
+            } catch (SecurityException e) {
+                logger.error("Failed the oauth callback to the security identity provider.", e);
+
+                event.event(EventType.LOGIN);
+                event.error(Errors.IDENTITY_PROVIDER_LOGIN_FAILURE);
+                return ErrorPage.error(session, null,
+                        Response.Status.BAD_GATEWAY,
+                        MessageUtils.EMAIL_DOMAIN);
             } catch (Exception e) {
                 logger.error("Failed to make identity provider oauth callback", e);
             }

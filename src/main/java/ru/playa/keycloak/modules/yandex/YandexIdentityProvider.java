@@ -82,6 +82,24 @@ public class YandexIdentityProvider
             throw new IllegalArgumentException(MessageUtils.email("Yandex"));
         }
 
+        String[] domainWhiteList = getConfig().getDomainWhiteList();
+
+        if (domainWhiteList.length > 0) {
+            String emailDomain = email.substring(email.indexOf("@") + 1);
+
+            boolean isWhiteList = false;
+            for (String domain: domainWhiteList) {
+                if (emailDomain.equals(domain)) {
+                    isWhiteList = true;
+                    break;
+                }
+            }
+
+            if (!isWhiteList) {
+                throw new SecurityException(MessageUtils.emailDomain("Yandex", email));
+            }
+        }
+
         String login = getJsonProperty(node, "login");
         if (StringUtils.isNullOrEmpty(login)) {
             user.setUsername(email);

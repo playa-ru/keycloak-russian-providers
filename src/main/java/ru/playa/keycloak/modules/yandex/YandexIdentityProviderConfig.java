@@ -27,4 +27,13 @@ public class YandexIdentityProviderConfig
      */
     public YandexIdentityProviderConfig() {
     }
+
+    /**
+     * Получения белого списка доменов.
+     *
+     * @return Белый список доменов.
+     */
+    public String[] getDomainWhiteList() {
+        return getConfig().get("domain_white_list").split(",");
+    }
 }

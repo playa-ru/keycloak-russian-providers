@@ -15,6 +15,11 @@ public class MessageUtils {
     public static final String EMAIL = "identityProviderEmailErrorMessage";
 
     /**
+     * Сообщение об ошибке "Ваш аккаунт не подходит для авторизации.".
+     */
+    public static final String EMAIL_DOMAIN = "identityProviderEmailDomainErrorMessage";
+
+    /**
      * Генерация сообщения ошибки.
      *
      * @param provider Название провейдера
@@ -24,5 +29,19 @@ public class MessageUtils {
         return String.format(
                 "Для авторизации через социальную сеть (%s) необходимо в Вашем профиле соцсети указать Ваш e-mail.",
                 provider);
+    }
+
+    /**
+     * Генерация сообщения ошибки на домен не из белого списка.
+     *
+     * @param provider Название провейдера
+     * @param email Почта пользователя
+     * @return сообщение об ошибке
+     */
+    public static String emailDomain(String provider, String email) {
+        return String.format(
+                "Ваш аккаунт не подходит для авторизации через социальную сеть (%s) с почтой (%s).",
+                provider,
+                email);
     }
 }
