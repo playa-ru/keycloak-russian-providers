@@ -57,8 +57,7 @@
         <version.checkstyle.plugin>3.0.0</version.checkstyle.plugin>
         <version.surefire.plugin>2.22.0</version.surefire.plugin>
 
-        <version.keycloak>18.0.2</version.keycloak>
-
+        <version.keycloak>20.0.3</version.keycloak>
     </properties>
 
     <scm>
@@ -137,8 +136,7 @@
                 </executions>
             </plugin>
 
-            <!--plugin>
-
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>${version.pmd.plugin}</version>
@@ -178,8 +176,7 @@
                         </configuration>
                     </execution>
                 </executions>
-
-            </plugin-->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -213,24 +210,99 @@
 
     <profiles>
         <profile>
+            <id>h2</id>
+            <properties>
+                <db.provider>h2</db.provider>
+            </properties>
+            <activation>
+                <property>
+                    <name>h2</name>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>postgres</id>
+            <properties>
+                <db.provider>postgres</db.provider>
+            </properties>
+            <activation>
+                <property>
+                    <name>postgres</name>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>oracle</id>
+            <properties>
+                <db.provider>oracle</db.provider>
+            </properties>
+            <activation>
+                <property>
+                    <name>oracle</name>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>mysql</id>
+            <properties>
+                <db.provider>mysql</db.provider>
+            </properties>
+            <activation>
+                <property>
+                    <name>mysql</name>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>mariadb</id>
+            <properties>
+                <db.provider>mariadb</db.provider>
+            </properties>
+            <activation>
+                <property>
+                    <name>mariadb</name>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
+            <id>mssql</id>
+            <properties>
+                <db.provider>mssql</db.provider>
+            </properties>
+            <activation>
+                <property>
+                    <name>mssql</name>
+                </property>
+            </activation>
+        </profile>
+
+        <profile>
             <id>docker</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>com.spotify</groupId>
                         <artifactId>dockerfile-maven-plugin</artifactId>
-                        <version>1.4.0</version>
+                        <version>1.4.13</version>
                         <configuration>
                             <repository>playaru/${artifactId}</repository>
                             <tag>${version.keycloak}</tag>
                             <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                            <buildArgs>
+                                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                                <DB_PROVIDER>${db.provider}</DB_PROVIDER>
+                            </buildArgs>
                         </configuration>
                         <executions>
                             <execution>
                                 <id>default</id>
                                 <goals>
                                     <goal>build</goal>
-                                    <!--<goal>push</goal>-->
                                 </goals>
                                 <phase>package</phase>
                             </execution>
