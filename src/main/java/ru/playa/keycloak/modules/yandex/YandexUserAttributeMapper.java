@@ -1,6 +1,6 @@
 package ru.playa.keycloak.modules.yandex;
 
-import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
+import ru.playa.keycloak.modules.AbstractRussianJsonUserAttributeMapper;
 
 /**
  * Пользовательские аттрибуты необходимые для авторизации через
@@ -9,7 +9,7 @@ import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
  * @author Anatoliy Pokhresnyi
  */
 public class YandexUserAttributeMapper
-        extends AbstractJsonUserAttributeMapper {
+    extends AbstractRussianJsonUserAttributeMapper {
 
     /**
      * Список совместимых провайдеров.

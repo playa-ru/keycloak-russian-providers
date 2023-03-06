@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 /**
  * Базовый провайдер OAuth-авторизации для российских социальных сетей.
  *
+ * @param <C> Тип объекта настроек.
  * @author Anatoliy Pokhresnyi
  */
 public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2IdentityProviderConfig>
@@ -38,6 +39,8 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
      */
     public AbstractRussianOAuth2IdentityProvider(KeycloakSession session, C config) {
         super(session, config);
+
+        logger.infof("Config %s", config.getConfig());
     }
 
     @Override

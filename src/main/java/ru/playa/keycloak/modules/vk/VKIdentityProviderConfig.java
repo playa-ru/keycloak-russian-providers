@@ -44,11 +44,11 @@ public class VKIdentityProviderConfig
      * @return Требуется email в профиле пользователя.
      */
     public boolean isEmailRequired() {
-        return Boolean.parseBoolean(getConfig().getOrDefault("email_required", "false"));
+        return Boolean.parseBoolean(getConfig().getOrDefault("emailRequired", "false"));
     }
 
     /**
-     * Дополнительные поля из профиля пользователя
+     * Дополнительные поля из профиля пользователя.
      *
      * @return Дополнительные поля из профиля пользователя
      */

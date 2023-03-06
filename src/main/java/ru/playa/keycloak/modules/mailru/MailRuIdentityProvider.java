@@ -3,6 +3,9 @@ package ru.playa.keycloak.modules.mailru;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
 
 import org.keycloak.broker.oidc.OIDCIdentityProvider;
 import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
@@ -13,6 +16,8 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
+import ru.playa.keycloak.modules.MessageUtils;
+import ru.playa.keycloak.modules.StringUtils;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
@@ -83,6 +88,23 @@ public class MailRuIdentityProvider
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "email"));
 
         String email = getJsonProperty(profile, "email");
+
+        if (StringUtils.isNullOrEmpty(email)) {
+            throw new IllegalArgumentException(MessageUtils.email("Yandex"));
+        } else {
+            String domain = email.substring(email.indexOf("@") + 1);
+            boolean match = Optional
+                .ofNullable(((MailRuIdentityProviderConfig) getConfig()).getHostedDomain())
+                .map(hd -> hd.split(","))
+                .map(Arrays::asList)
+                .orElse(Collections.singletonList("*"))
+                .stream()
+                .noneMatch(hd -> hd.equalsIgnoreCase(domain) || hd.equals("*"));
+
+            if (match) {
+                throw new IllegalArgumentException(MessageUtils.hostedDomain("Yandex", domain));
+            }
+        }
 
         user.setEmail(email);
         user.setUsername(email);

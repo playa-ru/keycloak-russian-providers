@@ -1,12 +1,16 @@
 # Russian providers customization
 # Messages for keycloak-russian-providers
 ok-public-key=Application's public key
-ok.public_key.tooltip=Application's public key
+ok.publicKey.tooltip=Application's public key
 ok-email-required=Email required
-ok.email_required.tooltip=Email required in your profile
+ok.emailRequired.tooltip=Email required in your profile
 vk-api-version=API Version
 vk.version.tooltip=VK API version
 vk-email-required=Email required
-vk.email_required.tooltip=Email required in your profile
+vk.emailRequired.tooltip=Email required in your profile
 vk-fetched-fields=Additional user's profile fields
 vk.fetched-fields.tooltip=Provide additional fields which would be fetched using the profile request
+mailru-hosted-domain=Hosted domains
+mailru.hostedDomain.tooltip=Hosted domains
+yandex-hosted-domain=Hosted domains
+yandex.hostedDomain.tooltip=Hosted domains

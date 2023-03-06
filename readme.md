@@ -52,40 +52,55 @@
 ```
 docker pull playaru/keycloak-russian
 ```
- - или соберите проект с профилем `docker`, получится готовый образ.
+ - или соберите проект с профилем `docker` и переменной с указанием типа БД, получится готовый образ. Например, сборка образа Keycloak с использованием БД Postgres:
 ```
-  mvn install -Pdocker
+  mvn install -Pdocker -Dpostgres
 ```
+Поддерживаемые БД:
++ h2 - H2
++ postgres - Postgres
++ mysql - MySql
++ mariadb - MariaDB
++ oracle - Oracle
++ mssql - Microsoft SQL Server
+
 Если вы не используете Docker 
 
-Можно установить библиотеку провайдеров в ваш Keycloak самостоятельно. Для этого нужно будет вручную выполнить шаги, описанные в [Dockerfile](Dockerfile), в целом [следуя инструкции](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations):
+Можно установить библиотеку провайдеров в ваш Keycloak самостоятельно. 
 
-* Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
-* Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
-* Скопируйте содержимое директории `/src/main/resources/themes/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
-* В файл `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_en.properties` добавьте следующие строки:
-```
-ok-public-key=Application's public key
-ok.public_key.tooltip=Application's public key
-vk-api-version=API Version
-vk.version.tooltip=VK API version
-vk-fetched-fields=Additional user's profile fields
-vk.fetched-fields.tooltip=Provide additional fields which would be fetched using the profile request
-```
-* В файл `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_ru.properties` добавьте следующие строки:
-```
-ok-public-key=Публичный ключ приложения
-ok.public_key.tooltip=Публичный ключ приложения
-vk-api-version=API Version
-vk.version.tooltip=Версия API
-vk-fetched-fields=Дополнительные поля из профиля пользователя
-vk.fetched-fields.tooltip=Запрашивать дополнительные поля
-```
-* В файл `${keycloak.home.dir}/themes/base/login/messages/messages_en.properties` добавьте следующие строки:
-```
-identityProviderEmailErrorMessage=For authorization through a social network, you must specify your e-mail in your social network profile.
-```
-* В файл `${keycloak.home.dir}/themes/base/login/messages/messages_ru.properties` добавьте следующие строки:
-```
-identityProviderEmailErrorMessage=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail.
-```
+## Keycloak <= 16.1.1
+
+Для этого нужно будет вручную выполнить шаги, описанные в [Dockerfile](Dockerfile), в целом [следуя инструкции](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations):
+
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
+2. Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
+3. Скопируйте содержимое директории `/src/main/resources/themes/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
+4. Добавьте переводы необходимые для темы, для этого необходимо дополнить файлы:
+   `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_en.custom` (
+   из файла `src/main/resources/theme/base/admin/messages/admin-messages_en.custom`)
+   `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_ru.custom` (
+   из файла `src/main/resources/theme/base/admin/messages/admin-messages_ru.custom`)
+   `${keycloak.home.dir}/themes/base/login/messages/messages_en.properties` (
+   из файла `src/main/resources/theme/base/login/messages/messages_en.custom`)
+   `${keycloak.home.dir}/themes/base/login/messages/messages_ru.properties` (
+   из файла `src/main/resources/theme/base/login/messages/messages_ru.custom`)
+
+## Keycloak >= 17.0.0
+
+Для установки модуля авторизации через ЕСИА необходимо выполнить следующие шаги:
+
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
+2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
+3. Разархивируйте стандартные темы в папку `/themes` (стандартные темы находятся по
+   пути `/lib/lib/main/org.keycloak.keycloak-themes-${keycloak-version}`, где `keycloak-version` версия Keycloak)
+4. Скопируйте содержимое директории `/src/main/resources/themes/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`   
+5. Добавьте переводы необходимые для темы, для этого необходимо дополнить файлы:
+   `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_en.custom` (
+   из файла `src/main/resources/theme/base/admin/messages/admin-messages_en.custom`)
+   `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_ru.custom` (
+   из файла `src/main/resources/theme/base/admin/messages/admin-messages_ru.custom`)
+   `${keycloak.home.dir}/themes/base/login/messages/messages_en.properties` (
+   из файла `src/main/resources/theme/base/login/messages/messages_en.custom`)
+   `${keycloak.home.dir}/themes/base/login/messages/messages_ru.properties` (
+   из файла `src/main/resources/theme/base/login/messages/messages_ru.custom`)
+6. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`

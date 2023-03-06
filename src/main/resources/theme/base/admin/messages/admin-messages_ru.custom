@@ -1,12 +1,16 @@
 # Russian providers customization
 # Messages for keycloak-russian-providers
 ok-public-key=Публичный ключ приложения
-ok.public_key.tooltip=Публичный ключ приложения
+ok.publicKey.tooltip=Публичный ключ приложения
 ok-email-required=Электронная почта обязательна
-ok.email_required.tooltip=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail
+ok.emailRequired.tooltip=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail
 vk-api-version=API Version
 vk.version.tooltip=Версия API
 vk-email-required=Электронная почта обязательна
-vk.email_required.tooltip=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail
+vk.emailRequired.tooltip=Для авторизации через социальную сеть необходимо в Вашем профиле соцсети указать Ваш e-mail
 vk-fetched-fields=Дополнительные поля из профиля пользователя
 vk.fetched-fields.tooltip=Запрашивать дополнительные поля
+mailru-hosted-domain=Белый список доменов
+mailru.hosted_domain.tooltip=Белый список доменов
+yandex-hosted-domain=Белый список доменов
+yandex.hosted_domain.tooltip=Белый список доменов

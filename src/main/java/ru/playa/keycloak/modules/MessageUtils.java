@@ -25,4 +25,18 @@ public class MessageUtils {
                 "Для авторизации через социальную сеть (%s) необходимо в Вашем профиле соцсети указать Ваш e-mail.",
                 provider);
     }
+
+    /**
+     * Генерация сообщения ошибки на домен не из белого списка.
+     *
+     * @param provider Название провейдера
+     * @param email    Почта пользователя
+     * @return сообщение об ошибке
+     */
+    public static String hostedDomain(String provider, String email) {
+        return String.format(
+            "Ваш аккаунт не подходит для авторизации через социальную сеть (%s) с почтой (%s).",
+            provider,
+            email);
+    }
 }

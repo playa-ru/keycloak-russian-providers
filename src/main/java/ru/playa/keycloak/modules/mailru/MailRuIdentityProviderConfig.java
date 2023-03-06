@@ -2,6 +2,7 @@ package ru.playa.keycloak.modules.mailru;
 
 import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
 import org.keycloak.models.IdentityProviderModel;
+import ru.playa.keycloak.modules.StringUtils;
 
 /**
  * Настройки OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
@@ -26,5 +27,16 @@ public class MailRuIdentityProviderConfig
      * <a href="https://my.mail.ru">Мой Мир</a>.
      */
     public MailRuIdentityProviderConfig() {
+    }
+
+    /**
+     * Получения белого списка доменов.
+     *
+     * @return Белый список доменов.
+     */
+    public String getHostedDomain() {
+        String hostedDomain = this.getConfig().get("hostedDomain");
+
+        return StringUtils.nonNullOrEmpty(hostedDomain) ? hostedDomain : null;
     }
 }

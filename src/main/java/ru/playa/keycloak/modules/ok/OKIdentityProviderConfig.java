@@ -35,7 +35,7 @@ public class OKIdentityProviderConfig
      * @return Публичный ключ приложения.
      */
     public String getPublicKey() {
-        return getConfig().get("public_key");
+        return getConfig().get("publicKey");
     }
 
     /**
@@ -44,7 +44,7 @@ public class OKIdentityProviderConfig
      * @return Требуется email в профиле пользователя.
      */
     public boolean isEmailRequired() {
-        return Boolean.parseBoolean(getConfig().getOrDefault("email_required", "false"));
+        return Boolean.parseBoolean(getConfig().getOrDefault("emailRequired", "false"));
     }
 
 }
