@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:20.0.3 as builder
+FROM quay.io/keycloak/keycloak:21.0.1 as builder
 
 ARG JAR_FILE
 ARG DB_PROVIDER
@@ -25,7 +25,7 @@ RUN echo "JAR_FILE is $JAR_FILE"
 
 RUN microdnf install -y unzip
 
-RUN unzip /opt/keycloak/lib/lib/main/org.keycloak.keycloak-themes-20.0.3.jar -d $THEMES_BASE_TMP
+RUN unzip /opt/keycloak/lib/lib/main/org.keycloak.keycloak-themes-21.0.1.jar -d $THEMES_BASE_TMP
 RUN mv $THEMES_BASE_TMP/theme/* $THEMES_HOME
 
 COPY target/$JAR_FILE $PROVIDERS_TMP/keycloak-russian-providers.jar
@@ -50,7 +50,7 @@ USER 1000
 
 RUN /opt/keycloak/bin/kc.sh build
 
-FROM quay.io/keycloak/keycloak:20.0.3
+FROM quay.io/keycloak/keycloak:21.0.1
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 WORKDIR /opt/keycloak
 

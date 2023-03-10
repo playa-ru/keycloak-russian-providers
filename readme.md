@@ -13,6 +13,7 @@
 ## Совместимость
 
 Библиотека провайдеров проверялась на следующих версиях Keycloak:
++ 21.0.1
 + 17.0.0
 + 16.1.1
 + 15.0.2
@@ -30,6 +31,7 @@
 
 | Версия библиотеки | Версия Keycloak | Репозиторий                                      |
 | :---------------: | :-------------: | :----------------------------------------------: |
+|      1.0.46       |    21.0.1       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.43       |    17.0.0       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.42       |    16.1.1       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.38       |    15.0.2       | [Maven Central](https://mvnrepository.com)       |
