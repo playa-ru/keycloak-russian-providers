@@ -5,11 +5,9 @@ import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.util.SimpleHttp;
-import org.keycloak.common.ClientConnection;
 import org.keycloak.events.Errors;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.events.EventType;
-import org.keycloak.http.HttpRequest;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.services.ErrorPage;
@@ -19,7 +17,6 @@ import org.keycloak.sessions.AuthenticationSessionModel;
 import javax.ws.rs.GET;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 /**
@@ -45,7 +42,7 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
 
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
-        return new Endpoint(callback, realm, event, this.session, this);
+        return new Endpoint(callback, realm, event, this.session);
     }
 
     /**
@@ -58,27 +55,26 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
         private final AuthenticationCallback callback;
         private final RealmModel realm;
         private final EventBuilder event;
-        private final AbstractOAuth2IdentityProvider provider;
         private final KeycloakSession session;
-        private final ClientConnection clientConnection;
-        private final HttpHeaders headers;
-        private final HttpRequest httpRequest;
+
+        public RealmModel getRealm() {
+            return realm;
+        }
+
+        public KeycloakSession getSession() {
+            return session;
+        }
 
         public Endpoint(
                 AuthenticationCallback aCallback,
                 RealmModel aRealm,
                 EventBuilder aEvent,
-                KeycloakSession aSession,
-                AbstractOAuth2IdentityProvider aProvider
+                KeycloakSession aSession
         ) {
             this.callback = aCallback;
             this.realm = aRealm;
             this.event = aEvent;
-            this.provider = aProvider;
             this.session = aSession;
-            this.clientConnection = session.getContext().getConnection();
-            this.httpRequest = session.getContext().getHttpRequest();
-            this.headers = session.getContext().getRequestHeaders();
         }
 
         @GET

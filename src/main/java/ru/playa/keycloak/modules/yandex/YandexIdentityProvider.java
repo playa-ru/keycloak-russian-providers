@@ -9,13 +9,11 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.HostedDomainUtils;
 import ru.playa.keycloak.modules.MessageUtils;
 import ru.playa.keycloak.modules.StringUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
@@ -84,18 +82,7 @@ public class YandexIdentityProvider
         if (StringUtils.isNullOrEmpty(email)) {
             throw new IllegalArgumentException(MessageUtils.email("Yandex"));
         } else {
-            String domain = email.substring(email.indexOf("@") + 1);
-            boolean match = Optional
-                .ofNullable(getConfig().getHostedDomain())
-                .map(hd -> hd.split(","))
-                .map(Arrays::asList)
-                .orElse(Collections.singletonList("*"))
-                .stream()
-                .noneMatch(hd -> hd.equalsIgnoreCase(domain) || hd.equals("*"));
-
-            if (match) {
-                throw new IllegalArgumentException(MessageUtils.hostedDomain("Yandex", domain));
-            }
+            HostedDomainUtils.isHostedDomain(email, getConfig().getHostedDomain(), "Yandex");
         }
 
         String login = getJsonProperty(node, "login");

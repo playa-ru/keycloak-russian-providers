@@ -1,14 +1,6 @@
 package ru.playa.keycloak.modules.mailru;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
-
-import org.keycloak.broker.oidc.OIDCIdentityProvider;
-import org.keycloak.broker.oidc.OIDCIdentityProviderConfig;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -16,8 +8,16 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.services.Urls;
+import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.HostedDomainUtils;
 import ru.playa.keycloak.modules.MessageUtils;
 import ru.playa.keycloak.modules.StringUtils;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
@@ -26,8 +26,8 @@ import ru.playa.keycloak.modules.StringUtils;
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuIdentityProvider
-        extends OIDCIdentityProvider
-        implements SocialIdentityProvider<OIDCIdentityProviderConfig> {
+        extends AbstractRussianOAuth2IdentityProvider<MailRuIdentityProviderConfig>
+        implements SocialIdentityProvider<MailRuIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -64,6 +64,11 @@ public class MailRuIdentityProvider
     }
 
     @Override
+    public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
+        return new Endpoint(callback, realm, event, this.session);
+    }
+
+    @Override
     protected boolean supportsExternalExchange() {
         return true;
     }
@@ -90,20 +95,9 @@ public class MailRuIdentityProvider
         String email = getJsonProperty(profile, "email");
 
         if (StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(MessageUtils.email("Yandex"));
+            throw new IllegalArgumentException(MessageUtils.email("MailRu"));
         } else {
-            String domain = email.substring(email.indexOf("@") + 1);
-            boolean match = Optional
-                .ofNullable(((MailRuIdentityProviderConfig) getConfig()).getHostedDomain())
-                .map(hd -> hd.split(","))
-                .map(Arrays::asList)
-                .orElse(Collections.singletonList("*"))
-                .stream()
-                .noneMatch(hd -> hd.equalsIgnoreCase(domain) || hd.equals("*"));
-
-            if (match) {
-                throw new IllegalArgumentException(MessageUtils.hostedDomain("Yandex", domain));
-            }
+            HostedDomainUtils.isHostedDomain(email, getConfig().getHostedDomain(), "MailRu");
         }
 
         user.setEmail(email);
@@ -133,5 +127,45 @@ public class MailRuIdentityProvider
     @Override
     protected String getDefaultScopes() {
         return DEFAULT_SCOPE;
+    }
+
+    /**
+     * Переопределенный класс {@link AbstractOAuth2IdentityProvider.Endpoint}.
+     * Класс переопределен с целью возвращения человеко-читаемой ошибки если
+     * в профиле социальной сети не указана электронная почта.
+     */
+    protected class Endpoint extends AbstractRussianOAuth2IdentityProvider<MailRuIdentityProviderConfig>.Endpoint {
+
+        public Endpoint(
+                AuthenticationCallback aCallback,
+                RealmModel aRealm,
+                EventBuilder aEvent,
+                KeycloakSession aSession
+        ) {
+            super(aCallback, aRealm, aEvent, aSession);
+        }
+
+        @Override
+        public SimpleHttp generateTokenRequest(String authorizationCode) {
+            String credentials = Base64.getEncoder().encodeToString(
+                    (getConfig().getClientId() + ":" + getConfig().getClientSecret()).getBytes(StandardCharsets.UTF_8)
+            );
+
+            String redirectURI = Urls
+                    .identityProviderAuthnResponse(
+                            getSession().getContext().getUri().getBaseUri(),
+                            MailRuIdentityProviderFactory.PROVIDER_ID,
+                            getRealm().getName()
+                    )
+                    .toString();
+
+            return SimpleHttp
+                    .doPost(getConfig().getTokenUrl(), session)
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .header("Authorization", "Basic " + credentials)
+                    .param(OAUTH2_PARAMETER_CODE, authorizationCode)
+                    .param(OAUTH2_PARAMETER_REDIRECT_URI, redirectURI)
+                    .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE);
+        }
     }
 }
