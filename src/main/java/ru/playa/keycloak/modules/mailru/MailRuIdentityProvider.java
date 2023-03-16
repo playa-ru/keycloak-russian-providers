@@ -130,9 +130,8 @@ public class MailRuIdentityProvider
     }
 
     /**
-     * Переопределенный класс {@link AbstractOAuth2IdentityProvider.Endpoint}.
-     * Класс переопределен с целью возвращения человеко-читаемой ошибки если
-     * в профиле социальной сети не указана электронная почта.
+     * Переопределенный класс {@link AbstractRussianOAuth2IdentityProvider.Endpoint}.
+     * Класс переопределен с целью изменения логики замены кода на токен.
      */
     protected class Endpoint extends AbstractRussianOAuth2IdentityProvider<MailRuIdentityProviderConfig>.Endpoint {
 
