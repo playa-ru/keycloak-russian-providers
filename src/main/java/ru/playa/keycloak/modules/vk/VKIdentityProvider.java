@@ -54,7 +54,7 @@ public class VKIdentityProvider
      * @param config  Конфигурация OAuth-авторизации.
      */
     public VKIdentityProvider(KeycloakSession session, VKIdentityProviderConfig config) {
-        super(session, config);
+        super(session, config, VKIdentityProviderFactory.PROVIDER_ID);
         config.setAuthorizationUrl(AUTH_URL + "?v=" + getConfig().getVersion());
         config.setTokenUrl(TOKEN_URL + "?v=" + getConfig().getVersion());
         config.setUserInfoUrl(PROFILE_URL + "?v=" + getConfig().getVersion());

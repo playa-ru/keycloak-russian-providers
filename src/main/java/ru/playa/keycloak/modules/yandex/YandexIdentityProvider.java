@@ -53,7 +53,7 @@ public class YandexIdentityProvider
      * @param config  Конфигурация OAuth-авторизации.
      */
     public YandexIdentityProvider(KeycloakSession session, YandexIdentityProviderConfig config) {
-        super(session, config);
+        super(session, config, YandexIdentityProviderFactory.PROVIDER_ID);
         config.setAuthorizationUrl(AUTH_URL);
         config.setTokenUrl(TOKEN_URL);
         config.setUserInfoUrl(PROFILE_URL);

@@ -9,7 +9,6 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import org.keycloak.services.Urls;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.HostedDomainUtils;
 import ru.playa.keycloak.modules.MessageUtils;
@@ -57,7 +56,7 @@ public class MailRuIdentityProvider
      * @param config  Конфигурация OAuth-авторизации.
      */
     public MailRuIdentityProvider(KeycloakSession session, MailRuIdentityProviderConfig config) {
-        super(session, config);
+        super(session, config, MailRuIdentityProviderFactory.PROVIDER_ID);
         config.setAuthorizationUrl(AUTH_URL);
         config.setTokenUrl(TOKEN_URL);
         config.setUserInfoUrl(PROFILE_URL);
@@ -150,20 +149,12 @@ public class MailRuIdentityProvider
                     (getConfig().getClientId() + ":" + getConfig().getClientSecret()).getBytes(StandardCharsets.UTF_8)
             );
 
-            String redirectURI = Urls
-                    .identityProviderAuthnResponse(
-                            getSession().getContext().getUri().getBaseUri(),
-                            MailRuIdentityProviderFactory.PROVIDER_ID,
-                            getRealm().getName()
-                    )
-                    .toString();
-
             return SimpleHttp
                     .doPost(getConfig().getTokenUrl(), session)
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .header("Authorization", "Basic " + credentials)
                     .param(OAUTH2_PARAMETER_CODE, authorizationCode)
-                    .param(OAUTH2_PARAMETER_REDIRECT_URI, redirectURI)
+                    .param(OAUTH2_PARAMETER_REDIRECT_URI, getRedirectURI())
                     .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE);
         }
     }

@@ -55,7 +55,7 @@ public class OKIdentityProvider
      * @param config  Конфигурация OAuth-авторизации.
      */
     public OKIdentityProvider(KeycloakSession session, OKIdentityProviderConfig config) {
-        super(session, config);
+        super(session, config, OKIdentityProviderFactory.PROVIDER_ID);
         config.setAuthorizationUrl(AUTH_URL);
         config.setTokenUrl(TOKEN_URL);
         config.setUserInfoUrl(PROFILE_URL);

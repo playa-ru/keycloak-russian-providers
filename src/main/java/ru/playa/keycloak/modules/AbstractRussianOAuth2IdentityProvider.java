@@ -11,6 +11,7 @@ import org.keycloak.events.EventType;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.services.ErrorPage;
+import org.keycloak.services.Urls;
 import org.keycloak.services.messages.Messages;
 import org.keycloak.sessions.AuthenticationSessionModel;
 
@@ -28,16 +29,20 @@ import javax.ws.rs.core.Response;
 public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2IdentityProviderConfig>
         extends AbstractOAuth2IdentityProvider<C> {
 
+    private final String providerID;
+
     /**
      * Создает объект OAuth-авторизации для российских социальных сейтей.
      *
      * @param session Сессия Keycloak.
      * @param config  Конфигурация OAuth-авторизации.
      */
-    public AbstractRussianOAuth2IdentityProvider(KeycloakSession session, C config) {
+    public AbstractRussianOAuth2IdentityProvider(KeycloakSession session, C config, String aProviderID) {
         super(session, config);
 
-        logger.infof("Config %s", config.getConfig());
+        this.providerID = aProviderID;
+
+        logger.infof("Provider %s Config %s", providerID, config.getConfig());
     }
 
     @Override
@@ -56,14 +61,6 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
         private final RealmModel realm;
         private final EventBuilder event;
         private final KeycloakSession session;
-
-        public RealmModel getRealm() {
-            return realm;
-        }
-
-        public KeycloakSession getSession() {
-            return session;
-        }
 
         public Endpoint(
                 AuthenticationCallback aCallback,
@@ -146,8 +143,18 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                     .param(OAUTH2_PARAMETER_CODE, authorizationCode)
                     .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
                     .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret())
-                    .param(OAUTH2_PARAMETER_REDIRECT_URI, session.getContext().getUri().getAbsolutePath().toString())
+                    .param(OAUTH2_PARAMETER_REDIRECT_URI, getRedirectURI())
                     .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE);
+        }
+
+        protected String getRedirectURI() {
+            return Urls
+                    .identityProviderAuthnResponse(
+                            session.getContext().getUri().getBaseUri(),
+                            providerID,
+                            realm.getName()
+                    )
+                    .toString();
         }
     }
 }
