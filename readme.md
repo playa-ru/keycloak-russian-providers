@@ -8,7 +8,7 @@
 + [Яндекс](docs/yandex.md)
 + [Mail.Ru](docs/mailru.md)
 
-Посмотреть на это в действии [можно здесь](https://elements.playa.ru/) - тут используется [docker образ из нашей директории на Docker Hub](https://github.com/playa-ru/keycloak-russian).
+Посмотреть на это в действии [можно здесь](https://my.yachtex.ru/) - тут используется [docker образ из нашей директории на Docker Hub](https://github.com/playa-ru/keycloak-russian).
 
 ## Совместимость
 
