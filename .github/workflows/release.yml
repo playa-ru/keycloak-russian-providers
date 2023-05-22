@@ -7,6 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set Version
+        run: |
+          echo "Tag name: $GITHUB_REF_NAME"
+          mvn versions:set -DnewVersion=$GITHUB_REF_NAME
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v3
         with:
