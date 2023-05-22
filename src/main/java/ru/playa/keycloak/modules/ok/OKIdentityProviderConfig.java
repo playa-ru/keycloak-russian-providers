@@ -47,4 +47,13 @@ public class OKIdentityProviderConfig
         return Boolean.parseBoolean(getConfig().getOrDefault("emailRequired", "false"));
     }
 
+    /**
+     * Дополнительные поля из профиля пользователя.
+     *
+     * @return Дополнительные поля из профиля пользователя
+     */
+    public String getFetchedFields() {
+        return getConfig().get("fetchedFields");
+    }
+
 }

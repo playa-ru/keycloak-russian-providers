@@ -1,18 +1,13 @@
 FROM registry.access.redhat.com/ubi9 AS ubi-micro-build
 RUN mkdir -p /mnt/rootfs
-RUN dnf install --installroot /mnt/rootfs unzip --releasever 9 --setopt install_weak_deps=false --nodocs -y; dnf --installroot /mnt/rootfs clean all
+RUN dnf install --installroot /mnt/rootfs unzip curl --releasever 9 --setopt install_weak_deps=false --nodocs -y; dnf --installroot /mnt/rootfs clean all
 
-FROM quay.io/keycloak/keycloak:21.0.1 as builder
+FROM quay.io/keycloak/keycloak:21.1.1 as builder
 COPY --from=ubi-micro-build /mnt/rootfs /
 
 ARG JAR_FILE
-ARG DB_PROVIDER
-
-ENV KC_HEALTH_ENABLED=true
-ENV KC_METRICS_ENABLED=true
-ENV KC_FEATURES=token-exchange
-ENV KC_DB=$DB_PROVIDER
-ENV KC_HTTP_RELATIVE_PATH=/auth
+ARG PLAYA_RU_GITHUB_TOKEN
+ENV PLAYA_RU_GITHUB_TOKEN ${PLAYA_RU_GITHUB_TOKEN}
 
 ENV JBOSS_HOME /opt/keycloak
 ENV THEMES_HOME $JBOSS_HOME/themes
@@ -20,15 +15,14 @@ ENV THEMES_BASE_TMP /tmp/keycloak-base-themes
 ENV PROVIDERS_TMP /tmp/keycloak-providers
 ENV LIBS_TMP /tmp/keycloak-libs
 
-ENV KEYCLOAK_VERSION 21.0.1
-ENV KEYCLOAK_ADMIN_THEME 1.0.7
+ENV KEYCLOAK_VERSION 21.1.1
+ENV KEYCLOAK_ADMIN_THEME 21.1.1.rsp-12
 
 RUN mkdir -p $PROVIDERS_TMP
 RUN mkdir -p $THEMES_BASE_TMP
 
 USER root
 
-RUN echo "DataBase is $DB_PROVIDER"
 RUN echo "JAR_FILE is $JAR_FILE"
 
 RUN unzip /opt/keycloak/lib/lib/main/org.keycloak.keycloak-themes-$KEYCLOAK_VERSION.jar -d $THEMES_BASE_TMP
@@ -38,7 +32,7 @@ COPY target/$JAR_FILE $PROVIDERS_TMP/keycloak-russian-providers.jar
 
 ADD https://repo1.maven.org/maven2/com/jayway/jsonpath/json-path/2.7.0/json-path-2.7.0.jar $JBOSS_HOME/providers
 ADD https://repo1.maven.org/maven2/net/minidev/json-smart/2.4.7/json-smart-2.4.7.jar $JBOSS_HOME/providers
-ADD https://nexus.playa.ru/nexus/content/repositories/releases/org/keycloak/keycloak-admin-ui/$KEYCLOAK_ADMIN_THEME/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME.jar $PROVIDERS_TMP
+RUN curl -X GET --location "https://maven.pkg.github.com/playa-ru/keycloak-ui/org/keycloak/keycloak-admin-ui/$KEYCLOAK_ADMIN_THEME/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME.jar" -H "Authorization: Bearer $PLAYA_RU_GITHUB_TOKEN" -o $PROVIDERS_TMP/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME.jar
 
 RUN cp $PROVIDERS_TMP/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME.jar $JBOSS_HOME/lib/lib/main/org.keycloak.keycloak-admin-ui-$KEYCLOAK_VERSION.jar
 
@@ -56,20 +50,4 @@ RUN rm -rf $THEMES_BASE_TMP
 
 USER 1000
 
-RUN /opt/keycloak/bin/kc.sh build
-
-FROM quay.io/keycloak/keycloak:21.0.1
-COPY --from=builder /opt/keycloak/ /opt/keycloak/
-WORKDIR /opt/keycloak
-
-# for demonstration purposes only, please make sure to use proper certificates in production instead
-RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
-# change these values to point to a running postgres instance
-
-ENV KC_DB_URL=<DBURL>
-ENV KC_DB_USERNAME=<DBUSERNAME>
-ENV KC_DB_PASSWORD=<DBPASSWORD>
-ENV KC_HTTP_ENABLED=<HTTPENABLED>
-ENV KC_HOSTNAME_STRICT=<HOSTNAMESTRICT>
-
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]

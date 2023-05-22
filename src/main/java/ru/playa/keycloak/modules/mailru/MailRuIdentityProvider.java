@@ -1,6 +1,7 @@
 package ru.playa.keycloak.modules.mailru;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -64,7 +65,7 @@ public class MailRuIdentityProvider
 
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
-        return new Endpoint(callback, realm, event, this.session);
+        return new Endpoint(callback, realm, event, this.session, this);
     }
 
     @Override
@@ -138,9 +139,10 @@ public class MailRuIdentityProvider
                 AuthenticationCallback aCallback,
                 RealmModel aRealm,
                 EventBuilder aEvent,
-                KeycloakSession aSession
+                KeycloakSession aSession,
+                AbstractOAuth2IdentityProvider aProvider
         ) {
-            super(aCallback, aRealm, aEvent, aSession);
+            super(aCallback, aRealm, aEvent, aSession, aProvider);
         }
 
         @Override

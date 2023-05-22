@@ -47,7 +47,7 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
 
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
-        return new Endpoint(callback, realm, event, this.session);
+        return new Endpoint(callback, realm, event, this.session, this);
     }
 
     /**
@@ -57,6 +57,7 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
      */
     protected class Endpoint {
 
+        private final AbstractOAuth2IdentityProvider provider;
         private final AuthenticationCallback callback;
         private final RealmModel realm;
         private final EventBuilder event;
@@ -66,12 +67,14 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                 AuthenticationCallback aCallback,
                 RealmModel aRealm,
                 EventBuilder aEvent,
-                KeycloakSession aSession
+                KeycloakSession aSession,
+                AbstractOAuth2IdentityProvider aProvider
         ) {
             this.callback = aCallback;
             this.realm = aRealm;
             this.event = aEvent;
             this.session = aSession;
+            this.provider = aProvider;
         }
 
         @GET
@@ -86,7 +89,9 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
             if (error != null) {
                 if (error.equals(ACCESS_DENIED)) {
                     logger.error(ACCESS_DENIED + " for broker login " + getConfig().getProviderId());
-                    return callback.cancelled();
+                    OAuth2IdentityProviderConfig providerConfig = this.provider.getConfig();
+
+                    return callback.cancelled(providerConfig);
                 } else {
                     logger.error(error + " for broker login " + getConfig().getProviderId());
                     return callback.error(Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
