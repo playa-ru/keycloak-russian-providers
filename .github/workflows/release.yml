@@ -11,7 +11,7 @@ jobs:
         run: |
           # Install gpg secret key
           cat <(echo -e "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}") | gpg --batch --import
-          cat <(echo -e "${{ secrets.PLAYA_SETTINGS_XML }}") | cat >> /home/runner/.m2/playa-settings.xml
+          echo -e "${{ secrets.PLAYA_SETTINGS_XML }}" | cat > /home/runner/.m2/playa-settings.xml
           # Verify gpg secret key
           gpg --list-secret-keys --keyid-format LONG
           cat /home/runner/.m2/playa-settings.xml
