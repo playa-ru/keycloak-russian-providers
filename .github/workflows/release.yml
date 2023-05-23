@@ -32,7 +32,7 @@ jobs:
           --batch-mode \
           -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
           -Dgpg.keyname=4F7456E30CDE511D0F50C63CCA9F643B66845DAA \
-          clean deploy
+          verify gpg:sign install:install deploy:deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
