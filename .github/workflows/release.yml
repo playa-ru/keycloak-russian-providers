@@ -24,7 +24,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-          settings-path: /home/runner/.m2/playa-settings.xml
+          settings-path: ~/playa-settings.xml
       - name: Publish package
         run: |
           mvn \
@@ -32,7 +32,7 @@ jobs:
           --batch-mode \
           -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
           clean deploy -Psonatype-oss-release
-          cat /home/runner/.m2/playa-settings.xml
+          cat ~/playa-settings.xml
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
