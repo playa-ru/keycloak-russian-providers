@@ -25,6 +25,7 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+          profiles: '[{ "id": "sonatype-oss-release", "properties": { "gpg.keyname": "4F7456E30CDE511D0F50C63CCA9F643B66845DAA", "gpg.passphrase": "${secrets.MAVEN_GPG_PASSPHRASE}"} }]'
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Publish package
