@@ -7,32 +7,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install gpg secret key
+      - name: Install GPG secret key
         run: |
           # Install gpg secret key
           cat <(echo -e "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}") | gpg --batch --import
-          echo -e "${{ secrets.PLAYA_SETTINGS_XML }}" | cat > ~/playa-settings.xml
-          # Verify gpg secret key
-          gpg --list-secret-keys --keyid-format LONG
-          cat ~/playa-settings.xml
       - name: Set Version
         run: |
           echo "Tag name: $GITHUB_REF_NAME"
           mvn versions:set -DnewVersion=$GITHUB_REF_NAME
-      - name: Set up Maven Central Repository
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          settings-path: ~/playa-settings.xml
       - name: Publish package
         run: |
           mvn \
           --no-transfer-progress \
           --batch-mode \
           -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
-          clean deploy -Psonatype-oss-release
-          cat ~/playa-settings.xml
+          -Dgpg.keyname=4F7456E30CDE511D0F50C63CCA9F643B66845DAA \
+          clean deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
