@@ -11,9 +11,10 @@ jobs:
         run: |
           # Install gpg secret key
           cat <(echo -e "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}") | gpg --batch --import
-          cat <(echo -e "${{ secrets.PLAYA_SETTINGS_XML }}") >> /home/runner/.m2/playa-settings.xml
+          cat <(echo -e "${{ secrets.PLAYA_SETTINGS_XML }}") | cat >> /home/runner/.m2/playa-settings.xml
           # Verify gpg secret key
           gpg --list-secret-keys --keyid-format LONG
+          cat /home/runner/.m2/playa-settings.xml
       - name: Set Version
         run: |
           echo "Tag name: $GITHUB_REF_NAME"
@@ -31,7 +32,7 @@ jobs:
           --batch-mode \
           -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
           clean deploy -Psonatype-oss-release
-          cat /home/runner/.m2/settings.xml
+          cat /home/runner/.m2/playa-settings.xml
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
