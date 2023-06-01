@@ -31,6 +31,7 @@
 
 | Версия библиотеки | Версия Keycloak | Репозиторий                                      |
 | :---------------: | :-------------: | :----------------------------------------------: |
+|    21.1.1-rsp     |    21.1.1       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.46       |    21.0.1       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.43       |    17.0.0       | [Maven Central](https://mvnrepository.com)       |
 |      1.0.42       |    16.1.1       | [Maven Central](https://mvnrepository.com)       |
@@ -54,17 +55,11 @@
 ```
 docker pull playaru/keycloak-russian
 ```
- - или соберите проект с профилем `docker` и переменной с указанием типа БД, получится готовый образ. Например, сборка образа Keycloak с использованием БД Postgres:
+ - или соберите проект с профилем `docker` и переменной с указанием токена к GitHub (у токена должны быть выданы права чтение репозитория),
+   получится готовый образ. Например, сборка образа Keycloak с использованием БД Postgres:
 ```
-  mvn install -Pdocker -Dpostgres
+  mvn install -Pdocker -Dtoken.github=XXX
 ```
-Поддерживаемые БД:
-+ h2 - H2
-+ postgres - Postgres
-+ mysql - MySql
-+ mariadb - MariaDB
-+ oracle - Oracle
-+ mssql - Microsoft SQL Server
 
 Если вы не используете Docker 
 

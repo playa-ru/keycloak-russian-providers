@@ -41,7 +41,6 @@
     </licenses>
 
     <properties>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -232,78 +231,6 @@
 
     <profiles>
         <profile>
-            <id>h2</id>
-            <properties>
-                <db.provider>h2</db.provider>
-            </properties>
-            <activation>
-                <property>
-                    <name>h2</name>
-                </property>
-            </activation>
-        </profile>
-
-        <profile>
-            <id>postgres</id>
-            <properties>
-                <db.provider>postgres</db.provider>
-            </properties>
-            <activation>
-                <property>
-                    <name>postgres</name>
-                </property>
-            </activation>
-        </profile>
-
-        <profile>
-            <id>oracle</id>
-            <properties>
-                <db.provider>oracle</db.provider>
-            </properties>
-            <activation>
-                <property>
-                    <name>oracle</name>
-                </property>
-            </activation>
-        </profile>
-
-        <profile>
-            <id>mysql</id>
-            <properties>
-                <db.provider>mysql</db.provider>
-            </properties>
-            <activation>
-                <property>
-                    <name>mysql</name>
-                </property>
-            </activation>
-        </profile>
-
-        <profile>
-            <id>mariadb</id>
-            <properties>
-                <db.provider>mariadb</db.provider>
-            </properties>
-            <activation>
-                <property>
-                    <name>mariadb</name>
-                </property>
-            </activation>
-        </profile>
-
-        <profile>
-            <id>mssql</id>
-            <properties>
-                <db.provider>mssql</db.provider>
-            </properties>
-            <activation>
-                <property>
-                    <name>mssql</name>
-                </property>
-            </activation>
-        </profile>
-
-        <profile>
             <id>docker</id>
             <build>
                 <plugins>
@@ -317,7 +244,7 @@
                             <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                             <buildArgs>
                                 <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                                <DB_PROVIDER>${db.provider}</DB_PROVIDER>
+                                <PLAYA_RU_GITHUB_TOKEN>${token.github}</PLAYA_RU_GITHUB_TOKEN>
                             </buildArgs>
                         </configuration>
                         <executions>

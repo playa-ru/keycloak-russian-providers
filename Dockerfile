@@ -1,53 +1,55 @@
-FROM registry.access.redhat.com/ubi9 AS ubi-micro-build
-RUN mkdir -p /mnt/rootfs
-RUN dnf install --installroot /mnt/rootfs unzip curl --releasever 9 --setopt install_weak_deps=false --nodocs -y; dnf --installroot /mnt/rootfs clean all
-
-FROM quay.io/keycloak/keycloak:21.1.1 as builder
-COPY --from=ubi-micro-build /mnt/rootfs /
+FROM bellsoft/liberica-openjdk-centos:17 AS ubi-micro-install
 
 ARG JAR_FILE
 ARG PLAYA_RU_GITHUB_TOKEN
-ENV PLAYA_RU_GITHUB_TOKEN ${PLAYA_RU_GITHUB_TOKEN}
 
-ENV JBOSS_HOME /opt/keycloak
-ENV THEMES_HOME $JBOSS_HOME/themes
-ENV THEMES_BASE_TMP /tmp/keycloak-base-themes
-ENV PROVIDERS_TMP /tmp/keycloak-providers
-ENV LIBS_TMP /tmp/keycloak-libs
+ARG TMP_DIST=/tmp/keycloak
 
 ENV KEYCLOAK_VERSION 21.1.1
-ENV KEYCLOAK_ADMIN_THEME 21.1.1.rsp-12
+ENV KEYCLOAK_ADMIN_THEME_VERSION 21.1.1.rsp
+ENV PLAYA_THEMES_VERSION 1.0.22
+ENV JSON_PATH_VERSION 2.7.0
+ENV JSON_SMART_VERSION 2.4.7
 
-RUN mkdir -p $PROVIDERS_TMP
-RUN mkdir -p $THEMES_BASE_TMP
+ENV MAVEN_CENTRAL_URL https://repo1.maven.org/maven2
+ENV NEXUS_URL https://nexus.playa.ru/nexus/content/repositories/releases
 
-USER root
+ARG KEYCLOAK_DIST=https://github.com/keycloak/keycloak/releases/download/$KEYCLOAK_VERSION/keycloak-$KEYCLOAK_VERSION.tar.gz
+ARG KEYCLOAK_ADMIN_UI_DIST=https://maven.pkg.github.com/playa-ru/keycloak-ui/org/keycloak/keycloak-admin-ui/$KEYCLOAK_ADMIN_THEME_VERSION/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME_VERSION.jar
+ARG JSON_PATH_DIST=https://repo1.maven.org/maven2/com/jayway/jsonpath/json-path/$JSON_PATH_VERSION/json-path-$JSON_PATH_VERSION.jar
+ARG JSON_SMART_DIST=https://repo1.maven.org/maven2/net/minidev/json-smart/$JSON_SMART_VERSION/json-smart-$JSON_SMART_VERSION.jar
 
-RUN echo "JAR_FILE is $JAR_FILE"
+RUN yum install -y curl tar gzip unzip
 
-RUN unzip /opt/keycloak/lib/lib/main/org.keycloak.keycloak-themes-$KEYCLOAK_VERSION.jar -d $THEMES_BASE_TMP
-RUN mv $THEMES_BASE_TMP/theme/* $THEMES_HOME
+ADD $KEYCLOAK_DIST $TMP_DIST/
+ADD $JSON_PATH_DIST $TMP_DIST/
+ADD $JSON_SMART_DIST $TMP_DIST/
+COPY target/$JAR_FILE $TMP_DIST/keycloak-russian-providers-$KEYCLOAK_VERSION.jar
 
-COPY target/$JAR_FILE $PROVIDERS_TMP/keycloak-russian-providers.jar
+RUN curl -X GET --location $KEYCLOAK_ADMIN_UI_DIST -H "Authorization: Bearer $PLAYA_RU_GITHUB_TOKEN" -o $TMP_DIST/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME_VERSION.jar
 
-ADD https://repo1.maven.org/maven2/com/jayway/jsonpath/json-path/2.7.0/json-path-2.7.0.jar $JBOSS_HOME/providers
-ADD https://repo1.maven.org/maven2/net/minidev/json-smart/2.4.7/json-smart-2.4.7.jar $JBOSS_HOME/providers
-RUN curl -X GET --location "https://maven.pkg.github.com/playa-ru/keycloak-ui/org/keycloak/keycloak-admin-ui/$KEYCLOAK_ADMIN_THEME/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME.jar" -H "Authorization: Bearer $PLAYA_RU_GITHUB_TOKEN" -o $PROVIDERS_TMP/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME.jar
+RUN cd /tmp/keycloak && tar -xvf /tmp/keycloak/keycloak-*.tar.gz && rm /tmp/keycloak/keycloak-*.tar.gz
 
-RUN cp $PROVIDERS_TMP/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME.jar $JBOSS_HOME/lib/lib/main/org.keycloak.keycloak-admin-ui-$KEYCLOAK_VERSION.jar
+RUN mv $TMP_DIST/keycloak-admin-ui-$KEYCLOAK_ADMIN_THEME_VERSION.jar $TMP_DIST/keycloak-$KEYCLOAK_VERSION/lib/lib/main/org.keycloak.keycloak-admin-ui-$KEYCLOAK_VERSION.jar
+RUN mv $TMP_DIST/keycloak-russian-providers-$KEYCLOAK_VERSION.jar $TMP_DIST/keycloak-$KEYCLOAK_VERSION/providers/keycloak-russian-providers-$KEYCLOAK_VERSION.jar
+RUN mv $TMP_DIST/json-path-$JSON_PATH_VERSION.jar $TMP_DIST/keycloak-$KEYCLOAK_VERSION/providers/json-path-$JSON_PATH_VERSION.jar
+RUN mv $TMP_DIST/json-smart-$JSON_SMART_VERSION.jar $TMP_DIST/keycloak-$KEYCLOAK_VERSION/providers/json-smart-$JSON_SMART_VERSION.jar
 
-RUN cp $PROVIDERS_TMP/keycloak-russian-providers.jar $JBOSS_HOME/providers
-RUN unzip $PROVIDERS_TMP/keycloak-russian-providers.jar -d $PROVIDERS_TMP
-RUN cat $PROVIDERS_TMP/theme/base/login/messages/messages_en.custom >> $THEMES_HOME/base/login/messages/messages_en.properties
-RUN cat $PROVIDERS_TMP/theme/base/login/messages/messages_ru.custom >> $THEMES_HOME/base/login/messages/messages_ru.properties
-RUN cat $PROVIDERS_TMP/theme/base/admin/messages/admin-messages_en.custom >> $THEMES_HOME/base/admin/messages/admin-messages_en.properties
-RUN cat $PROVIDERS_TMP/theme/base/admin/messages/admin-messages_ru.custom >> $THEMES_HOME/base/admin/messages/admin-messages_ru.properties
+RUN mkdir -p /opt/keycloak && mv /tmp/keycloak/keycloak-$KEYCLOAK_VERSION/* /opt/keycloak && mkdir -p /opt/keycloak/data
 
-RUN chmod -R a+r $JBOSS_HOME
+RUN chmod -R g+rwX /opt/keycloak
 
-RUN rm -rf $PROVIDERS_TMP
-RUN rm -rf $THEMES_BASE_TMP
+FROM bellsoft/liberica-openjdk-centos:17 AS ubi-micro-chown
+ENV LANG en_US.UTF-8
+
+COPY --from=ubi-micro-install --chown=1000:0 /opt/keycloak /opt/keycloak
+
+RUN echo "keycloak:x:0:root" >> /etc/group && \
+    echo "keycloak:x:1000:0:keycloak user:/opt/keycloak:/sbin/nologin" >> /etc/passwd
 
 USER 1000
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+EXPOSE 8080
+EXPOSE 8443
+
+ENTRYPOINT [ "/opt/keycloak/bin/kc.sh" ]
