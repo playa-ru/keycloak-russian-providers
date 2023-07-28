@@ -13,6 +13,7 @@
 ## Совместимость
 
 Библиотека провайдеров проверялась на следующих версиях Keycloak:
++ 21.1.1
 + 21.0.1
 + 17.0.0
 + 16.1.1
@@ -56,7 +57,7 @@
 docker pull playaru/keycloak-russian
 ```
  - или соберите проект с профилем `docker` и переменной с указанием токена к GitHub (у токена должны быть выданы права чтение репозитория),
-   получится готовый образ. Например, сборка образа Keycloak с использованием БД Postgres:
+   получится готовый образ. Например, сборка образа Keycloak:
 ```
   mvn install -Pdocker -Dtoken.github=XXX
 ```
@@ -82,7 +83,7 @@ docker pull playaru/keycloak-russian
    `${keycloak.home.dir}/themes/base/login/messages/messages_ru.properties` (
    из файла `src/main/resources/theme/base/login/messages/messages_ru.custom`)
 
-## Keycloak >= 17.0.0
+## Keycloak 17.0.0 - 20.0.5
 
 Для установки модуля авторизации через ЕСИА необходимо выполнить следующие шаги:
 
@@ -101,3 +102,12 @@ docker pull playaru/keycloak-russian
    `${keycloak.home.dir}/themes/base/login/messages/messages_ru.properties` (
    из файла `src/main/resources/theme/base/login/messages/messages_ru.custom`)
 6. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
+
+## Keycloak >= 21.1.1
+
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
+2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
+3. Скачайте обновленную версию библиотеки `keycloak-admin-ui` с [github](https://github.com/playa-ru/keycloak-ui/packages/1871123). 
+   Шаблон формирования версии библиотеки `${keycloak-version}.rsp`
+4. Скопируйте `keycloak-admin-ui` в `/lib/lib/main/org.keycloak.keycloak-admin-ui-${keycloak-version}.jar`
+5. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
