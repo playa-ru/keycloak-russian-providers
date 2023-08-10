@@ -88,12 +88,12 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
 
             if (error != null) {
                 if (error.equals(ACCESS_DENIED)) {
-                    logger.error(ACCESS_DENIED + " for broker login " + getConfig().getProviderId());
+                    logger.error("ACCESS_DENIED: " + ACCESS_DENIED + " for broker login " + getConfig().getProviderId());
                     OAuth2IdentityProviderConfig providerConfig = this.provider.getConfig();
 
                     return callback.cancelled(providerConfig);
                 } else {
-                    logger.error(error + " for broker login " + getConfig().getProviderId());
+                    logger.error("ERROR:" + error + " for broker login " + getConfig().getProviderId());
                     return callback.error(Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
                 }
             }
