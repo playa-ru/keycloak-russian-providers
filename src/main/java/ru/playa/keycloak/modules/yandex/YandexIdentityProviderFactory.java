@@ -4,6 +4,10 @@ import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.provider.ProviderConfigProperty;
+import org.keycloak.provider.ProviderConfigurationBuilder;
+
+import java.util.List;
 
 /**
  * Фабрика OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
@@ -32,6 +36,18 @@ public class YandexIdentityProviderFactory
     @Override
     public YandexIdentityProviderConfig createConfig() {
         return new YandexIdentityProviderConfig();
+    }
+
+    @Override
+    public List<ProviderConfigProperty> getConfigProperties() {
+        return ProviderConfigurationBuilder.create()
+                .property()
+                .name("hostedDomain")
+                .label("Hosted domains")
+                .helpText("Comma ',' separated list of domains is supported.")
+                .type(ProviderConfigProperty.STRING_TYPE)
+                .add()
+                .build();
     }
 
     @Override
