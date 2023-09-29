@@ -50,7 +50,7 @@ public class OKIdentityProviderFactory
                 .property()
                 .name("emailRequired")
                 .label("Email Required")
-                .helpText("Is email required (user can be registered in VK via phone)")
+                .helpText("Is email required (user can be registered in OK via phone)")
                 .type(ProviderConfigProperty.BOOLEAN_TYPE)
                 .defaultValue("false")
                 .add()
