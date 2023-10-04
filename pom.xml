@@ -44,10 +44,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.release>17</maven.compiler.release>
 
         <version.javadoc.plugin>2.10.1</version.javadoc.plugin>
+        <version.compiler.plugin>3.11.0</version.compiler.plugin>
         <version.deploy.plugin>2.8.2</version.deploy.plugin>
         <version.source.plugin>2.4</version.source.plugin>
         <version.release.plugin>2.5.3</version.release.plugin>
@@ -56,7 +56,7 @@
         <version.checkstyle.plugin>3.0.0</version.checkstyle.plugin>
         <version.surefire.plugin>2.22.0</version.surefire.plugin>
 
-        <version.keycloak>21.1.1</version.keycloak>
+        <version.keycloak>22.0.3</version.keycloak>
     </properties>
 
     <scm>
@@ -98,6 +98,12 @@
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.compiler.plugin}</version>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.0.0-M5</version>
@@ -201,6 +207,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${version.source.plugin}</version>
                 <executions>
                     <execution>
                         <id>attach-source</id>
