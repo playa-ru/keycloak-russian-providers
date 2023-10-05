@@ -11,6 +11,7 @@ jobs:
         run: |
           # Install gpg secret key
           cat <(echo -e "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}") | gpg --batch --import
+          gpg --list-secret-keys
       - name: Set Version
         run: |
           echo "Tag name: $GITHUB_REF_NAME"
