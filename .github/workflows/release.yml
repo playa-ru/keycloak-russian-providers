@@ -23,17 +23,8 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Publish package
-        run: |
-          mvn \
-          --no-transfer-progress \
-          --batch-mode \
-          -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
-          -Dgpg.keyname=4F7456E30CDE511D0F50C63CCA9F643B66845DAA \
-          verify gpg:sign install:install deploy:deploy
+        run: mvn --batch-mode install:install deploy:deploy
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
