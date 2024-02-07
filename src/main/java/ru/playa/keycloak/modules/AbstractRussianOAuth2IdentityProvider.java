@@ -47,7 +47,7 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
 
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
-        return new Endpoint(callback, realm, event, this.session, this);
+        return new Endpoint(callback, realm, event, this.session, this, providerID);
     }
 
     /**
@@ -55,26 +55,29 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
      * Класс переопределен с целью возвращения человеко-читаемой ошибки если
      * в профиле социальной сети не указана электронная почта.
      */
-    protected class Endpoint {
+    protected static class Endpoint {
 
         private final AbstractOAuth2IdentityProvider provider;
         private final AuthenticationCallback callback;
         private final RealmModel realm;
         private final EventBuilder event;
         private final KeycloakSession session;
+        private final String providerID;
 
         public Endpoint(
                 AuthenticationCallback aCallback,
                 RealmModel aRealm,
                 EventBuilder aEvent,
                 KeycloakSession aSession,
-                AbstractOAuth2IdentityProvider aProvider
+                AbstractOAuth2IdentityProvider aProvider,
+                String aProviderID
         ) {
             this.callback = aCallback;
             this.realm = aRealm;
             this.event = aEvent;
             this.session = aSession;
             this.provider = aProvider;
+            this.providerID = aProviderID;
         }
 
         @GET
@@ -89,13 +92,13 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
             if (error != null) {
                 if (error.equals(ACCESS_DENIED)) {
                     logger.error(
-                            "ACCESS_DENIED: " + ACCESS_DENIED + " for broker login " + getConfig().getProviderId()
+                            "ACCESS_DENIED: " + ACCESS_DENIED + " for broker login " + provider.getConfig().getProviderId()
                     );
                     OAuth2IdentityProviderConfig providerConfig = this.provider.getConfig();
 
                     return callback.cancelled(providerConfig);
                 } else {
-                    logger.error("ERROR:" + error + " for broker login " + getConfig().getProviderId());
+                    logger.error("ERROR:" + error + " for broker login " + provider.getConfig().getProviderId());
                     return callback.error(Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
                 }
             }
@@ -111,13 +114,13 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
 
                     logger.infof("Get token. Response %s", response);
 
-                    BrokeredIdentityContext federatedIdentity = getFederatedIdentity(response);
-                    if (getConfig().isStoreToken() && federatedIdentity.getToken() == null) {
+                    BrokeredIdentityContext federatedIdentity = provider.getFederatedIdentity(response);
+                    if (provider.getConfig().isStoreToken() && federatedIdentity.getToken() == null) {
                         federatedIdentity.setToken(response);
                     }
 
-                    federatedIdentity.setIdpConfig(getConfig());
-                    federatedIdentity.setIdp(AbstractRussianOAuth2IdentityProvider.this);
+                    federatedIdentity.setIdpConfig(provider.getConfig());
+                    federatedIdentity.setIdp(provider);
                     federatedIdentity.setAuthenticationSession(authSession);
 
                     return this.callback.authenticated(federatedIdentity);
@@ -146,10 +149,10 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
         }
 
         public SimpleHttp generateTokenRequest(String authorizationCode) {
-            return SimpleHttp.doPost(getConfig().getTokenUrl(), session)
+            return SimpleHttp.doPost(provider.getConfig().getTokenUrl(), session)
                     .param(OAUTH2_PARAMETER_CODE, authorizationCode)
-                    .param(OAUTH2_PARAMETER_CLIENT_ID, getConfig().getClientId())
-                    .param(OAUTH2_PARAMETER_CLIENT_SECRET, getConfig().getClientSecret())
+                    .param(OAUTH2_PARAMETER_CLIENT_ID, provider.getConfig().getClientId())
+                    .param(OAUTH2_PARAMETER_CLIENT_SECRET, provider.getConfig().getClientSecret())
                     .param(OAUTH2_PARAMETER_REDIRECT_URI, getRedirectURI())
                     .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE);
         }
