@@ -55,6 +55,7 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
      * Класс переопределен с целью возвращения человеко-читаемой ошибки если
      * в профиле социальной сети не указана электронная почта.
      */
+    @SuppressWarnings("CPD-START")
     protected static class Endpoint {
 
         private final AbstractOAuth2IdentityProvider provider;
@@ -92,7 +93,8 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
             if (error != null) {
                 if (error.equals(ACCESS_DENIED)) {
                     logger.error(
-                            "ACCESS_DENIED: " + ACCESS_DENIED + " for broker login " + provider.getConfig().getProviderId()
+                            "ACCESS_DENIED: " + ACCESS_DENIED + " for broker login "
+                                    + provider.getConfig().getProviderId()
                     );
                     OAuth2IdentityProviderConfig providerConfig = this.provider.getConfig();
 
