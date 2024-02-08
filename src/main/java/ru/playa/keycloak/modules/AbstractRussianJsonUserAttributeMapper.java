@@ -66,9 +66,9 @@ public abstract class AbstractRussianJsonUserAttributeMapper extends AbstractJso
             .map(String::trim)
             .map(value -> value.startsWith("$.") ? value : "$." +  value)
             .map(JsonPath::compile)
-            .orElseThrow(() -> {
-                throw new IllegalArgumentException("Json path to the object is not set");
-            });
+            .orElseThrow(() ->
+                    new IllegalArgumentException("Json path to the object is not set")
+            );
         final String json = Optional
             .ofNullable((JsonNode) context.getContextData().get(CONTEXT_JSON_NODE))
             .map(JsonNode::toString)
