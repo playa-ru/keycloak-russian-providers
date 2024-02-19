@@ -58,17 +58,13 @@ public abstract class AbstractRussianJsonUserAttributeMapper extends AbstractJso
             .ofNullable(mapper.getConfig().get(CONF_USER_ATTRIBUTE))
             .map(String::trim)
             .filter(value -> !value.isEmpty())
-            .orElseThrow(() -> {
-                throw new IllegalArgumentException("Attribute name is not set");
-            });
+            .orElseThrow(() -> new IllegalArgumentException("Attribute name is not set"));
         final JsonPath path = Optional
             .ofNullable(mapper.getConfig().get(CONF_JSON_FIELD))
             .map(String::trim)
             .map(value -> value.startsWith("$.") ? value : "$." +  value)
             .map(JsonPath::compile)
-            .orElseThrow(() ->
-                    new IllegalArgumentException("Json path to the object is not set")
-            );
+            .orElseThrow(() -> new IllegalArgumentException("Json path to the object is not set"));
         final String json = Optional
             .ofNullable((JsonNode) context.getContextData().get(CONTEXT_JSON_NODE))
             .map(JsonNode::toString)

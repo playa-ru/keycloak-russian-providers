@@ -2,3 +2,4 @@ ru.playa.keycloak.modules.yandex.YandexIdentityProviderFactory
 ru.playa.keycloak.modules.vk.VKIdentityProviderFactory
 ru.playa.keycloak.modules.ok.OKIdentityProviderFactory
 ru.playa.keycloak.modules.mailru.MailRuIdentityProviderFactory
+ru.playa.keycloak.modules.vkid.VKIDIdentityProviderFactory

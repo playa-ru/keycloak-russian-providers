@@ -1,4 +1,4 @@
-package ru.playa.keycloak.modules.vk;
+package ru.playa.keycloak.modules.vkid;
 
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
@@ -14,28 +14,28 @@ import java.util.List;
  *
  * @author Anatoliy Pokhresnyi
  */
-public class VKIdentityProviderFactory
-        extends AbstractIdentityProviderFactory<VKIdentityProvider>
-        implements SocialIdentityProviderFactory<VKIdentityProvider> {
+public class VKIDIdentityProviderFactory
+        extends AbstractIdentityProviderFactory<VKIDIdentityProvider>
+        implements SocialIdentityProviderFactory<VKIDIdentityProvider> {
 
     /**
      * Уникальный идентификатор провайдера.
      */
-    public static final String PROVIDER_ID = "vk";
+    public static final String PROVIDER_ID = "vkid";
 
     @Override
     public String getName() {
-        return "VK";
+        return "VK ID";
     }
 
     @Override
-    public VKIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
-        return new VKIdentityProvider(session, new VKIdentityProviderConfig(model));
+    public VKIDIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
+        return new VKIDIdentityProvider(session, new VKIDIdentityProviderConfig(model));
     }
 
     @Override
-    public VKIdentityProviderConfig createConfig() {
-        return new VKIdentityProviderConfig();
+    public VKIDIdentityProviderConfig createConfig() {
+        return new VKIDIdentityProviderConfig();
     }
 
     @Override

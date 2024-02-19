@@ -2,3 +2,4 @@ ru.playa.keycloak.modules.yandex.YandexUserAttributeMapper
 ru.playa.keycloak.modules.vk.VKUserAttributeMapper
 ru.playa.keycloak.modules.ok.OKUserAttributeMapper
 ru.playa.keycloak.modules.mailru.MailRuUserAttributeMapper
+ru.playa.keycloak.modules.vkid.VKIDUserAttributeMapper
