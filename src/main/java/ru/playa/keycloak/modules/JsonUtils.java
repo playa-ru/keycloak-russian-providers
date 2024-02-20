@@ -32,16 +32,11 @@ public class JsonUtils {
     }
 
     public static String asText(JsonNode node, String field) {
+        System.out.println(node);
+        System.out.println(field + "=" + node.get(field).asText());
+
         return node == null ? null : node.get(field).asText();
 
     }
-
-    /**
-     * Получает значение указанного поля.
-     *
-     * @param json  Строка в формате Json.
-     * @param field Название поля значение, которого необходимо получить.
-     * @return Значение выбранного поля.
-     */
 
 }

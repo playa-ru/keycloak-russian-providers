@@ -13,6 +13,7 @@ import org.keycloak.provider.ProviderConfigurationBuilder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Базовый провайдер OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -83,8 +84,15 @@ implements SocialIdentityProvider<T> {
 
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode node) {
-        JsonNode context = JsonUtils.asJsonNode(node, "response");
-        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(context, "id"));
+        logger.infof("ExtractIdentityFromProfile. Node %s", node);
+
+        JsonNode context = JsonUtils.asJsonNode(node, "response").get(0);
+
+        logger.infof("ExtractIdentityFromProfile. Context %s", context);
+
+        BrokeredIdentityContext user = new BrokeredIdentityContext(
+            Objects.requireNonNull(JsonUtils.asText(context, "id"))
+        );
 
         user.setUsername(JsonUtils.asText(context, "screen_name"));
         user.setFirstName(JsonUtils.asText(context, "first_name"));
@@ -120,18 +128,23 @@ implements SocialIdentityProvider<T> {
 
     @Override
     public BrokeredIdentityContext getFederatedIdentity(String response) {
+        logger.infof("GetFederatedIdentity %s", response);
+
         JsonNode node = JsonUtils.asJsonNode(response);
-        String accessToken = extractTokenFromResponse(response, getAccessTokenResponseParameter());
-        String userId = JsonUtils.asText(node, "user_id");
-        String email = JsonUtils.asText(node, "email");
+        JsonNode context = JsonUtils.asJsonNode(node, "response") == null
+            ? node
+            : JsonUtils.asJsonNode(node, "response");
+        String accessToken = JsonUtils.asText(context, "access_token");
+        String userId = JsonUtils.asText(context, "user_id");
+        String email = JsonUtils.asText(context, "email");
 
         if (accessToken == null) {
             throw new IdentityBrokerException("No access token available in OAuth server response: " + response);
         }
 
-        BrokeredIdentityContext context = doGetFederatedIdentity(accessToken, userId, email);
-        context.getContextData().put(FEDERATED_ACCESS_TOKEN, accessToken);
-        return context;
+        BrokeredIdentityContext biContext = doGetFederatedIdentity(accessToken, userId, email);
+        biContext.getContextData().put(FEDERATED_ACCESS_TOKEN, accessToken);
+        return biContext;
     }
 
     /**

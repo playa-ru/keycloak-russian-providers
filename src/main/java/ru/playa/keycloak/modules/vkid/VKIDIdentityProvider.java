@@ -107,7 +107,13 @@ public class VKIDIdentityProvider
                 @QueryParam(OAuth2Constants.ERROR) String error
         ) {
             String payload = httpRequest.getUri().getQueryParameters().getFirst("payload");
+
+            logger.infof("VkEndpoint. AuthResponse. Payload %s", payload);
+
             JsonNode node = JsonUtils.asJsonNode(payload);
+
+            logger.infof("VkEndpoint. AuthResponse. Node %s", node);
+
             String token = JsonUtils.asText(node, "token");
             String uuid = JsonUtils.asText(node, "uuid");
             String oldState = CACHE.getOrDefault(uuid, uuid);
