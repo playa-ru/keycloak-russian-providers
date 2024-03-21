@@ -12,6 +12,11 @@ With this library you can log in into Keycloak via
 ## Keycloak versions
 
 It was tested against Keycloak versions:
++ 24.0.1
++ 23.0.6
++ 22.0.3
++ 21.1.1
++ 21.0.1
 + 17.0.0
 + 16.1.1
 + 15.0.2
