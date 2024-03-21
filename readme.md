@@ -117,3 +117,9 @@ docker pull playaru/keycloak-russian
    Шаблон формирования версии библиотеки `${keycloak-version}.rsp`
 4. Скопируйте `keycloak-admin-ui` в `/lib/lib/main/org.keycloak.keycloak-admin-ui-${keycloak-version}.jar`
 5. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
+
+## Keycloak >= 23.0.0
+
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
+2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
+3. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
