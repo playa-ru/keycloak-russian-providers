@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Утилитный класс парсинга json.
@@ -32,11 +33,11 @@ public class JsonUtils {
     }
 
     public static String asText(JsonNode node, String field) {
-        System.out.println(node);
-        System.out.println(field + "=" + node.get(field).asText());
-
-        return node == null ? null : node.get(field).asText();
-
+        return Optional
+            .ofNullable(node)
+            .map(it -> it.get(field))
+            .map(JsonNode::asText)
+            .orElse(null);
     }
 
 }
