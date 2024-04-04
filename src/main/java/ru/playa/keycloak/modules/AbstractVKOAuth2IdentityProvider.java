@@ -106,7 +106,7 @@ implements SocialIdentityProvider<T> {
         return user;
     }
 
-    protected BrokeredIdentityContext extractIdentityFromProfile(JsonNode node, String email) {
+    protected BrokeredIdentityContext extractIdentityFromProfile(JsonNode node, String email, String phone) {
         BrokeredIdentityContext user = extractIdentityFromProfile(null, node);
 
         if (getConfig().isEmailRequired() && StringUtils.isNullOrEmpty(email)) {
@@ -122,6 +122,7 @@ implements SocialIdentityProvider<T> {
         }
 
         user.setEmail(email);
+        user.setUserAttribute("phone", phone);
 
         return user;
     }
@@ -137,12 +138,13 @@ implements SocialIdentityProvider<T> {
         String accessToken = JsonUtils.asText(context, "access_token");
         String userId = JsonUtils.asText(context, "user_id");
         String email = JsonUtils.asText(context, "email");
+        String phone = JsonUtils.asText(context, "phone");
 
         if (accessToken == null) {
             throw new IdentityBrokerException("No access token available in OAuth server response: " + response);
         }
 
-        BrokeredIdentityContext biContext = doGetFederatedIdentity(accessToken, userId, email);
+        BrokeredIdentityContext biContext = doGetFederatedIdentity(accessToken, userId, email, phone);
         biContext.getContextData().put(FEDERATED_ACCESS_TOKEN, accessToken);
         return biContext;
     }
@@ -152,7 +154,8 @@ implements SocialIdentityProvider<T> {
      *
      * @return Данные авторизованного пользователя.
      */
-    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken, String userId, String email) {
+    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken, String userId, String email,
+                                                             String phone) {
         try {
             String fields = StringUtils.isNullOrEmpty(getConfig().getFetchedFields())
                     ? "" : "," + getConfig().getFetchedFields();
@@ -167,7 +170,7 @@ implements SocialIdentityProvider<T> {
                             .doGet(url, session)
                             .param("content-type", "application/json; charset=utf-8")
                             .asJson(),
-                    email);
+                    email, phone);
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from VK: " + e.getMessage(), e);
         }
