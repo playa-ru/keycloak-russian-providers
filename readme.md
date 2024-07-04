@@ -35,7 +35,7 @@
 
 | Версия библиотеки | Версия Keycloak | Репозиторий                                      |
 |:-----------------:|:---------------:| :----------------------------------------------: |
-|    24.0.1.rsp     |     24.0.1      | [Maven Central](https://mvnrepository.com)       |
+|   24.0.1.rsp-2    |     24.0.1      | [Maven Central](https://mvnrepository.com)       |
 |   23.0.6.rsp-3    |     23.0.6      | [Maven Central](https://mvnrepository.com)       |
 |    22.0.3.rsp     |     22.0.3      | [Maven Central](https://mvnrepository.com)       |
 |    21.1.1.rsp     |     21.1.1      | [Maven Central](https://mvnrepository.com)       |
