@@ -13,10 +13,9 @@ import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import ru.playa.keycloak.modules.AbstractVKOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.InfinispanUtils;
 import ru.playa.keycloak.modules.JsonUtils;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -45,11 +44,6 @@ public class VKIDIdentityProvider
     private static final String PROFILE_URL = "https://api.vk.com/method/users.get";
 
     /**
-     * Кеш state-ов.
-     */
-    private static final Map<String, String> CACHE = new HashMap<>();
-
-    /**
      * Создает объект OAuth-авторизации через
      * <a href="https://vk.com">ВКонтакте</a>.
      *
@@ -73,7 +67,7 @@ public class VKIDIdentityProvider
     protected UriBuilder createAuthorizationUrl(AuthenticationRequest request) {
         final String state = UUID.randomUUID().toString();
 
-        CACHE.put(state, request.getState().getEncoded());
+        InfinispanUtils.put(state, request.getState().getEncoded());
 
         return UriBuilder
                 .fromUri(getConfig().getAuthorizationUrl())
@@ -116,7 +110,7 @@ public class VKIDIdentityProvider
 
             String token = JsonUtils.asText(node, "token");
             String uuid = JsonUtils.asText(node, "uuid");
-            String oldState = CACHE.getOrDefault(uuid, uuid);
+            String oldState = InfinispanUtils.get(uuid);
 
             return super.authResponse(oldState, token, error);
         }

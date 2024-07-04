@@ -4,8 +4,10 @@ import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
 import ru.playa.keycloak.modules.AbstractVKOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.InfinispanUtils;
 
 import java.util.List;
 
@@ -26,6 +28,13 @@ public class VKIDIdentityProviderFactory
     @Override
     public String getName() {
         return "VK ID";
+    }
+
+    @Override
+    public void postInit(KeycloakSessionFactory factory) {
+        InfinispanUtils.init(factory.create());
+
+        super.postInit(factory);
     }
 
     @Override
