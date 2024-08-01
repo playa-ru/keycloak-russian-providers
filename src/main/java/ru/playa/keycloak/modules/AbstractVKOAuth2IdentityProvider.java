@@ -91,14 +91,14 @@ implements SocialIdentityProvider<T> {
         logger.infof("ExtractIdentityFromProfile. Context %s", context);
 
         BrokeredIdentityContext user = new BrokeredIdentityContext(
-            Objects.requireNonNull(JsonUtils.asText(context, "id"))
+            Objects.requireNonNull(JsonUtils.asText(context, "id")),
+            getConfig()
         );
 
         user.setUsername(JsonUtils.asText(context, "screen_name"));
         user.setFirstName(JsonUtils.asText(context, "first_name"));
         user.setLastName(JsonUtils.asText(context, "last_name"));
 
-        user.setIdpConfig(getConfig());
         user.setIdp(this);
 
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, context, getConfig().getAlias());

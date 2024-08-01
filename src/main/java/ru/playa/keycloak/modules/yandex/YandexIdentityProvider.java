@@ -76,7 +76,7 @@ public class YandexIdentityProvider
 
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode node) {
-        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(node, "id"));
+        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(node, "id"), getConfig());
 
         String email = getJsonProperty(node, "default_email");
         if (StringUtils.isNullOrEmpty(email)) {
@@ -96,7 +96,6 @@ public class YandexIdentityProvider
         user.setLastName(getJsonProperty(node, "last_name"));
         user.setFirstName(getJsonProperty(node, "first_name"));
 
-        user.setIdpConfig(getConfig());
         user.setIdp(this);
 
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, node, getConfig().getAlias());

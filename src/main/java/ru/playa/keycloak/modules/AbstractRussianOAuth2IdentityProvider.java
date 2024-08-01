@@ -146,7 +146,6 @@ public abstract class AbstractRussianOAuth2IdentityProvider<C extends OAuth2Iden
                     }
                 }
 
-                federatedIdentity.setIdpConfig(providerConfig);
                 federatedIdentity.setIdp(provider);
                 federatedIdentity.setAuthenticationSession(authSession);
 
