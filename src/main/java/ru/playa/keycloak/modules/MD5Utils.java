@@ -3,6 +3,7 @@ package ru.playa.keycloak.modules;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  * Утилитный класс генерации хеша в формате MD5.
@@ -24,7 +25,7 @@ public class MD5Utils {
         return new String(encode(md5(getBytes(data))));
     }
 
-    private static byte[] getBytes(final String string) {
+    public static byte[] getBytes(final String string) {
         if (string == null) {
             return null;
         }
@@ -48,5 +49,26 @@ public class MD5Utils {
             out[j++] = DIGITS_LOWER[0x0F & data[i]];
         }
         return out;
+    }
+
+    public static String sha256(final String data) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+           return Base64.getUrlEncoder().encodeToString(digest.digest(getBytes(data)));
+        } catch (final NoSuchAlgorithmException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 }

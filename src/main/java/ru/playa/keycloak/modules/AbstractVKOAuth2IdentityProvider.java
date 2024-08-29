@@ -82,6 +82,10 @@ implements SocialIdentityProvider<T> {
         return SimpleHttp.doGet(getConfig().getUserInfoUrl() + "&access_token=" + subjectToken, session);
     }
 
+    public KeycloakSession getSession() {
+        return session;
+    }
+
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode node) {
         logger.infof("ExtractIdentityFromProfile. Node %s", node);

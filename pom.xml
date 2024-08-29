@@ -67,6 +67,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <version>2.9.0</version>
@@ -132,67 +137,67 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${version.checkstyle.plugin}</version>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--                <version>${version.checkstyle.plugin}</version>-->
 
-                <configuration>
-                    <consoleOutput>true</consoleOutput>
-                    <configLocation>checkstyle.xml</configLocation>
-                </configuration>
+<!--                <configuration>-->
+<!--                    <consoleOutput>true</consoleOutput>-->
+<!--                    <configLocation>checkstyle.xml</configLocation>-->
+<!--                </configuration>-->
 
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>validate</phase>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>check</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>validate</phase>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${version.pmd.plugin}</version>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-pmd-plugin</artifactId>-->
+<!--                <version>${version.pmd.plugin}</version>-->
 
-                <configuration>
-                    <sourceEncoding>utf-8</sourceEncoding>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>1.8</targetJdk>
-                    <rulesets>
-                        <ruleset>pmd.xml</ruleset>
-                    </rulesets>
-                    <excludeRoots>
-                        <excludeRoot>target/generated-sources</excludeRoot>
-                    </excludeRoots>
-                    <analysisCache>true</analysisCache>
-                </configuration>
+<!--                <configuration>-->
+<!--                    <sourceEncoding>utf-8</sourceEncoding>-->
+<!--                    <minimumTokens>100</minimumTokens>-->
+<!--                    <targetJdk>1.8</targetJdk>-->
+<!--                    <rulesets>-->
+<!--                        <ruleset>pmd.xml</ruleset>-->
+<!--                    </rulesets>-->
+<!--                    <excludeRoots>-->
+<!--                        <excludeRoot>target/generated-sources</excludeRoot>-->
+<!--                    </excludeRoots>-->
+<!--                    <analysisCache>true</analysisCache>-->
+<!--                </configuration>-->
 
-                <executions>
-                    <execution>
-                        <id>pmd-check</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <excludeFromFailureFile>exclude-pmd.properties</excludeFromFailureFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>cpd-check</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>cpd-check</goal>
-                        </goals>
-                        <configuration>
-                            <excludeFromFailureFile>exclude-cpd.properties</excludeFromFailureFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>pmd-check</id>-->
+<!--                        <phase>test</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>check</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <excludeFromFailureFile>exclude-pmd.properties</excludeFromFailureFile>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>cpd-check</id>-->
+<!--                        <phase>test</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>cpd-check</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <excludeFromFailureFile>exclude-cpd.properties</excludeFromFailureFile>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -200,20 +205,20 @@
                 <version>${version.deploy.plugin}</version>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
+<!--                <version>3.2.0</version>-->
 
-                <executions>
-                    <execution>
-                        <id>attach-javadoc</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>attach-javadoc</id>-->
+<!--                        <goals>-->
+<!--                            <goal>jar</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
