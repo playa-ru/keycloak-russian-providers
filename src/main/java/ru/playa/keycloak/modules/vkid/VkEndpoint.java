@@ -81,7 +81,6 @@ public class VkEndpoint extends AEndpoint {
                 .param(AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_CLIENT_ID, provider.getConfig().getClientId())
                 .param("device_id", device_id)
                 .param("code_verifier",codeVerifier)
-                .param("code_challenge",MD5Utils.sha256(codeVerifier))
                 .param("state", state);
 
         logger.infof("CreateAuthorizationUrl %s", tokenRequest.getUrl());

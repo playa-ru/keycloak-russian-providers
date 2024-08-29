@@ -14,6 +14,7 @@ import org.keycloak.provider.ProviderConfigurationBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Базовый провайдер OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -90,7 +91,10 @@ implements SocialIdentityProvider<T> {
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode node) {
         logger.infof("ExtractIdentityFromProfile. Node %s", node);
 
-        JsonNode context = JsonUtils.asJsonNode(node, "response").get(0);
+        JsonNode context = Optional
+                .ofNullable(JsonUtils.asJsonNode(node, "response"))
+                .map(e -> e.get(0))
+                .orElse(node);
 
         logger.infof("ExtractIdentityFromProfile. Context %s", context);
 
