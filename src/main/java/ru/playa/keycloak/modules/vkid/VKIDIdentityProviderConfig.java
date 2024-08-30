@@ -17,7 +17,7 @@ public class VKIDIdentityProviderConfig
      *
      * @param model Модель настроек OAuth-авторизации.
      */
-    public VKIDIdentityProviderConfig(IdentityProviderModel model) {
+    public VKIDIdentityProviderConfig(final IdentityProviderModel model) {
         super(model);
     }
 

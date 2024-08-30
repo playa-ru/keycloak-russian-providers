@@ -40,7 +40,7 @@ public final class InfinispanUtils {
      *
      * @param session Сессия Keycloak.
      */
-    public static synchronized void init(KeycloakSession session) {
+    public static synchronized void init(final KeycloakSession session) {
         if (cache != null) {
             return;
         }
@@ -68,7 +68,7 @@ public final class InfinispanUtils {
      * @param key Ключ.
      * @param value Значение.
      */
-    public static void put(String key, String value) {
+    public static void put(final String key, final String value) {
         LOGGER.infof("Put value in cache %s. Key %s. Value %s", INFINISPAN_CACHE_NAME, key, value);
 
         cache.put(key, value);
@@ -80,7 +80,7 @@ public final class InfinispanUtils {
      * @param key Ключ.
      * @return Значение
      */
-    public static String get(String key) {
+    public static String get(final String key) {
         LOGGER.infof("Get value from cache %s. Key %s.", INFINISPAN_CACHE_NAME, key);
 
         return cache.getOrDefault(key, key).toString();

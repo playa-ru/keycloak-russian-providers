@@ -18,7 +18,7 @@ public class OKIdentityProviderConfig
      *
      * @param model Модель настроек OAuth-авторизации.
      */
-    public OKIdentityProviderConfig(IdentityProviderModel model) {
+    public OKIdentityProviderConfig(final IdentityProviderModel model) {
         super(model);
     }
 

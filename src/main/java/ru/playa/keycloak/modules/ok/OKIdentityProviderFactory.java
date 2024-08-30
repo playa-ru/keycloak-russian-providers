@@ -29,7 +29,7 @@ public class OKIdentityProviderFactory
     }
 
     @Override
-    public OKIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
+    public OKIdentityProvider create(final KeycloakSession session, final IdentityProviderModel model) {
         return new OKIdentityProvider(session, new OKIdentityProviderConfig(model));
     }
 

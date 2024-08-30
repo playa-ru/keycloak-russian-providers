@@ -10,7 +10,7 @@ import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.StringUtils;
+import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
 
@@ -21,8 +21,8 @@ import java.io.IOException;
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuIdentityProvider
-        extends AbstractRussianOAuth2IdentityProvider<MailRuIdentityProviderConfig>
-        implements SocialIdentityProvider<MailRuIdentityProviderConfig> {
+    extends AbstractRussianOAuth2IdentityProvider<MailRuIdentityProviderConfig>
+    implements SocialIdentityProvider<MailRuIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -51,7 +51,7 @@ public class MailRuIdentityProvider
      * @param session Сессия Keycloak.
      * @param config  Конфигурация OAuth-авторизации.
      */
-    public MailRuIdentityProvider(KeycloakSession session, MailRuIdentityProviderConfig config) {
+    public MailRuIdentityProvider(final KeycloakSession session, final MailRuIdentityProviderConfig config) {
         super(session, config);
         config.setAuthorizationUrl(AUTH_URL);
         config.setTokenUrl(TOKEN_URL);
@@ -59,10 +59,8 @@ public class MailRuIdentityProvider
     }
 
     @Override
-    public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
-        return new MailRuEndpoint(
-            callback, event, this, session
-        );
+    public Object callback(final RealmModel realm, final AuthenticationCallback callback, final EventBuilder event) {
+        return new MailRuEndpoint(callback, event, this, session);
     }
 
     @Override
@@ -71,12 +69,12 @@ public class MailRuIdentityProvider
     }
 
     @Override
-    protected String getProfileEndpointForValidation(EventBuilder event) {
+    protected String getProfileEndpointForValidation(final EventBuilder event) {
         return PROFILE_URL;
     }
 
     @Override
-    protected SimpleHttp buildUserInfoRequest(String subjectToken, String userInfoUrl) {
+    protected SimpleHttp buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
         logger.info("subjectToken: " + subjectToken);
         logger.info("userInfoUrl: " + userInfoUrl);
 
@@ -84,17 +82,17 @@ public class MailRuIdentityProvider
     }
 
     @Override
-    protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
+    protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode profile) {
         logger.info("profile: " + profile.toString());
 
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "email"), getConfig());
 
         String email = getJsonProperty(profile, "email");
 
-        if (StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(StringUtils.email("MailRu"));
+        if (Utils.isNullOrEmpty(email)) {
+            throw new IllegalArgumentException(Utils.toEmailErrorMessage("MailRu"));
         } else {
-            StringUtils.isHostedDomain(email, getConfig().getHostedDomain(), "MailRu");
+            Utils.isHostedDomain(email, getConfig().getHostedDomain(), "MailRu");
         }
 
         user.setEmail(email);
@@ -110,11 +108,12 @@ public class MailRuIdentityProvider
     }
 
     @Override
-    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
+    protected BrokeredIdentityContext doGetFederatedIdentity(final String accessToken) {
         try {
-            return extractIdentityFromProfile(null,
-                                              SimpleHttp.doGet(PROFILE_URL + "?access_token=" + accessToken, session)
-                                                        .asJson());
+            return extractIdentityFromProfile(
+                null,
+                SimpleHttp.doGet(PROFILE_URL + "?access_token=" + accessToken, session).asJson()
+            );
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from MailRu: " + e.getMessage(), e);
         }

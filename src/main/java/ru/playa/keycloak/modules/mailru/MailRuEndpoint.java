@@ -22,15 +22,34 @@ import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PAR
  */
 public class MailRuEndpoint extends AbstractRussianEndpoint {
 
+    /**
+     * Провайдер авторизации.
+     */
     private final MailRuIdentityProvider provider;
+
+    /**
+     * Сессия.
+     */
     private final KeycloakSession session;
+
+    /**
+     * Контекст.
+     */
     private final KeycloakContext context;
 
+    /**
+     * Конструктор.
+     *
+     * @param aCallback Callback.
+     * @param aEvent    Сервис отправки событий.
+     * @param aProvider Провайдер авторизации.
+     * @param aSession  Сессия.
+     */
     public MailRuEndpoint(
-        IdentityProvider.AuthenticationCallback aCallback,
-        EventBuilder aEvent,
-        MailRuIdentityProvider aProvider,
-        KeycloakSession aSession
+        final IdentityProvider.AuthenticationCallback aCallback,
+        final EventBuilder aEvent,
+        final MailRuIdentityProvider aProvider,
+        final KeycloakSession aSession
     ) {
         super(aCallback, aEvent, aProvider, aSession);
         this.provider = aProvider;
@@ -39,7 +58,7 @@ public class MailRuEndpoint extends AbstractRussianEndpoint {
     }
 
     @Override
-    public SimpleHttp generateTokenRequest(String authorizationCode) {
+    public SimpleHttp generateTokenRequest(final String authorizationCode) {
         String clientID = provider.getConfig().getClientId();
         String clientSecret = provider.getConfig().getClientSecret();
         String credentials = Base64

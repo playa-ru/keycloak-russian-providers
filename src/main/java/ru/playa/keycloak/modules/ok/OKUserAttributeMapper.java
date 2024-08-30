@@ -16,8 +16,6 @@ public class OKUserAttributeMapper
      */
     private static final String[] COMPATIBLE_PROVIDERS = new String[]{OKIdentityProviderFactory.PROVIDER_ID};
 
-    private static final String MAPPER_ID = "ok-user-attribute-mapper";
-
     @Override
     public String[] getCompatibleProviders() {
         return COMPATIBLE_PROVIDERS;
@@ -25,6 +23,6 @@ public class OKUserAttributeMapper
 
     @Override
     public String getId() {
-        return MAPPER_ID;
+        return "ok-user-attribute-mapper";
     }
 }

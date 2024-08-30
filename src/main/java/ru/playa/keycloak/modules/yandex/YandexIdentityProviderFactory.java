@@ -29,7 +29,7 @@ public class YandexIdentityProviderFactory
     }
 
     @Override
-    public YandexIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
+    public YandexIdentityProvider create(final KeycloakSession session, final IdentityProviderModel model) {
         return new YandexIdentityProvider(session, new YandexIdentityProviderConfig(model));
     }
 

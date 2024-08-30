@@ -45,26 +45,65 @@ import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PAR
  * в профиле социальной сети не указана электронная почта.
  */
 public class AbstractRussianEndpoint {
-    private static final String BROKER_CODE_CHALLENGE_PARAM = "BROKER_CODE_CHALLENGE";
+    /**
+     * Logger.
+     */
     protected static final Logger LOGGER = Logger.getLogger(AbstractOAuth2IdentityProvider.class);
 
+    /**
+     * Переменная из @{code AbstractOAuth2IdentityProvider#BROKER_CODE_CHALLENGE_PARAM}.
+     */
+    private static final String BROKER_CODE_CHALLENGE_PARAM = "BROKER_CODE_CHALLENGE";
+
+    /**
+     * Callback.
+     */
     private final IdentityProvider.AuthenticationCallback callback;
+
+    /**
+     * Сервис отправки событий.
+     */
     private final EventBuilder event;
+
+    /**
+     * Провайдер авторизации.
+     */
     private final AbstractOAuth2IdentityProvider provider;
+
+    /**
+     * Сессия.
+     */
     private final KeycloakSession session;
 
+    /**
+     * Конструктор.
+     *
+     * @param aCallback Callback.
+     * @param aEvent    Сервис отправки событий.
+     * @param aProvider Провайдер авторизации.
+     * @param aSession  Сессия.
+     */
     public AbstractRussianEndpoint(
         final IdentityProvider.AuthenticationCallback aCallback,
         final EventBuilder aEvent,
         final AbstractOAuth2IdentityProvider aProvider,
-        final KeycloakSession sSession
+        final KeycloakSession aSession
     ) {
         this.callback = aCallback;
         this.event = aEvent;
         this.provider = aProvider;
-        this.session = sSession;
+        this.session = aSession;
     }
 
+    /**
+     * Метод получения кода авторизации.
+     *
+     * @param state             Код.
+     * @param authorizationCode Код авторизации
+     * @param error             Код ошибки.
+     * @param errorDescription  Описание ошибки
+     * @return Response.
+     */
     @GET
     @Path("")
     public Response authResponse(
@@ -151,20 +190,40 @@ public class AbstractRussianEndpoint {
         }
     }
 
-    private void logErroneousRedirectUrlError(String mainMessage, OAuth2IdentityProviderConfig providerConfig) {
+    /**
+     * Логирование ошибки.
+     *
+     * @param mainMessage    Сообщение об ошибке.
+     * @param providerConfig Настройки провайдера авторизации.
+     */
+    private void logErroneousRedirectUrlError(
+        final String mainMessage, final OAuth2IdentityProviderConfig providerConfig
+    ) {
         String providerId = providerConfig.getProviderId();
         String redirectionUrl = session.getContext().getUri().getRequestUri().toString();
 
         LOGGER.errorf("%s. providerId=%s, redirectionUrl=%s", mainMessage, providerId, redirectionUrl);
     }
 
-    private Response errorIdentityProviderLogin(String message) {
+    /**
+     * Завершение Flow ошибкой авторизации.
+     *
+     * @param message Сообщение об ошибке.
+     * @return Response.
+     */
+    private Response errorIdentityProviderLogin(final String message) {
         event.event(EventType.IDENTITY_PROVIDER_LOGIN);
         event.error(Errors.IDENTITY_PROVIDER_LOGIN_FAILURE);
         return ErrorPage.error(session, null, Response.Status.BAD_GATEWAY, message);
     }
 
-    public SimpleHttp generateTokenRequest(String authorizationCode) {
+    /**
+     * Обмен кода на токен.
+     *
+     * @param authorizationCode Код.
+     * @return HTTP запрос.
+     */
+    public SimpleHttp generateTokenRequest(final String authorizationCode) {
         KeycloakContext context = session.getContext();
         OAuth2IdentityProviderConfig providerConfig = provider.getConfig();
         SimpleHttp tokenRequest = SimpleHttp

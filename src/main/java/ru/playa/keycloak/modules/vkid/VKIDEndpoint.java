@@ -29,16 +29,39 @@ import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PAR
  */
 public class VKIDEndpoint extends AbstractRussianEndpoint {
 
+    /**
+     * Провайдер авторизации.
+     */
     private final VKIDIdentityProvider provider;
-    private final KeycloakContext context;
-    private final HttpRequest request;
+
+    /**
+     * Сессия.
+     */
     private final KeycloakSession session;
 
+    /**
+     * Контекст.
+     */
+    private final KeycloakContext context;
+
+    /**
+     * HTTP запрос.
+     */
+    private final HttpRequest request;
+
+    /**
+     * Конструктор.
+     *
+     * @param aCallback Callback.
+     * @param aEvent    Сервис отправки событий.
+     * @param aProvider Провайдер авторизации.
+     * @param aSession  Сессия.
+     */
     public VKIDEndpoint(
-        IdentityProvider.AuthenticationCallback aCallback,
-        EventBuilder aEvent,
-        VKIDIdentityProvider aProvider,
-        KeycloakSession aSession
+        final IdentityProvider.AuthenticationCallback aCallback,
+        final EventBuilder aEvent,
+        final VKIDIdentityProvider aProvider,
+        final KeycloakSession aSession
     ) {
         super(aCallback, aEvent, aProvider, aSession);
         this.provider = aProvider;
@@ -49,11 +72,12 @@ public class VKIDEndpoint extends AbstractRussianEndpoint {
 
     @GET
     @Path("")
+    @Override
     public Response authResponse(
-        @QueryParam(OAUTH2_PARAMETER_STATE) String state,
-        @QueryParam(OAUTH2_PARAMETER_CODE) String authorizationCode,
-        @QueryParam(ERROR) String error,
-        @QueryParam(ERROR_DESCRIPTION) String errorDescription
+        @QueryParam(OAUTH2_PARAMETER_STATE) final String state,
+        @QueryParam(OAUTH2_PARAMETER_CODE) final String authorizationCode,
+        @QueryParam(ERROR) final String error,
+        @QueryParam(ERROR_DESCRIPTION) final String errorDescription
     ) {
         String oldState = InfinispanUtils.get(state);
 
@@ -61,7 +85,7 @@ public class VKIDEndpoint extends AbstractRussianEndpoint {
     }
 
     @Override
-    public SimpleHttp generateTokenRequest(String authorizationCode) {
+    public SimpleHttp generateTokenRequest(final String authorizationCode) {
         String deviceID = request.getUri().getQueryParameters().getFirst("device_id");
         String state = request.getUri().getQueryParameters().getFirst("state");
         String oldState = InfinispanUtils.get(state);

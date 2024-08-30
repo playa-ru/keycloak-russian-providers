@@ -29,7 +29,7 @@ public class VKIdentityProviderFactory
     }
 
     @Override
-    public VKIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
+    public VKIdentityProvider create(final KeycloakSession session, final IdentityProviderModel model) {
         return new VKIdentityProvider(session, new VKIdentityProviderConfig(model));
     }
 

@@ -9,7 +9,7 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.StringUtils;
+import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
 
@@ -52,7 +52,7 @@ public class OKIdentityProvider
      * @param session Сессия Keycloak.
      * @param config  Конфигурация OAuth-авторизации.
      */
-    public OKIdentityProvider(KeycloakSession session, OKIdentityProviderConfig config) {
+    public OKIdentityProvider(final KeycloakSession session, final OKIdentityProviderConfig config) {
         super(session, config);
         config.setAuthorizationUrl(AUTH_URL);
         config.setTokenUrl(TOKEN_URL);
@@ -65,32 +65,32 @@ public class OKIdentityProvider
     }
 
     @Override
-    protected String getProfileEndpointForValidation(EventBuilder event) {
+    protected String getProfileEndpointForValidation(final EventBuilder event) {
         return PROFILE_URL;
     }
 
     @Override
-    protected SimpleHttp buildUserInfoRequest(String subjectToken, String userInfoUrl) {
+    protected SimpleHttp buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
         return SimpleHttp.doGet(PROFILE_URL + "?access_token=" + subjectToken, session);
     }
 
     @Override
-    protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode profile) {
+    protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode profile) {
         logger.info("profile: " + profile.toString());
 
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "uid"), getConfig());
 
         String email = getJsonProperty(profile, "email");
-        if (getConfig().isEmailRequired() && StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(StringUtils.email("OK"));
+        if (getConfig().isEmailRequired() && Utils.isNullOrEmpty(email)) {
+            throw new IllegalArgumentException(Utils.toEmailErrorMessage("OK"));
         }
 
         String username = getJsonProperty(profile, "login");
 
-        if (StringUtils.nonNullOrEmpty(email)) {
+        if (Utils.nonNullOrEmpty(email)) {
             user.setUsername(email);
         } else {
-            if (StringUtils.nonNullOrEmpty(username)) {
+            if (Utils.nonNullOrEmpty(username)) {
                 user.setUsername(username);
             } else {
                 user.setUsername("ok." + user.getId());
@@ -109,20 +109,18 @@ public class OKIdentityProvider
     }
 
     @Override
-    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
+    protected BrokeredIdentityContext doGetFederatedIdentity(final String accessToken) {
         try {
-
-
             String params = "application_key="
                 + getConfig().getPublicKey()
                 + "format=jsonmethod=users.getCurrentUser"
-                + StringUtils.hex(StringUtils.md5(accessToken + getConfig().getClientSecret()));
+                + Utils.hex(Utils.md5(accessToken + getConfig().getClientSecret()));
 
             String url = PROFILE_URL
                 + "?application_key=" + getConfig().getPublicKey()
                 + "&format=json"
                 + "&method=users.getCurrentUser"
-                + "&sig=" + StringUtils.hex(StringUtils.md5(params))
+                + "&sig=" + Utils.hex(Utils.md5(params))
                 + "&access_token=" + accessToken;
 
             logger.info("url: " + url);

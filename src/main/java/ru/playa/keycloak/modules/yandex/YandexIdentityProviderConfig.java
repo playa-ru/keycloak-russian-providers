@@ -2,7 +2,7 @@ package ru.playa.keycloak.modules.yandex;
 
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.models.IdentityProviderModel;
-import ru.playa.keycloak.modules.StringUtils;
+import ru.playa.keycloak.modules.Utils;
 
 /**
  * Настройки OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
@@ -18,7 +18,7 @@ public class YandexIdentityProviderConfig
      *
      * @param model Модель настроек OAuth-авторизации.
      */
-    public YandexIdentityProviderConfig(IdentityProviderModel model) {
+    public YandexIdentityProviderConfig(final IdentityProviderModel model) {
         super(model);
     }
 
@@ -37,6 +37,6 @@ public class YandexIdentityProviderConfig
     public String getHostedDomain() {
         String hostedDomain = this.getConfig().get("hostedDomain");
 
-        return StringUtils.nonNullOrEmpty(hostedDomain) ? hostedDomain : null;
+        return Utils.nonNullOrEmpty(hostedDomain) ? hostedDomain : null;
     }
 }

@@ -32,14 +32,14 @@ public class VKIDIdentityProviderFactory
     }
 
     @Override
-    public void postInit(KeycloakSessionFactory factory) {
+    public void postInit(final KeycloakSessionFactory factory) {
         InfinispanUtils.init(factory.create());
 
         super.postInit(factory);
     }
 
     @Override
-    public VKIDIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
+    public VKIDIdentityProvider create(final KeycloakSession session, final IdentityProviderModel model) {
         return new VKIDIdentityProvider(session, new VKIDIdentityProviderConfig(model));
     }
 

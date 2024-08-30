@@ -9,7 +9,7 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.StringUtils;
+import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -53,7 +53,7 @@ public class VKIdentityProvider
      * @param session Сессия Keycloak.
      * @param config  Конфигурация OAuth-авторизации.
      */
-    public VKIdentityProvider(KeycloakSession session, VKIdentityProviderConfig config) {
+    public VKIdentityProvider(final KeycloakSession session, final VKIdentityProviderConfig config) {
         super(session, config);
         config.setAuthorizationUrl(AUTH_URL + "?v=" + getConfig().getVersion());
         config.setTokenUrl(TOKEN_URL + "?v=" + getConfig().getVersion());
@@ -66,34 +66,34 @@ public class VKIdentityProvider
     }
 
     @Override
-    protected String getProfileEndpointForValidation(EventBuilder event) {
+    protected String getProfileEndpointForValidation(final EventBuilder event) {
         return getConfig().getUserInfoUrl();
     }
 
     @Override
-    protected SimpleHttp buildUserInfoRequest(String subjectToken, String userInfoUrl) {
+    protected SimpleHttp buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
         return SimpleHttp.doGet(getConfig().getUserInfoUrl() + "&access_token=" + subjectToken, session);
     }
 
     @Override
-    protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode node) {
+    protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode node) {
         logger.infof("ExtractIdentityFromProfile. Node %s", node);
 
         JsonNode context = Optional
-            .ofNullable(StringUtils.asJsonNode(node, "response"))
+            .ofNullable(Utils.asJsonNode(node, "response"))
             .map(e -> e.get(0))
             .orElse(node);
 
         logger.infof("ExtractIdentityFromProfile. Context %s", context);
 
         BrokeredIdentityContext user = new BrokeredIdentityContext(
-            Objects.requireNonNull(StringUtils.asText(context, "id")),
+            Objects.requireNonNull(Utils.asText(context, "id")),
             getConfig()
         );
 
-        user.setUsername(StringUtils.asText(context, "screen_name"));
-        user.setFirstName(StringUtils.asText(context, "first_name"));
-        user.setLastName(StringUtils.asText(context, "last_name"));
+        user.setUsername(Utils.asText(context, "screen_name"));
+        user.setFirstName(Utils.asText(context, "first_name"));
+        user.setLastName(Utils.asText(context, "last_name"));
 
         user.setIdp(this);
 
@@ -102,17 +102,29 @@ public class VKIdentityProvider
         return user;
     }
 
-    protected BrokeredIdentityContext extractIdentityFromProfile(JsonNode node, String email, String phone) {
+    /**
+     * Получение BrokeredIdentityContext из профиля пользователя.
+     *
+     * @param node Профиль пользователя.
+     * @param email Электронная почта.
+     * @param phone Номер телефона.
+     * @return BrokeredIdentityContext
+     */
+    protected BrokeredIdentityContext extractIdentityFromProfile(
+        final JsonNode node,
+        final String email,
+        final String phone
+    ) {
         BrokeredIdentityContext user = extractIdentityFromProfile(null, node);
 
-        if (getConfig().isEmailRequired() && StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(StringUtils.email("VK"));
+        if (getConfig().isEmailRequired() && Utils.isNullOrEmpty(email)) {
+            throw new IllegalArgumentException(Utils.toEmailErrorMessage("VK"));
         }
 
-        if (StringUtils.nonNullOrEmpty(email)) {
+        if (Utils.nonNullOrEmpty(email)) {
             user.setUsername(email);
         } else {
-            if (StringUtils.isNullOrEmpty(user.getUsername())) {
+            if (Utils.isNullOrEmpty(user.getUsername())) {
                 user.setUsername("vk." + user.getId());
             }
         }
@@ -124,17 +136,17 @@ public class VKIdentityProvider
     }
 
     @Override
-    public BrokeredIdentityContext getFederatedIdentity(String response) {
+    public BrokeredIdentityContext getFederatedIdentity(final String response) {
         logger.infof("GetFederatedIdentity %s", response);
 
-        JsonNode node = StringUtils.asJsonNode(response);
-        JsonNode context = StringUtils.asJsonNode(node, "response") == null
+        JsonNode node = Utils.asJsonNode(response);
+        JsonNode context = Utils.asJsonNode(node, "response") == null
             ? node
-            : StringUtils.asJsonNode(node, "response");
-        String accessToken = StringUtils.asText(context, "access_token");
-        String userId = StringUtils.asText(context, "user_id");
-        String email = StringUtils.asText(context, "email");
-        String phone = StringUtils.asText(context, "phone");
+            : Utils.asJsonNode(node, "response");
+        String accessToken = Utils.asText(context, "access_token");
+        String userId = Utils.asText(context, "user_id");
+        String email = Utils.asText(context, "email");
+        String phone = Utils.asText(context, "phone");
 
         if (accessToken == null) {
             throw new IdentityBrokerException("No access token available in OAuth server response: " + response);
@@ -148,14 +160,20 @@ public class VKIdentityProvider
     /**
      * Запрос информации о пользователе.
      *
+     * @param accessToken Access токен.
+     * @param email Электронная почта.
+     * @param phone Номер телефона.
+     * @param userId Уникальный идентификатор пользователя.
      * @return Данные авторизованного пользователя.
      */
     protected BrokeredIdentityContext doGetFederatedIdentity(
-        String accessToken, String userId, String email,
-        String phone
+        final String accessToken,
+        final String userId,
+        final String email,
+        final String phone
     ) {
         try {
-            String fields = StringUtils.isNullOrEmpty(getConfig().getFetchedFields())
+            String fields = Utils.isNullOrEmpty(getConfig().getFetchedFields())
                 ? "" : "," + getConfig().getFetchedFields();
             String url = getConfig().getUserInfoUrl()
                 + "&access_token=" + accessToken
@@ -176,7 +194,7 @@ public class VKIdentityProvider
     }
 
     @Override
-    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
+    protected BrokeredIdentityContext doGetFederatedIdentity(final String accessToken) {
         try {
             String url = getConfig().getUserInfoUrl()
                 + "&access_token=" + accessToken;
