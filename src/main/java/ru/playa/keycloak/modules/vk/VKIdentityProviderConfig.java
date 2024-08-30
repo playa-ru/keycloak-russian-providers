@@ -1,7 +1,7 @@
 package ru.playa.keycloak.modules.vk;
 
+import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.models.IdentityProviderModel;
-import ru.playa.keycloak.modules.AbstractVKIdentityProviderConfig;
 
 /**
  * Настройки OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -10,7 +10,7 @@ import ru.playa.keycloak.modules.AbstractVKIdentityProviderConfig;
  * @author dmitrymalinin
  */
 public class VKIdentityProviderConfig
-        extends AbstractVKIdentityProviderConfig {
+    extends OAuth2IdentityProviderConfig {
 
     /**
      * Создает объект настроек OAuth-авторизации через
@@ -18,7 +18,7 @@ public class VKIdentityProviderConfig
      *
      * @param model Модель настроек OAuth-авторизации.
      */
-    public VKIdentityProviderConfig(IdentityProviderModel model) {
+    public VKIdentityProviderConfig(final IdentityProviderModel model) {
         super(model);
     }
 

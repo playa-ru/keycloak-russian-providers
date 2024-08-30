@@ -29,7 +29,7 @@ public class MailRuIdentityProviderFactory
     }
 
     @Override
-    public MailRuIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
+    public MailRuIdentityProvider create(final KeycloakSession session, final IdentityProviderModel model) {
         return new MailRuIdentityProvider(session, new MailRuIdentityProviderConfig(model));
     }
 

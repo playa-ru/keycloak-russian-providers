@@ -6,7 +6,7 @@ import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
-import ru.playa.keycloak.modules.AbstractVKOAuth2IdentityProvider;
+import org.keycloak.provider.ProviderConfigurationBuilder;
 import ru.playa.keycloak.modules.InfinispanUtils;
 
 import java.util.List;
@@ -25,20 +25,21 @@ public class VKIDIdentityProviderFactory
      */
     public static final String PROVIDER_ID = "vkid";
 
+
     @Override
     public String getName() {
         return "VK ID";
     }
 
     @Override
-    public void postInit(KeycloakSessionFactory factory) {
+    public void postInit(final KeycloakSessionFactory factory) {
         InfinispanUtils.init(factory.create());
 
         super.postInit(factory);
     }
 
     @Override
-    public VKIDIdentityProvider create(KeycloakSession session, IdentityProviderModel model) {
+    public VKIDIdentityProvider create(final KeycloakSession session, final IdentityProviderModel model) {
         return new VKIDIdentityProvider(session, new VKIDIdentityProviderConfig(model));
     }
 
@@ -49,7 +50,16 @@ public class VKIDIdentityProviderFactory
 
     @Override
     public List<ProviderConfigProperty> getConfigProperties() {
-        return AbstractVKOAuth2IdentityProvider.CONFIG_PROPERTIES;
+        return ProviderConfigurationBuilder
+            .create()
+            .property()
+            .name("emailRequired")
+            .label("Email Required")
+            .helpText("Is email required (user can be registered in VK via phone)")
+            .type(ProviderConfigProperty.BOOLEAN_TYPE)
+            .defaultValue("false")
+            .add()
+            .build();
     }
 
     @Override

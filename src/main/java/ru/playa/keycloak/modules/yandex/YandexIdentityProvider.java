@@ -9,9 +9,7 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.HostedDomainUtils;
-import ru.playa.keycloak.modules.MessageUtils;
-import ru.playa.keycloak.modules.StringUtils;
+import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
 
@@ -22,8 +20,8 @@ import java.io.IOException;
  * @author Anatoliy Pokhresnyi
  */
 public class YandexIdentityProvider
-        extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
-        implements SocialIdentityProvider<YandexIdentityProviderConfig> {
+    extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
+    implements SocialIdentityProvider<YandexIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -52,7 +50,7 @@ public class YandexIdentityProvider
      * @param session Сессия Keycloak.
      * @param config  Конфигурация OAuth-авторизации.
      */
-    public YandexIdentityProvider(KeycloakSession session, YandexIdentityProviderConfig config) {
+    public YandexIdentityProvider(final KeycloakSession session, final YandexIdentityProviderConfig config) {
         super(session, config);
         config.setAuthorizationUrl(AUTH_URL);
         config.setTokenUrl(TOKEN_URL);
@@ -65,28 +63,28 @@ public class YandexIdentityProvider
     }
 
     @Override
-    protected String getProfileEndpointForValidation(EventBuilder event) {
+    protected String getProfileEndpointForValidation(final EventBuilder event) {
         return PROFILE_URL;
     }
 
     @Override
-    protected SimpleHttp buildUserInfoRequest(String subjectToken, String userInfoUrl) {
+    protected SimpleHttp buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
         return SimpleHttp.doGet(PROFILE_URL + "?oauth_token=" + subjectToken, session);
     }
 
     @Override
-    protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode node) {
+    protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode node) {
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(node, "id"), getConfig());
 
         String email = getJsonProperty(node, "default_email");
-        if (StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(MessageUtils.email("Yandex"));
+        if (Utils.isNullOrEmpty(email)) {
+            throw new IllegalArgumentException(Utils.toEmailErrorMessage("Yandex"));
         } else {
-            HostedDomainUtils.isHostedDomain(email, getConfig().getHostedDomain(), "Yandex");
+            Utils.isHostedDomain(email, getConfig().getHostedDomain(), "Yandex");
         }
 
         String login = getJsonProperty(node, "login");
-        if (StringUtils.isNullOrEmpty(login)) {
+        if (Utils.isNullOrEmpty(login)) {
             user.setUsername(email);
         } else {
             user.setUsername(login);
@@ -104,16 +102,14 @@ public class YandexIdentityProvider
     }
 
     @Override
-    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
+    protected BrokeredIdentityContext doGetFederatedIdentity(final String accessToken) {
         try {
             return extractIdentityFromProfile(
-                    null,
-                    SimpleHttp.doGet(
-                            PROFILE_URL
-                                    + "?oauth_token="
-                                    + accessToken,
-                            session)
-                            .asJson());
+                null,
+                SimpleHttp
+                    .doGet(PROFILE_URL + "?oauth_token=" + accessToken, session)
+                    .asJson()
+            );
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from Yandex: " + e.getMessage(), e);
         }

@@ -18,7 +18,7 @@ public class OKIdentityProviderConfig
      *
      * @param model Модель настроек OAuth-авторизации.
      */
-    public OKIdentityProviderConfig(IdentityProviderModel model) {
+    public OKIdentityProviderConfig(final IdentityProviderModel model) {
         super(model);
     }
 
@@ -45,15 +45,6 @@ public class OKIdentityProviderConfig
      */
     public boolean isEmailRequired() {
         return Boolean.parseBoolean(getConfig().getOrDefault("emailRequired", "false"));
-    }
-
-    /**
-     * Дополнительные поля из профиля пользователя.
-     *
-     * @return Дополнительные поля из профиля пользователя
-     */
-    public String getFetchedFields() {
-        return getConfig().get("fetchedFields");
     }
 
 }
