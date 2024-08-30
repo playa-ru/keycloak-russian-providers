@@ -13,6 +13,7 @@
 ## Совместимость
 
 Библиотека провайдеров проверялась на следующих версиях Keycloak:
++ 25.0.2
 + 24.0.1
 + 23.0.6
 + 22.0.3
@@ -35,7 +36,8 @@
 
 | Версия библиотеки | Версия Keycloak | Репозиторий                                      |
 |:-----------------:|:---------------:| :----------------------------------------------: |
-|   24.0.1.rsp-2    |     24.0.1      | [Maven Central](https://mvnrepository.com)       |
+|   25.0.2.rsp-1    |     25.0.2      | [Maven Central](https://mvnrepository.com)       |
+|   24.0.1.rsp-3    |     24.0.1      | [Maven Central](https://mvnrepository.com)       |
 |   23.0.6.rsp-3    |     23.0.6      | [Maven Central](https://mvnrepository.com)       |
 |    22.0.3.rsp     |     22.0.3      | [Maven Central](https://mvnrepository.com)       |
 |    21.1.1.rsp     |     21.1.1      | [Maven Central](https://mvnrepository.com)       |
@@ -52,7 +54,7 @@
 |      1.0.17       |      8.0.1      | [Playa Repository](https://nexus.playa.ru/nexus) |
 |      1.0.16       |      6.0.1      | [Playa Repository](https://nexus.playa.ru/nexus) |
 |      1.0.15       |   4.8.3.Final   | [Playa Repository](https://nexus.playa.ru/nexus) |
-|      1.0.1        |   4.5.0.Final   | [Playa Repository](https://nexus.playa.ru/nexus) |
+|       1.0.1       |   4.5.0.Final   | [Playa Repository](https://nexus.playa.ru/nexus) |
 
 ## Установка провайдеров авторизации в Keycloak
 

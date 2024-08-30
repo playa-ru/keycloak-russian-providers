@@ -12,6 +12,7 @@ With this library you can log in into Keycloak via
 ## Keycloak versions
 
 It was tested against Keycloak versions:
++ 25.0.2
 + 24.0.1
 + 23.0.6
 + 22.0.3
@@ -34,6 +35,7 @@ It was tested against Keycloak versions:
 
 |  Version Library  | Version Keycloak | Repository                                       |
 | :---------------: |:----------------:| :----------------------------------------------: |
+|   25.0.2.rsp-1    |     25.0.2      | [Maven Central](https://mvnrepository.com)       |
 |   24.0.1.rsp-2    |      24.0.1      | [Maven Central](https://mvnrepository.com)       |
 |   23.0.6.rsp-3    |      23.0.6      | [Maven Central](https://mvnrepository.com)       |
 |    22.0.3.rsp     |      22.0.3      | [Maven Central](https://mvnrepository.com)       |
