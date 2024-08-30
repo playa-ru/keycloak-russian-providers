@@ -9,15 +9,10 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import org.keycloak.services.Urls;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.HostedDomainUtils;
-import ru.playa.keycloak.modules.MessageUtils;
 import ru.playa.keycloak.modules.StringUtils;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
@@ -66,7 +61,7 @@ public class MailRuIdentityProvider
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
         return new MailRuEndpoint(
-            callback, realm, event, this
+            callback, event, this, session
         );
     }
 
@@ -97,9 +92,9 @@ public class MailRuIdentityProvider
         String email = getJsonProperty(profile, "email");
 
         if (StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(MessageUtils.email("MailRu"));
+            throw new IllegalArgumentException(StringUtils.email("MailRu"));
         } else {
-            HostedDomainUtils.isHostedDomain(email, getConfig().getHostedDomain(), "MailRu");
+            StringUtils.isHostedDomain(email, getConfig().getHostedDomain(), "MailRu");
         }
 
         user.setEmail(email);
@@ -130,42 +125,5 @@ public class MailRuIdentityProvider
         return DEFAULT_SCOPE;
     }
 
-    /**
-     * Переопределенный класс {@link AbstractRussianOAuth2IdentityProvider.Endpoint}.
-     * Класс переопределен с целью изменения логики замены кода на токен.
-     */
-    protected static class MailRuEndpoint extends AbstractRussianEndpoint<MailRuIdentityProvider> {
 
-        public MailRuEndpoint(
-            AuthenticationCallback aCallback,
-            RealmModel aRealm,
-            EventBuilder aEvent,
-            MailRuIdentityProvider aProvider
-        ) {
-            super(aCallback, aRealm, aEvent, aProvider);
-        }
-
-        @Override
-        public SimpleHttp generateTokenRequest(String authorizationCode) {
-            String clientID = getProvider().getConfig().getClientId();
-            String clientSecret = getProvider().getConfig().getClientSecret();
-            String credentials = Base64
-                .getEncoder()
-                .encodeToString((clientID + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
-
-            return SimpleHttp
-                    .doPost(getProvider().getConfig().getTokenUrl(), session)
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .header("Authorization", "Basic " + credentials)
-                    .param(OAUTH2_PARAMETER_CODE, authorizationCode)
-                    .param(OAUTH2_PARAMETER_REDIRECT_URI, Urls
-                            .identityProviderAuthnResponse(
-                                    session.getContext().getUri().getBaseUri(),
-                                    getProvider().getConfig().getAlias(),
-                                    realm.getName()
-                            )
-                            .toString())
-                    .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE);
-        }
-    }
 }

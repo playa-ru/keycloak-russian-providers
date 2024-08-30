@@ -7,15 +7,17 @@ import org.keycloak.broker.provider.AuthenticationRequest;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
 import org.keycloak.broker.provider.util.SimpleHttp;
+import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import ru.playa.keycloak.modules.*;
+import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.InfinispanUtils;
+import ru.playa.keycloak.modules.StringUtils;
 
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -26,7 +28,8 @@ import java.util.UUID;
  * @author dmitrymalinin
  */
 public class VKIDIdentityProvider
-        extends AbstractVKOAuth2IdentityProvider<VKIDIdentityProviderConfig> {
+    extends AbstractRussianOAuth2IdentityProvider<VKIDIdentityProviderConfig>
+    implements SocialIdentityProvider<VKIDIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -60,7 +63,23 @@ public class VKIDIdentityProvider
 
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
-        return new VkEndpoint(callback, realm, event, this, this.getSession());
+        return new VKIDEndpoint(callback, event, this, session);
+    }
+
+    @Override
+    public BrokeredIdentityContext getFederatedIdentity(String response) {
+        logger.infof("GetFederatedIdentity %s", response);
+
+        JsonNode node = StringUtils.asJsonNode(response);
+        String accessToken = StringUtils.asText(node, "access_token");
+
+        if (accessToken == null) {
+            throw new IdentityBrokerException("No access token available in OAuth server response: " + response);
+        }
+
+        BrokeredIdentityContext biContext = doGetFederatedIdentity(accessToken);
+        biContext.getContextData().put(FEDERATED_ACCESS_TOKEN, accessToken);
+        return biContext;
     }
 
     /**
@@ -68,8 +87,8 @@ public class VKIDIdentityProvider
      *
      * @return Данные авторизованного пользователя.
      */
-    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken, String userId, String email,
-                                                             String phone) {
+    @Override
+    protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         try {
             logger.infof("DoGetFederatedIdentity AccessToken %s", accessToken);
 
@@ -78,28 +97,48 @@ public class VKIDIdentityProvider
                             .doPost(getConfig().getUserInfoUrl(), session)
                             .param("access_token", accessToken)
                             .param("client_id", getConfig().getClientId())
-                            .asJson(),
-                    email, phone);
+                            .asJson()
+            );
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from VK: " + e.getMessage(), e);
         }
     }
 
+    protected BrokeredIdentityContext extractIdentityFromProfile(JsonNode node) {
+        BrokeredIdentityContext user = extractIdentityFromProfile(null, node);
+
+        String email = StringUtils.asText(node, "email");
+        String phone = StringUtils.asText(node, "phone");
+
+        if (getConfig().isEmailRequired() && StringUtils.isNullOrEmpty(email)) {
+            throw new IllegalArgumentException(StringUtils.email("VK"));
+        }
+
+        if (StringUtils.nonNullOrEmpty(email)) {
+            user.setUsername(email);
+        } else {
+            if (StringUtils.isNullOrEmpty(user.getUsername())) {
+                user.setUsername("vk." + user.getId());
+            }
+        }
+
+        user.setEmail(email);
+        user.setUserAttribute("phone", phone);
+
+        return user;
+    }
+
+
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(EventBuilder event, JsonNode node) {
-        logger.infof("ExtractIdentityFromProfile. Node %s", node);
-
-        JsonNode context = JsonUtils.asJsonNode(node, "user");
-
-        logger.infof("ExtractIdentityFromProfile. Context %s", context);
-
+        JsonNode context = StringUtils.asJsonNode(node, "user");
         BrokeredIdentityContext user = new BrokeredIdentityContext(
-                Objects.requireNonNull(JsonUtils.asText(context, "user_id")),
+                Objects.requireNonNull(StringUtils.asText(context, "user_id")),
                 getConfig()
         );
 
-        user.setFirstName(JsonUtils.asText(context, "first_name"));
-        user.setLastName(JsonUtils.asText(context, "last_name"));
+        user.setFirstName(StringUtils.asText(context, "first_name"));
+        user.setLastName(StringUtils.asText(context, "last_name"));
 
         user.setIdp(this);
 
@@ -111,25 +150,24 @@ public class VKIDIdentityProvider
     @Override
     protected UriBuilder createAuthorizationUrl(AuthenticationRequest request) {
         final String state = UUID.randomUUID().toString();
-        final String code = new PkceGeneratorSHA256().generateRandomCodeVerifier(new SecureRandom());
+        final String code = StringUtils.generateRandomCodeVerifier(new SecureRandom());
 
         InfinispanUtils.put(state, request.getState().getEncoded());
         InfinispanUtils.put(request.getState().getEncoded(), code);
 
-        UriBuilder b = UriBuilder
+        return UriBuilder
                 .fromUri(getConfig().getAuthorizationUrl())
                 .queryParam(OAUTH2_PARAMETER_SCOPE, getConfig().getDefaultScope())
                 .queryParam("state", state)
                 .queryParam("code_challenge_method", "s256")
-                .queryParam("code_challenge", new PkceGeneratorSHA256().deriveCodeVerifierChallenge(code))
+                .queryParam("code_challenge", StringUtils.deriveCodeVerifierChallenge(code))
                 .queryParam(OAUTH2_PARAMETER_RESPONSE_TYPE, "code")
                 .queryParam("client_id", getConfig().getClientId())
                 .queryParam(OAUTH2_PARAMETER_REDIRECT_URI, request.getRedirectUri());
-
-        logger.infof("VKIDIdentityProvider CreateAuthorizationUrl code_challenge %s", MD5Utils.sha256(code));
-        logger.infof("VKIDIdentityProvider CreateAuthorizationUrl code_verifier %s", code);
-
-        return b;
     }
 
+    @Override
+    protected String getDefaultScopes() {
+        return "";
+    }
 }

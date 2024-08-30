@@ -5,7 +5,7 @@ import org.keycloak.broker.social.SocialIdentityProviderFactory;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.provider.ProviderConfigProperty;
-import ru.playa.keycloak.modules.AbstractVKOAuth2IdentityProvider;
+import org.keycloak.provider.ProviderConfigurationBuilder;
 
 import java.util.List;
 
@@ -40,7 +40,28 @@ public class VKIdentityProviderFactory
 
     @Override
     public List<ProviderConfigProperty> getConfigProperties() {
-        return AbstractVKOAuth2IdentityProvider.CONFIG_PROPERTIES;
+        return ProviderConfigurationBuilder
+            .create()
+            .property()
+            .name("version")
+            .label("Version VK API")
+            .helpText("Version of VK API.")
+            .type(ProviderConfigProperty.STRING_TYPE)
+            .add()
+            .property()
+            .name("emailRequired")
+            .label("Email Required")
+            .helpText("Is email required (user can be registered in VK via phone)")
+            .type(ProviderConfigProperty.BOOLEAN_TYPE)
+            .defaultValue("false")
+            .add()
+            .property()
+            .name("fetchedFields")
+            .label("Fetched Fields")
+            .helpText("Additional fields to need to be fetched")
+            .type(ProviderConfigProperty.STRING_TYPE)
+            .add()
+            .build();
     }
 
     @Override

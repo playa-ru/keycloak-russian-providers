@@ -6,7 +6,7 @@ import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.provider.ProviderConfigProperty;
-import ru.playa.keycloak.modules.AbstractVKOAuth2IdentityProvider;
+import org.keycloak.provider.ProviderConfigurationBuilder;
 import ru.playa.keycloak.modules.InfinispanUtils;
 
 import java.util.List;
@@ -24,6 +24,7 @@ public class VKIDIdentityProviderFactory
      * Уникальный идентификатор провайдера.
      */
     public static final String PROVIDER_ID = "vkid";
+
 
     @Override
     public String getName() {
@@ -49,7 +50,16 @@ public class VKIDIdentityProviderFactory
 
     @Override
     public List<ProviderConfigProperty> getConfigProperties() {
-        return AbstractVKOAuth2IdentityProvider.CONFIG_PROPERTIES;
+        return ProviderConfigurationBuilder
+            .create()
+            .property()
+            .name("emailRequired")
+            .label("Email Required")
+            .helpText("Is email required (user can be registered in VK via phone)")
+            .type(ProviderConfigProperty.BOOLEAN_TYPE)
+            .defaultValue("false")
+            .add()
+            .build();
     }
 
     @Override

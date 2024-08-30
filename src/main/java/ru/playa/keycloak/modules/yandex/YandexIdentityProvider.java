@@ -9,8 +9,6 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.HostedDomainUtils;
-import ru.playa.keycloak.modules.MessageUtils;
 import ru.playa.keycloak.modules.StringUtils;
 
 import java.io.IOException;
@@ -22,8 +20,8 @@ import java.io.IOException;
  * @author Anatoliy Pokhresnyi
  */
 public class YandexIdentityProvider
-        extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
-        implements SocialIdentityProvider<YandexIdentityProviderConfig> {
+    extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
+    implements SocialIdentityProvider<YandexIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -80,9 +78,9 @@ public class YandexIdentityProvider
 
         String email = getJsonProperty(node, "default_email");
         if (StringUtils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(MessageUtils.email("Yandex"));
+            throw new IllegalArgumentException(StringUtils.email("Yandex"));
         } else {
-            HostedDomainUtils.isHostedDomain(email, getConfig().getHostedDomain(), "Yandex");
+            StringUtils.isHostedDomain(email, getConfig().getHostedDomain(), "Yandex");
         }
 
         String login = getJsonProperty(node, "login");
@@ -107,13 +105,11 @@ public class YandexIdentityProvider
     protected BrokeredIdentityContext doGetFederatedIdentity(String accessToken) {
         try {
             return extractIdentityFromProfile(
-                    null,
-                    SimpleHttp.doGet(
-                            PROFILE_URL
-                                    + "?oauth_token="
-                                    + accessToken,
-                            session)
-                            .asJson());
+                null,
+                SimpleHttp
+                    .doGet(PROFILE_URL + "?oauth_token=" + accessToken, session)
+                    .asJson()
+            );
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from Yandex: " + e.getMessage(), e);
         }
