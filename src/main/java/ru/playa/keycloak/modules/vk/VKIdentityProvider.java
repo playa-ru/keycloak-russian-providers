@@ -12,7 +12,6 @@ import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -86,16 +85,14 @@ public class VKIdentityProvider
 
         logger.infof("ExtractIdentityFromProfile. Context %s", context);
 
-        BrokeredIdentityContext user = new BrokeredIdentityContext(
-            Objects.requireNonNull(Utils.asText(context, "id")),
-            getConfig()
-        );
+        BrokeredIdentityContext user = new BrokeredIdentityContext(Utils.asText(context, "id"));
 
         user.setUsername(Utils.asText(context, "screen_name"));
         user.setFirstName(Utils.asText(context, "first_name"));
         user.setLastName(Utils.asText(context, "last_name"));
 
         user.setIdp(this);
+        user.setIdpConfig(getConfig());
 
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, context, getConfig().getAlias());
 

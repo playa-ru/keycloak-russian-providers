@@ -85,7 +85,7 @@ public class MailRuIdentityProvider
     protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode profile) {
         logger.info("profile: " + profile.toString());
 
-        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "email"), getConfig());
+        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "email"));
 
         String email = getJsonProperty(profile, "email");
 
@@ -101,6 +101,7 @@ public class MailRuIdentityProvider
         user.setLastName(getJsonProperty(profile, "last_name"));
 
         user.setIdp(this);
+        user.setIdpConfig(getConfig());
 
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, profile, getConfig().getAlias());
 

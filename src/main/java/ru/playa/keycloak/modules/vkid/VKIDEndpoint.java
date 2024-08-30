@@ -15,7 +15,6 @@ import ru.playa.keycloak.modules.AbstractRussianEndpoint;
 import ru.playa.keycloak.modules.InfinispanUtils;
 
 import static org.keycloak.OAuth2Constants.ERROR;
-import static org.keycloak.OAuth2Constants.ERROR_DESCRIPTION;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_CLIENT_ID;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_CODE;
@@ -76,12 +75,11 @@ public class VKIDEndpoint extends AbstractRussianEndpoint {
     public Response authResponse(
         @QueryParam(OAUTH2_PARAMETER_STATE) final String state,
         @QueryParam(OAUTH2_PARAMETER_CODE) final String authorizationCode,
-        @QueryParam(ERROR) final String error,
-        @QueryParam(ERROR_DESCRIPTION) final String errorDescription
+        @QueryParam(ERROR) final String error
     ) {
         String oldState = InfinispanUtils.get(state);
 
-        return super.authResponse(oldState, authorizationCode, error, errorDescription);
+        return super.authResponse(oldState, authorizationCode, error);
     }
 
     @Override

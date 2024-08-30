@@ -1,11 +1,11 @@
 package ru.playa.keycloak.modules;
 
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.OAuthErrorException;
 import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
@@ -18,7 +18,6 @@ import org.keycloak.events.Errors;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.events.EventType;
 import org.keycloak.models.ClientModel;
-import org.keycloak.models.Constants;
 import org.keycloak.models.KeycloakContext;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
@@ -28,16 +27,11 @@ import org.keycloak.services.managers.ClientSessionCode;
 import org.keycloak.services.messages.Messages;
 import org.keycloak.sessions.AuthenticationSessionModel;
 
-import static org.keycloak.OAuth2Constants.CODE_VERIFIER;
-import static org.keycloak.OAuth2Constants.ERROR;
-import static org.keycloak.OAuth2Constants.ERROR_DESCRIPTION;
-import static org.keycloak.OAuth2Constants.STATE;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.ACCESS_DENIED;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_CODE;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_GRANT_TYPE;
 import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_REDIRECT_URI;
-import static org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_STATE;
 
 /**
  * Переопределенный класс {@code AbstractOAuth2IdentityProvider#Endpoint}.
@@ -101,16 +95,13 @@ public class AbstractRussianEndpoint {
      * @param state             Код.
      * @param authorizationCode Код авторизации
      * @param error             Код ошибки.
-     * @param errorDescription  Описание ошибки
      * @return Response.
      */
     @GET
-    @Path("")
     public Response authResponse(
-        @QueryParam(OAUTH2_PARAMETER_STATE) final String state,
-        @QueryParam(OAUTH2_PARAMETER_CODE) final String authorizationCode,
-        @QueryParam(ERROR) final String error,
-        @QueryParam(ERROR_DESCRIPTION) final String errorDescription
+        @QueryParam(AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_STATE) final String state,
+        @QueryParam(AbstractOAuth2IdentityProvider.OAUTH2_PARAMETER_CODE) final String authorizationCode,
+        @QueryParam(OAuth2Constants.ERROR) final String error
     ) {
         OAuth2IdentityProviderConfig providerConfig = provider.getConfig();
 
@@ -130,10 +121,6 @@ public class AbstractRussianEndpoint {
                 } else if (error.equals(OAuthErrorException.LOGIN_REQUIRED) || error.equals(
                     OAuthErrorException.INTERACTION_REQUIRED)) {
                     return callback.error(error);
-                } else if (error.equals(
-                    OAuthErrorException.TEMPORARILY_UNAVAILABLE) && Constants.AUTHENTICATION_EXPIRED_MESSAGE.equals(
-                    errorDescription)) {
-                    return callback.retryLogin(this.provider, authSession);
                 } else {
                     return callback.error(Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
                 }
@@ -172,6 +159,7 @@ public class AbstractRussianEndpoint {
                 }
             }
 
+            federatedIdentity.setIdpConfig(providerConfig);
             federatedIdentity.setIdp(provider);
             federatedIdentity.setAuthenticationSession(authSession);
 
@@ -214,6 +202,7 @@ public class AbstractRussianEndpoint {
     private Response errorIdentityProviderLogin(final String message) {
         event.event(EventType.IDENTITY_PROVIDER_LOGIN);
         event.error(Errors.IDENTITY_PROVIDER_LOGIN_FAILURE);
+
         return ErrorPage.error(session, null, Response.Status.BAD_GATEWAY, message);
     }
 
@@ -241,7 +230,7 @@ public class AbstractRussianEndpoint {
         if (providerConfig.isPkceEnabled()) {
 
             // reconstruct the original code verifier that was used to generate the code challenge from the HttpRequest.
-            String stateParam = session.getContext().getUri().getQueryParameters().getFirst(STATE);
+            String stateParam = session.getContext().getUri().getQueryParameters().getFirst(OAuth2Constants.STATE);
             if (stateParam == null) {
                 LOGGER.warn("Cannot lookup PKCE code_verifier: state param is missing.");
                 return tokenRequest;
@@ -272,7 +261,7 @@ public class AbstractRussianEndpoint {
                 return tokenRequest;
             }
 
-            tokenRequest.param(CODE_VERIFIER, brokerCodeChallenge);
+            tokenRequest.param(OAuth2Constants.CODE_VERIFIER, brokerCodeChallenge);
         }
 
         return provider.authenticateTokenRequest(tokenRequest);

@@ -78,7 +78,7 @@ public class OKIdentityProvider
     protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode profile) {
         logger.info("profile: " + profile.toString());
 
-        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "uid"), getConfig());
+        BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(profile, "uid"));
 
         String email = getJsonProperty(profile, "email");
         if (getConfig().isEmailRequired() && Utils.isNullOrEmpty(email)) {
@@ -102,6 +102,7 @@ public class OKIdentityProvider
         user.setLastName(getJsonProperty(profile, "last_name"));
 
         user.setIdp(this);
+        user.setIdpConfig(getConfig());
 
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, profile, getConfig().getAlias());
 

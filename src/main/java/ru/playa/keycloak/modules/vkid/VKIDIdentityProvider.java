@@ -16,7 +16,6 @@ import ru.playa.keycloak.modules.InfinispanUtils;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -136,15 +135,13 @@ public class VKIDIdentityProvider
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode node) {
         JsonNode context = Utils.asJsonNode(node, "user");
-        BrokeredIdentityContext user = new BrokeredIdentityContext(
-                Objects.requireNonNull(Utils.asText(context, "user_id")),
-                getConfig()
-        );
+        BrokeredIdentityContext user = new BrokeredIdentityContext(Utils.asText(context, "user_id"));
 
         user.setFirstName(Utils.asText(context, "first_name"));
         user.setLastName(Utils.asText(context, "last_name"));
 
         user.setIdp(this);
+        user.setIdpConfig(getConfig());
 
         AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, context, getConfig().getAlias());
 
