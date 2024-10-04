@@ -26,8 +26,8 @@ import java.util.UUID;
  * @author Anatoliy Pokhresnyi
  */
 public class VKIDIdentityProvider
-    extends AbstractRussianOAuth2IdentityProvider<VKIDIdentityProviderConfig>
-    implements SocialIdentityProvider<VKIDIdentityProviderConfig> {
+        extends AbstractRussianOAuth2IdentityProvider<VKIDIdentityProviderConfig>
+        implements SocialIdentityProvider<VKIDIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -89,14 +89,14 @@ public class VKIDIdentityProvider
     protected BrokeredIdentityContext doGetFederatedIdentity(final String accessToken) {
         try {
             logger.infof("DoGetFederatedIdentity AccessToken %s", accessToken);
+            JsonNode node = SimpleHttp
+                    .doPost(getConfig().getUserInfoUrl(), session)
+                    .param("access_token", accessToken)
+                    .param("client_id", getConfig().getClientId())
+                    .asJson();
+            JsonNode context = Utils.asJsonNode(node, "user");
 
-            return extractIdentityFromProfile(
-                    SimpleHttp
-                            .doPost(getConfig().getUserInfoUrl(), session)
-                            .param("access_token", accessToken)
-                            .param("client_id", getConfig().getClientId())
-                            .asJson()
-            );
+            return extractIdentityFromProfile(context);
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from VK: " + e.getMessage(), e);
         }
@@ -135,18 +135,17 @@ public class VKIDIdentityProvider
 
     @Override
     protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode node) {
-        JsonNode context = Utils.asJsonNode(node, "user");
         BrokeredIdentityContext user = new BrokeredIdentityContext(
-                Objects.requireNonNull(Utils.asText(context, "user_id")),
+                Objects.requireNonNull(Utils.asText(node, "user_id")),
                 getConfig()
         );
 
-        user.setFirstName(Utils.asText(context, "first_name"));
-        user.setLastName(Utils.asText(context, "last_name"));
+        user.setFirstName(Utils.asText(node, "first_name"));
+        user.setLastName(Utils.asText(node, "last_name"));
 
         user.setIdp(this);
 
-        AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, context, getConfig().getAlias());
+        AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, node, getConfig().getAlias());
 
         return user;
     }
