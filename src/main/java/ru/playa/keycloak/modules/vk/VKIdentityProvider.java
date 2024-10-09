@@ -9,11 +9,14 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.RussianException;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
+
+import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -118,7 +121,7 @@ public class VKIdentityProvider
         BrokeredIdentityContext user = extractIdentityFromProfile(null, node);
 
         if (getConfig().isEmailRequired() && Utils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(Utils.toEmailErrorMessage("VK"));
+            throw new RussianException(VKIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
         }
 
         if (Utils.nonNullOrEmpty(email)) {

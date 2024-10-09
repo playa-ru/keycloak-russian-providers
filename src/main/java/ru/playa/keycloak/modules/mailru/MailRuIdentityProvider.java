@@ -10,9 +10,12 @@ import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
+import ru.playa.keycloak.modules.RussianException;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
+
+import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
@@ -90,9 +93,9 @@ public class MailRuIdentityProvider
         String email = getJsonProperty(profile, "email");
 
         if (Utils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(Utils.toEmailErrorMessage("MailRu"));
+            throw new RussianException(MailRuIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
         } else {
-            Utils.isHostedDomain(email, getConfig().getHostedDomain(), "MailRu");
+            Utils.isHostedDomain(email, getConfig().getHostedDomain(), MailRuIdentityProviderFactory.PROVIDER_ID);
         }
 
         user.setEmail(email);

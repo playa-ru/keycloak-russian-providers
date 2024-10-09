@@ -178,6 +178,10 @@ public class AbstractRussianEndpoint {
             return callback.authenticated(federatedIdentity);
         } catch (WebApplicationException e) {
             return e.getResponse();
+        } catch (RussianException e) {
+            LOGGER.errorf("Code %s. Message %s", e.getKey(), e.getMessage());
+
+            return errorIdentityProviderLogin(e.getKey());
         } catch (IdentityBrokerException e) {
             if (e.getMessageCode() != null) {
                 return errorIdentityProviderLogin(e.getMessageCode());

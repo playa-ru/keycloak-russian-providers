@@ -13,11 +13,14 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.InfinispanUtils;
+import ru.playa.keycloak.modules.RussianException;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
+
+import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -91,31 +94,33 @@ public class VKIDIdentityProvider
             logger.infof("DoGetFederatedIdentity AccessToken %s", accessToken);
 
             return extractIdentityFromProfile(
-                    SimpleHttp
-                            .doPost(getConfig().getUserInfoUrl(), session)
-                            .param("access_token", accessToken)
-                            .param("client_id", getConfig().getClientId())
-                            .asJson()
+                null,
+                SimpleHttp
+                    .doPost(getConfig().getUserInfoUrl(), session)
+                    .param("access_token", accessToken)
+                    .param("client_id", getConfig().getClientId())
+                    .asJson()
             );
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from VK: " + e.getMessage(), e);
         }
     }
 
-    /**
-     * Получение BrokeredIdentityContext из профиля пользователя.
-     *
-     * @param node Профиль пользователя.
-     * @return BrokeredIdentityContext
-     */
-    protected BrokeredIdentityContext extractIdentityFromProfile(final JsonNode node) {
-        BrokeredIdentityContext user = extractIdentityFromProfile(null, node);
+    @Override
+    protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode node) {
+        logger.infof("Profile %s", node);
 
-        String email = Utils.asText(node, "email");
-        String phone = Utils.asText(node, "phone");
+        JsonNode context = Utils.asJsonNode(node, "user");
+        BrokeredIdentityContext user = new BrokeredIdentityContext(
+                Objects.requireNonNull(Utils.asText(context, "user_id")),
+                getConfig()
+        );
+
+        String email = Utils.asText(context, "email");
+        String phone = Utils.asText(context, "phone");
 
         if (getConfig().isEmailRequired() && Utils.isNullOrEmpty(email)) {
-            throw new IllegalArgumentException(Utils.toEmailErrorMessage("VK"));
+            throw new RussianException(VKIDIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
         }
 
         if (Utils.nonNullOrEmpty(email)) {
@@ -128,18 +133,6 @@ public class VKIDIdentityProvider
 
         user.setEmail(email);
         user.setUserAttribute("phone", phone);
-
-        return user;
-    }
-
-
-    @Override
-    protected BrokeredIdentityContext extractIdentityFromProfile(final EventBuilder event, final JsonNode node) {
-        JsonNode context = Utils.asJsonNode(node, "user");
-        BrokeredIdentityContext user = new BrokeredIdentityContext(
-                Objects.requireNonNull(Utils.asText(context, "user_id")),
-                getConfig()
-        );
 
         user.setFirstName(Utils.asText(context, "first_name"));
         user.setLastName(Utils.asText(context, "last_name"));

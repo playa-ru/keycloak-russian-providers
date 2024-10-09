@@ -13,6 +13,8 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Optional;
 
+import static ru.playa.keycloak.modules.RussianException.HOSTED_DOMAIN_KEY;
+
 /**
  * Утилитный класс.
  *
@@ -61,7 +63,7 @@ public final class Utils {
             .noneMatch(hd -> hd.equalsIgnoreCase(domain) || hd.equals("*"));
 
         if (match) {
-            throw new IllegalArgumentException(Utils.toHostedDomainErrorMessage(provider, domain));
+            throw new RussianException(provider, HOSTED_DOMAIN_KEY, email);
         }
     }
 
@@ -127,18 +129,6 @@ public final class Utils {
             .map(it -> it.get(field))
             .map(JsonNode::asText)
             .orElse(null);
-    }
-
-    /**
-     * Генерация сообщения ошибки.
-     *
-     * @param provider Название провейдера
-     * @return сообщение об ошибке
-     */
-    public static String toEmailErrorMessage(final String provider) {
-        return String.format(
-            "Для авторизации через социальную сеть (%s) необходимо в Вашем профиле соцсети указать Ваш e-mail.",
-            provider);
     }
 
     /**
