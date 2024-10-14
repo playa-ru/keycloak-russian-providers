@@ -13,6 +13,7 @@
 ## Совместимость
 
 Библиотека провайдеров проверялась на следующих версиях Keycloak:
++ 26.0.0
 + 25.0.2
 + 24.0.1
 + 23.0.6
@@ -34,19 +35,20 @@
 
 **Таблица поддерживаемых версий:**
 
-| Версия библиотеки | Версия Keycloak | Репозиторий                                      |
-|:-----------------:|:---------------:| :----------------------------------------------: |
-|   25.0.2.rsp-1    |     25.0.2      | [Maven Central](https://mvnrepository.com)       |
-|   24.0.1.rsp-3    |     24.0.1      | [Maven Central](https://mvnrepository.com)       |
-|   23.0.6.rsp-3    |     23.0.6      | [Maven Central](https://mvnrepository.com)       |
-|    22.0.3.rsp     |     22.0.3      | [Maven Central](https://mvnrepository.com)       |
-|    21.1.1.rsp     |     21.1.1      | [Maven Central](https://mvnrepository.com)       |
-|      1.0.46       |     21.0.1      | [Maven Central](https://mvnrepository.com)       |
-|      1.0.43       |     17.0.0      | [Maven Central](https://mvnrepository.com)       |
-|      1.0.42       |     16.1.1      | [Maven Central](https://mvnrepository.com)       |
-|      1.0.38       |     15.0.2      | [Maven Central](https://mvnrepository.com)       |
-|      1.0.37       |     13.0.0      | [Maven Central](https://mvnrepository.com)       |
-|      1.0.32       |     12.0.4      | [Maven Central](https://mvnrepository.com)       |
+| Версия библиотеки | Версия Keycloak |                   Репозиторий                    |
+|:-----------------:|:---------------:|:------------------------------------------------:|
+|    26.0.0.rsp     |     26.0.0      |    [Maven Central](https://mvnrepository.com)    |
+|   25.0.2.rsp-2    |     25.0.2      |    [Maven Central](https://mvnrepository.com)    |
+|   24.0.1.rsp-3    |     24.0.1      |    [Maven Central](https://mvnrepository.com)    |
+|   23.0.6.rsp-3    |     23.0.6      |    [Maven Central](https://mvnrepository.com)    |
+|    22.0.3.rsp     |     22.0.3      |    [Maven Central](https://mvnrepository.com)    |
+|    21.1.1.rsp     |     21.1.1      |    [Maven Central](https://mvnrepository.com)    |
+|      1.0.46       |     21.0.1      |    [Maven Central](https://mvnrepository.com)    |
+|      1.0.43       |     17.0.0      |    [Maven Central](https://mvnrepository.com)    |
+|      1.0.42       |     16.1.1      |    [Maven Central](https://mvnrepository.com)    |
+|      1.0.38       |     15.0.2      |    [Maven Central](https://mvnrepository.com)    |
+|      1.0.37       |     13.0.0      |    [Maven Central](https://mvnrepository.com)    |
+|      1.0.32       |     12.0.4      |    [Maven Central](https://mvnrepository.com)    |
 |      1.0.28       |     12.0.0      | [Playa Repository](https://nexus.playa.ru/nexus) |
 |      1.0.26       |     12.0.1      | [Playa Repository](https://nexus.playa.ru/nexus) |
 |      1.0.25       |     11.0.3      | [Playa Repository](https://nexus.playa.ru/nexus) | 
