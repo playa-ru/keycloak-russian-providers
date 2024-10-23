@@ -1,7 +1,9 @@
 package ru.playa.keycloak.modules.yandex;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.ws.rs.core.UriBuilder;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
+import org.keycloak.broker.provider.AuthenticationRequest;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
 import org.keycloak.broker.provider.util.SimpleHttp;
@@ -117,6 +119,16 @@ public class YandexIdentityProvider
             throw new IdentityBrokerException("Could not obtain user profile from Yandex: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    protected UriBuilder createAuthorizationUrl(final AuthenticationRequest request) {
+        UriBuilder builder = super.createAuthorizationUrl(request);
+        if (getConfig().isForceConfirm()) {
+            builder.queryParam("force_confirm", "yes");
+        }
+        return builder;
+    }
+
 
     @Override
     protected String getDefaultScopes() {

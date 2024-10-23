@@ -39,4 +39,12 @@ public class YandexIdentityProviderConfig
 
         return Utils.nonNullOrEmpty(hostedDomain) ? hostedDomain : null;
     }
+
+    /**
+     * Признак того, что у пользователя обязательно нужно запросить разрешение на доступ к аккаунту.
+     * @return Использовать ли принудительное подтверждение.
+     */
+    public Boolean isForceConfirm() {
+        return Boolean.valueOf((String) this.getConfig().get("forceConfirm"));
+    }
 }
