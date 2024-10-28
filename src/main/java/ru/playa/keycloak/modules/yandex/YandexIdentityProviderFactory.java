@@ -47,6 +47,15 @@ public class YandexIdentityProviderFactory
                 .helpText("Comma ',' separated list of domains is supported.")
                 .type(ProviderConfigProperty.STRING_TYPE)
                 .add()
+                .property()
+                .name("forceConfirm")
+                .label("Force confirm")
+                .helpText("An indication that the user must be asked for permission "
+                        + "to access the account (even if the user has already allowed "
+                        + "access to this application).")
+                .type(ProviderConfigProperty.BOOLEAN_TYPE)
+                .defaultValue(false)
+                .add()
                 .build();
     }
 
