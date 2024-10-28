@@ -45,6 +45,6 @@ public class YandexIdentityProviderConfig
      * @return Использовать ли принудительное подтверждение.
      */
     public Boolean isForceConfirm() {
-        return Boolean.valueOf((String) this.getConfig().get("forceConfirm"));
+        return Boolean.valueOf(this.getConfig().getOrDefault("forceConfirm", "false"));
     }
 }
