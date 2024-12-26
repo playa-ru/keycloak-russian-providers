@@ -1,0 +1,20 @@
+name: Сборка проекта keycloak-russian-providers
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-master:
+    name: Сборка проекта
+    runs-on: ubuntu-latest
+    steps:
+      - name: Клонирование проекта
+        uses: actions/checkout@v4  # Checkout the repository code
+      - name: Установка Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Сборка проекта
+        run: |
+          ./mvnw package
