@@ -80,7 +80,7 @@ docker pull playaru/keycloak-russian
 
 Для этого нужно будет вручную выполнить шаги, описанные в [Dockerfile](Dockerfile), в целом [следуя инструкции](https://www.keycloak.org/docs/latest/server_development/index.html#registering-provider-implementations):
 
-1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/). 
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://s01.oss.sonatype.org/content/groups/public/ru/playa/keycloak/keycloak-russian-providers/). 
 2. Скопируйте `keycloak-russian-providers.jar` в [директорию] `${keycloak.home.dir}/standalone/deployments`.
 3. Скопируйте содержимое директории `/src/main/resources/themes/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`
 4. Добавьте переводы необходимые для темы, для этого необходимо дополнить файлы:
@@ -97,7 +97,7 @@ docker pull playaru/keycloak-russian
 
 Для установки модуля авторизации через ЕСИА необходимо выполнить следующие шаги:
 
-1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://s01.oss.sonatype.org/content/groups/public/ru/playa/keycloak/keycloak-russian-providers/).
 2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
 3. Разархивируйте стандартные темы в папку `/themes` (стандартные темы находятся по
    пути `/lib/lib/main/org.keycloak.keycloak-themes-${keycloak-version}`, где `keycloak-version` версия Keycloak)
@@ -115,7 +115,7 @@ docker pull playaru/keycloak-russian
 
 ## Keycloak >= 21.1.1
 
-1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://s01.oss.sonatype.org/content/groups/public/ru/playa/keycloak/keycloak-russian-providers/).
 2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
 3. Скачайте обновленную версию библиотеки `keycloak-admin-ui` с [github](https://github.com/playa-ru/keycloak-ui/packages/1871123). 
    Шаблон формирования версии библиотеки `${keycloak-version}.rsp`
@@ -124,6 +124,6 @@ docker pull playaru/keycloak-russian
 
 ## Keycloak >= 23.0.0
 
-1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
+1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://s01.oss.sonatype.org/content/groups/public/ru/playa/keycloak/keycloak-russian-providers/).
 2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
 3. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
