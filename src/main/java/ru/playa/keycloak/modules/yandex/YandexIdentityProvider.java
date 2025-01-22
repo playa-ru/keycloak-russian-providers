@@ -2,6 +2,7 @@ package ru.playa.keycloak.modules.yandex;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.ws.rs.core.UriBuilder;
+import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.AuthenticationRequest;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
@@ -10,13 +11,11 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
-import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.RussianException;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
+import ru.playa.keycloak.modules.exception.MissingEmailException;
 
-import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
@@ -25,7 +24,7 @@ import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY
  * @author Anatoliy Pokhresnyi
  */
 public class YandexIdentityProvider
-    extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
+    extends AbstractOAuth2IdentityProvider<YandexIdentityProviderConfig>
     implements SocialIdentityProvider<YandexIdentityProviderConfig> {
 
     /**
@@ -83,7 +82,7 @@ public class YandexIdentityProvider
 
         String email = getJsonProperty(node, "default_email");
         if (Utils.isNullOrEmpty(email)) {
-            throw new RussianException(YandexIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
+            throw new MissingEmailException(YandexIdentityProviderFactory.PROVIDER_ID);
         } else {
             Utils.isHostedDomain(email, getConfig().getHostedDomain(), YandexIdentityProviderFactory.PROVIDER_ID);
         }

@@ -12,8 +12,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Optional;
+import ru.playa.keycloak.modules.exception.NotHostedDomainException;
 
-import static ru.playa.keycloak.modules.RussianException.HOSTED_DOMAIN_KEY;
 
 /**
  * Утилитный класс.
@@ -63,7 +63,7 @@ public final class Utils {
             .noneMatch(hd -> hd.equalsIgnoreCase(domain) || hd.equals("*"));
 
         if (match) {
-            throw new RussianException(provider, HOSTED_DOMAIN_KEY, email);
+            throw new NotHostedDomainException(provider, email);
         }
     }
 

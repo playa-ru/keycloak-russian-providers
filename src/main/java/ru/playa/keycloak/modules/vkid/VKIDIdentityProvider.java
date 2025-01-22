@@ -1,7 +1,15 @@
 package ru.playa.keycloak.modules.vkid;
 
+import static org.keycloak.OAuth2Constants.ERROR;
+import static org.keycloak.OAuth2Constants.ERROR_DESCRIPTION;
+
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
+import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.AuthenticationRequest;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
@@ -11,16 +19,14 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
+import org.keycloak.services.Urls;
 import ru.playa.keycloak.modules.InfinispanUtils;
-import ru.playa.keycloak.modules.RussianException;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
-
-import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
+import ru.playa.keycloak.modules.exception.MissingEmailException;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -29,7 +35,7 @@ import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY
  * @author Anatoliy Pokhresnyi
  */
 public class VKIDIdentityProvider
-    extends AbstractRussianOAuth2IdentityProvider<VKIDIdentityProviderConfig>
+    extends AbstractOAuth2IdentityProvider<VKIDIdentityProviderConfig>
     implements SocialIdentityProvider<VKIDIdentityProviderConfig> {
 
     /**
@@ -64,7 +70,7 @@ public class VKIDIdentityProvider
 
     @Override
     public Object callback(final RealmModel realm, final AuthenticationCallback callback, final EventBuilder event) {
-        return new VKIDEndpoint(callback, event, this, session);
+        return new VkIdEndpoint(callback, realm, event, this);
     }
 
     @Override
@@ -120,7 +126,7 @@ public class VKIDIdentityProvider
         String phone = Utils.asText(context, "phone");
 
         if (getConfig().isEmailRequired() && Utils.isNullOrEmpty(email)) {
-            throw new RussianException(VKIDIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
+            throw new MissingEmailException(VKIDIdentityProviderFactory.PROVIDER_ID);
         }
 
         if (Utils.nonNullOrEmpty(email)) {
@@ -166,5 +172,73 @@ public class VKIDIdentityProvider
     @Override
     protected String getDefaultScopes() {
         return "";
+    }
+
+  /**
+   * Переопределение метода для получения токена.
+   */
+  protected static class VkIdEndpoint extends Endpoint {
+
+      /**
+       * Necessary evil, super class has private field :(.
+       * Необходимое зло, у суперкласса есть приватное поле :(.
+       */
+      private final VKIDIdentityProvider providerOverride;
+
+       /**
+       * @param callback Авторизационный коллбэк.
+       * @param realm реалм.
+       * @param event эвент.
+       * @param provider провайдер.
+       */
+        public VkIdEndpoint(
+            final AuthenticationCallback callback,
+            final RealmModel realm,
+            final EventBuilder event,
+            final VKIDIdentityProvider provider
+        ) {
+          super(callback, realm, event, provider);
+          this.providerOverride = provider;
+        }
+
+        @GET
+        @Path("")
+        @Override
+        public Response authResponse(
+            @QueryParam(OAUTH2_PARAMETER_STATE) final String state,
+            @QueryParam(OAUTH2_PARAMETER_CODE) final String authorizationCode,
+            @QueryParam(ERROR) final String error,
+            @QueryParam(ERROR_DESCRIPTION) final String errorDescription
+        ) {
+          String oldState = InfinispanUtils.get(state);
+
+          return super.authResponse(oldState, authorizationCode, error, errorDescription);
+        }
+
+        @Override
+        public SimpleHttp generateTokenRequest(final String authorizationCode) {
+            String deviceID = httpRequest.getUri().getQueryParameters().getFirst("device_id");
+            String state = httpRequest.getUri().getQueryParameters().getFirst("state");
+            String oldState = InfinispanUtils.get(state);
+            String codeVerifier = InfinispanUtils.get(oldState);
+
+            return SimpleHttp
+                .doPost(providerOverride.getConfig().getTokenUrl(), session)
+                .param(OAUTH2_PARAMETER_CODE, authorizationCode)
+                .param(
+                    OAUTH2_PARAMETER_REDIRECT_URI,
+                    Urls
+                        .identityProviderAuthnResponse(
+                            session.getContext().getUri().getBaseUri(), providerOverride.getConfig().getAlias(),
+                            session.getContext().getRealm().getName()
+                        )
+                        .toString()
+                )
+                .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE)
+                .param(OAUTH2_PARAMETER_CLIENT_ID, providerOverride.getConfig().getClientId())
+                .param("device_id", deviceID)
+                .param("code_verifier", codeVerifier)
+                .param("state", state);
+        }
     }
 }
