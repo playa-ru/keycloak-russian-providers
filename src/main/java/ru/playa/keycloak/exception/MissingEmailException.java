@@ -1,4 +1,4 @@
-package ru.playa.keycloak.modules.exception;
+package ru.playa.keycloak.exception;
 
 import org.keycloak.broker.provider.IdentityBrokerException;
 

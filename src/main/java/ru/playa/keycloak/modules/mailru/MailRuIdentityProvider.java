@@ -16,7 +16,7 @@ import org.keycloak.services.Urls;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
-import ru.playa.keycloak.modules.exception.MissingEmailException;
+import ru.playa.keycloak.exception.MissingEmailException;
 
 
 /**

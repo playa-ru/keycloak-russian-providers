@@ -26,7 +26,7 @@ import ru.playa.keycloak.modules.Utils;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
-import ru.playa.keycloak.modules.exception.MissingEmailException;
+import ru.playa.keycloak.exception.MissingEmailException;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
