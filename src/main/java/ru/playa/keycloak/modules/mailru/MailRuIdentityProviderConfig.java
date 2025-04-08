@@ -35,8 +35,8 @@ public class MailRuIdentityProviderConfig
      * @return Белый список доменов.
      */
     public String getHostedDomain() {
-        String hostedDomain = this.getConfig().get("hostedDomain");
+        String mailHostedDomain = this.getConfig().get("mailHostedDomain");
 
-        return Utils.nonNullOrEmpty(hostedDomain) ? hostedDomain : null;
+        return Utils.nonNullOrEmpty(mailHostedDomain) ? mailHostedDomain : null;
     }
 }
