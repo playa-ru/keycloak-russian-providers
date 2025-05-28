@@ -99,10 +99,11 @@ docker pull playaru/keycloak-russian
 
 1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
 2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
-3. Разархивируйте стандартные темы в папку `/themes` (стандартные темы находятся по
+3. Скопируйте `json-path-2.7.0.jar`, `json-smart-2.4.7.jar` файлы в директорию `/providers`
+4. Разархивируйте стандартные темы в папку `/themes` (стандартные темы находятся по
    пути `/lib/lib/main/org.keycloak.keycloak-themes-${keycloak-version}`, где `keycloak-version` версия Keycloak)
-4. Скопируйте содержимое директории `/src/main/resources/themes/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`   
-5. Добавьте переводы необходимые для темы, для этого необходимо дополнить файлы:
+5. Скопируйте содержимое директории `/src/main/resources/themes/base/admin/resources/partials` в `${keycloak.home.dir}/themes/base/admin/resources/partials`   
+6. Добавьте переводы необходимые для темы, для этого необходимо дополнить файлы:
    `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_en.custom` (
    из файла `src/main/resources/theme/base/admin/messages/admin-messages_en.custom`)
    `${keycloak.home.dir}/themes/base/admin/messages/admin-messages_ru.custom` (
@@ -111,19 +112,21 @@ docker pull playaru/keycloak-russian
    из файла `src/main/resources/theme/base/login/messages/messages_en.custom`)
    `${keycloak.home.dir}/themes/base/login/messages/messages_ru.properties` (
    из файла `src/main/resources/theme/base/login/messages/messages_ru.custom`)
-6. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
+7. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
 
 ## Keycloak >= 21.1.1
 
 1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
 2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
-3. Скачайте обновленную версию библиотеки `keycloak-admin-ui` с [github](https://github.com/playa-ru/keycloak-ui/packages/1871123). 
+3. Скопируйте `json-path-2.7.0.jar`, `json-smart-2.4.7.jar` файлы в директорию `/providers`
+4. Скачайте обновленную версию библиотеки `keycloak-admin-ui` с [github](https://github.com/playa-ru/keycloak-ui/packages/1871123). 
    Шаблон формирования версии библиотеки `${keycloak-version}.rsp`
-4. Скопируйте `keycloak-admin-ui` в `/lib/lib/main/org.keycloak.keycloak-admin-ui-${keycloak-version}.jar`
-5. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
+5. Скопируйте `keycloak-admin-ui` в `/lib/lib/main/org.keycloak.keycloak-admin-ui-${keycloak-version}.jar`
+6. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
 
 ## Keycloak >= 23.0.0
 
 1. Соберите проект из исходников с помощью Maven, или [возьмите готовый keycloak-russian-providers.jar в нашем репозитории](https://nexus.playa.ru/nexus/content/repositories/releases/ru/playa/keycloak/keycloak-russian-providers/).
 2. Скопируйте `keycloak-russian-providers.jar` файл в директорию `/providers`
-3. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
+3. Скопируйте `json-path-2.7.0.jar`, `json-smart-2.4.7.jar` файлы в директорию `/providers`
+4. Выполнить установку новых модулей для этого необходимо выполнить команду `/bin/kc.sh build`
