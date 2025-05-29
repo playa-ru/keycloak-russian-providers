@@ -42,7 +42,7 @@ public class MailRuIdentityProviderFactory
     public List<ProviderConfigProperty> getConfigProperties() {
         return ProviderConfigurationBuilder.create()
                 .property()
-                .name("hostedDomain")
+                .name("mailHostedDomain")
                 .label("Hosted domains")
                 .helpText("Comma ',' separated list of domains is supported.")
                 .type(ProviderConfigProperty.STRING_TYPE)

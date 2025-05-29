@@ -35,9 +35,9 @@ public class YandexIdentityProviderConfig
      * @return Белый список доменов.
      */
     public String getHostedDomain() {
-        String hostedDomain = this.getConfig().get("hostedDomain");
+        String yandexHostedDomain = this.getConfig().get("yandexHostedDomain");
 
-        return Utils.nonNullOrEmpty(hostedDomain) ? hostedDomain : null;
+        return Utils.nonNullOrEmpty(yandexHostedDomain) ? yandexHostedDomain : null;
     }
 
     /**
