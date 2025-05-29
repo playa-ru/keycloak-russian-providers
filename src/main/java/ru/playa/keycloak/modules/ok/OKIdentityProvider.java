@@ -1,6 +1,7 @@
 package ru.playa.keycloak.modules.ok;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -8,14 +9,10 @@ import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
-import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.RussianException;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
-
-import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
-
+import ru.playa.keycloak.exception.MissingEmailException;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://ok.ru/">Одноклассники</a>.
@@ -25,7 +22,7 @@ import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY
  * @author dmitrymalinin
  */
 public class OKIdentityProvider
-    extends AbstractRussianOAuth2IdentityProvider<OKIdentityProviderConfig>
+    extends AbstractOAuth2IdentityProvider<OKIdentityProviderConfig>
     implements SocialIdentityProvider<OKIdentityProviderConfig> {
 
     /**
@@ -85,7 +82,7 @@ public class OKIdentityProvider
 
         String email = getJsonProperty(profile, "email");
         if (getConfig().isEmailRequired() && Utils.isNullOrEmpty(email)) {
-            throw new RussianException(OKIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
+            throw new MissingEmailException(OKIdentityProviderFactory.PROVIDER_ID);
         }
 
         String username = getJsonProperty(profile, "login");

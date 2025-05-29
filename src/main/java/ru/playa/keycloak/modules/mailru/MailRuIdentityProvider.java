@@ -1,6 +1,9 @@
 package ru.playa.keycloak.modules.mailru;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
@@ -9,13 +12,12 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
-import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.RussianException;
+import org.keycloak.services.Urls;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
+import ru.playa.keycloak.exception.MissingEmailException;
 
-import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://my.mail.ru">Мой Мир</a>.
@@ -24,7 +26,7 @@ import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY
  * @author Anatoliy Pokhresnyi
  */
 public class MailRuIdentityProvider
-    extends AbstractRussianOAuth2IdentityProvider<MailRuIdentityProviderConfig>
+    extends AbstractOAuth2IdentityProvider<MailRuIdentityProviderConfig>
     implements SocialIdentityProvider<MailRuIdentityProviderConfig> {
 
     /**
@@ -63,7 +65,7 @@ public class MailRuIdentityProvider
 
     @Override
     public Object callback(final RealmModel realm, final AuthenticationCallback callback, final EventBuilder event) {
-        return new MailRuEndpoint(callback, event, this, session);
+        return new MailRuEndpoint(callback, realm, event, this);
     }
 
     @Override
@@ -93,7 +95,7 @@ public class MailRuIdentityProvider
         String email = getJsonProperty(profile, "email");
 
         if (Utils.isNullOrEmpty(email)) {
-            throw new RussianException(MailRuIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
+            throw new MissingEmailException(MailRuIdentityProviderFactory.PROVIDER_ID);
         } else {
             Utils.isHostedDomain(email, getConfig().getHostedDomain(), MailRuIdentityProviderFactory.PROVIDER_ID);
         }
@@ -127,5 +129,55 @@ public class MailRuIdentityProvider
         return DEFAULT_SCOPE;
     }
 
+    /**
+     * Переопределение метода для получения токена.
+     */
+    protected static class MailRuEndpoint extends Endpoint {
+
+        /**
+         * Necessary evil, super class has private field :(.
+         * Необходимое зло, у суперкласса есть приватное поле :(.
+         */
+        private final MailRuIdentityProvider providerOverride;
+
+        /**
+         * @param callback Авторизационный коллбэк.
+         * @param realm реалм.
+         * @param event эвент.
+         * @param provider провайдер.
+         */
+        public MailRuEndpoint(
+            final AuthenticationCallback callback,
+            final RealmModel realm,
+            final EventBuilder event,
+            final MailRuIdentityProvider provider
+        ) {
+            super(callback, realm, event, provider);
+            this.providerOverride = provider;
+        }
+
+        @Override
+        public SimpleHttp generateTokenRequest(final String authorizationCode) {
+            String clientID = providerOverride.getConfig().getClientId();
+            String clientSecret = providerOverride.getConfig().getClientSecret();
+            String credentials = Base64
+                .getEncoder()
+                .encodeToString((clientID + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
+
+            return SimpleHttp
+                .doPost(providerOverride.getConfig().getTokenUrl(), session)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Authorization", "Basic " + credentials)
+                .param(OAUTH2_PARAMETER_CODE, authorizationCode)
+                .param(OAUTH2_PARAMETER_REDIRECT_URI, Urls
+                    .identityProviderAuthnResponse(
+                        session.getContext().getUri().getBaseUri(),
+                        providerOverride.getConfig().getAlias(),
+                        session.getContext().getRealm().getName()
+                    )
+                    .toString())
+                .param(OAUTH2_PARAMETER_GRANT_TYPE, OAUTH2_GRANT_TYPE_AUTHORIZATION_CODE);
+        }
+    }
 
 }
