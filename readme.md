@@ -10,6 +10,14 @@
 
 Посмотреть на это в действии [можно здесь](https://my.yachtex.ru/) - тут используется [docker образ из нашей директории на Docker Hub](https://github.com/playa-ru/keycloak-russian).
 
+## Мы переехали!
+
+Теперь проект живёт в [GitVerse](https://gitverse.ru/playa.ru/keycloak-russian-providers)
+Подпишитесь там, чтобы быть в курсе обновлений.
+
+Репозиторий на [GitHub](https://github.com/playa-ru/keycloak-russian-providers) остаётся зеркалом и содержит
+актуальные исходные коды, но все изменения вносятся через новый репозиторий.
+
 ## Совместимость
 
 Библиотека провайдеров проверялась на следующих версиях Keycloak:
