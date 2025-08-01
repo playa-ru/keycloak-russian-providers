@@ -74,10 +74,9 @@
 ```
 docker pull playaru/keycloak-russian
 ```
- - или соберите проект с профилем `docker` и переменной с указанием токена к GitHub (у токена должны быть выданы права чтение репозитория),
-   получится готовый образ. Например, сборка образа Keycloak:
+ - или соберите проект с профилем `docker`, получится готовый образ. Например, сборка образа Keycloak:
 ```
-  mvn install -Pdocker -Dtoken.github=XXX
+  mvn install -Pdocker
 ```
 
 Если вы не используете Docker 
