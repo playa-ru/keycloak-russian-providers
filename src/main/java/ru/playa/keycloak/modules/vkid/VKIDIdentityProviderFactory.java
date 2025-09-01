@@ -2,14 +2,17 @@ package ru.playa.keycloak.modules.vkid;
 
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
+import org.keycloak.connections.jpa.JpaConnectionProvider;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
+import org.keycloak.provider.Provider;
 import org.keycloak.provider.ProviderConfigProperty;
 import org.keycloak.provider.ProviderConfigurationBuilder;
 import ru.playa.keycloak.modules.InfinispanUtils;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Фабрика OAuth-авторизации через <a href="https://vk.com">ВКонтакте</a>.
@@ -65,5 +68,10 @@ public class VKIDIdentityProviderFactory
     @Override
     public String getId() {
         return PROVIDER_ID;
+    }
+
+    @Override
+    public Set<Class<? extends Provider>> dependsOn() {
+        return Set.of(JpaConnectionProvider.class);
     }
 }
