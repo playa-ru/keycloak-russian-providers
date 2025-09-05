@@ -2,6 +2,7 @@ package ru.playa.keycloak.modules.vkid;
 
 import org.keycloak.broker.provider.AbstractIdentityProviderFactory;
 import org.keycloak.broker.social.SocialIdentityProviderFactory;
+import org.keycloak.connections.infinispan.InfinispanConnectionProvider;
 import org.keycloak.connections.jpa.JpaConnectionProvider;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.KeycloakSession;
@@ -72,6 +73,6 @@ public class VKIDIdentityProviderFactory
 
     @Override
     public Set<Class<? extends Provider>> dependsOn() {
-        return Set.of(JpaConnectionProvider.class);
+        return Set.of(JpaConnectionProvider.class, InfinispanConnectionProvider.class);
     }
 }
