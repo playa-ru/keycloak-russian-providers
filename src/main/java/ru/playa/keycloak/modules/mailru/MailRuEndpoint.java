@@ -1,8 +1,9 @@
 package ru.playa.keycloak.modules.mailru;
 
 import org.keycloak.broker.provider.IdentityProvider;
-import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.events.EventBuilder;
+import org.keycloak.http.simple.SimpleHttp;
+import org.keycloak.http.simple.SimpleHttpRequest;
 import org.keycloak.models.KeycloakContext;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.Urls;
@@ -58,7 +59,7 @@ public class MailRuEndpoint extends AbstractRussianEndpoint {
     }
 
     @Override
-    public SimpleHttp generateTokenRequest(final String authorizationCode) {
+    public SimpleHttpRequest generateTokenRequest(final String authorizationCode) {
         String clientID = provider.getConfig().getClientId();
         String clientSecret = provider.getConfig().getClientSecret();
         String credentials = Base64
@@ -66,7 +67,8 @@ public class MailRuEndpoint extends AbstractRussianEndpoint {
             .encodeToString((clientID + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
 
         return SimpleHttp
-            .doPost(provider.getConfig().getTokenUrl(), session)
+            .create(session)
+            .doPost(provider.getConfig().getTokenUrl())
             .header("Content-Type", "application/x-www-form-urlencoded")
             .header("Authorization", "Basic " + credentials)
             .param(OAUTH2_PARAMETER_CODE, authorizationCode)

@@ -35,17 +35,17 @@ public class VKIDIdentityProvider
     /**
      * Запрос кода подтверждения.
      */
-    private static final String AUTH_URL = "https://id.vk.com/authorize";
+    private static final String AUTH_URL = "https://id.vk.ru/authorize";
 
     /**
      * Обмен кода подтверждения на токен.
      */
-    private static final String TOKEN_URL = "https://id.vk.com/oauth2/auth";
+    private static final String TOKEN_URL = "https://id.vk.ru/oauth2/auth";
 
     /**
      * Запрос информации о пользователе.
      */
-    private static final String PROFILE_URL = "https://id.vk.com/oauth2/user_info";
+    private static final String PROFILE_URL = "https://id.vk.ru/oauth2/user_info";
 
     /**
      * Создает объект OAuth-авторизации через

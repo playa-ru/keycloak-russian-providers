@@ -6,9 +6,10 @@ import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.AuthenticationRequest;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
-import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
+import org.keycloak.http.simple.SimpleHttp;
+import org.keycloak.http.simple.SimpleHttpRequest;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.RussianException;
@@ -73,8 +74,8 @@ public class YandexIdentityProvider
     }
 
     @Override
-    protected SimpleHttp buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
-        return SimpleHttp.doGet(PROFILE_URL + "?oauth_token=" + subjectToken, session);
+    protected SimpleHttpRequest buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
+        return SimpleHttp.create(session).doGet(PROFILE_URL + "?oauth_token=" + subjectToken);
     }
 
     @Override
@@ -112,7 +113,8 @@ public class YandexIdentityProvider
             return extractIdentityFromProfile(
                 null,
                 SimpleHttp
-                    .doGet(PROFILE_URL + "?oauth_token=" + accessToken, session)
+                    .create(session)
+                    .doGet(PROFILE_URL + "?oauth_token=" + accessToken)
                     .asJson()
             );
         } catch (IOException e) {

@@ -4,9 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.keycloak.broker.oidc.mappers.AbstractJsonUserAttributeMapper;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
-import org.keycloak.broker.provider.util.SimpleHttp;
+import org.keycloak.http.simple.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
+import org.keycloak.http.simple.SimpleHttpRequest;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.RussianException;
@@ -74,8 +75,8 @@ public class VKIdentityProvider
     }
 
     @Override
-    protected SimpleHttp buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
-        return SimpleHttp.doGet(getConfig().getUserInfoUrl() + "&access_token=" + subjectToken, session);
+    protected SimpleHttpRequest buildUserInfoRequest(final String subjectToken, final String userInfoUrl) {
+        return SimpleHttp.create(session).doGet(getConfig().getUserInfoUrl() + "&access_token=" + subjectToken);
     }
 
     @Override
@@ -186,7 +187,8 @@ public class VKIdentityProvider
 
             return extractIdentityFromProfile(
                 SimpleHttp
-                    .doGet(url, session)
+                    .create(session)
+                    .doGet(url)
                     .param("content-type", "application/json; charset=utf-8")
                     .asJson(),
                 email, phone
@@ -201,7 +203,7 @@ public class VKIdentityProvider
         try {
             String url = getConfig().getUserInfoUrl()
                 + "&access_token=" + accessToken;
-            return extractIdentityFromProfile(null, SimpleHttp.doGet(url, session).asJson());
+            return extractIdentityFromProfile(null, SimpleHttp.create(session).doGet(url).asJson());
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from VK: " + e.getMessage(), e);
         }
