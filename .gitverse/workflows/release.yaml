@@ -27,12 +27,8 @@ jobs:
             <servers>
               <server>
                 <id>ossrh</id>
-                <username>J0xiFl</username>
-                <password>T1NxPWD3VhcaEIBep8MfGSXlnvBP0P5GV</password>
-              </server>
-              <server>
-                <id>gpg.passphrase</id>
-                <passphrase>${{secrets.MAVEN_GPG_PASSPHRASE}}</passphrase>
+                <username>${{secrets.OSSRH_USERNAME}}</username>
+                <password>${{secrets.OSSRH_TOKEN}}</password>
               </server>
             </servers>
           </settings>
