@@ -16,10 +16,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           server-id: ossrh
-          server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password:  ${{ secrets.OSSRH_TOKEN }}
+          server-username: J0xiFl
+          server-password:  T1NxPWD3VhcaEIBep8MfGSXlnvBP0P5GV
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
       - name: Публикация проекта в Maven Central
         run: |
           cat <(echo -e "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}") | gpg --batch --import
@@ -27,6 +28,6 @@ jobs:
           ./mvnw versions:set -DnewVersion=$GITHUB_REF_NAME        
           ./mvnw --no-transfer-progress --batch-mode -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -Dgpg.keyname=C9AAFE214609D9C5 verify gpg:sign install:install deploy:deploy
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_USERNAME: J0xiFl
+          MAVEN_PASSWORD: T1NxPWD3VhcaEIBep8MfGSXlnvBP0P5GV
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
