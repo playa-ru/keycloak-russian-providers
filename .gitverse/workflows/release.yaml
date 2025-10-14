@@ -32,7 +32,7 @@ jobs:
               </server>
               <server>
                 <id>gpg.passphrase</id>
-                <passphrase>${secrets.MAVEN_GPG_PASSPHRASE}</passphrase>
+                <passphrase>${{secrets.MAVEN_GPG_PASSPHRASE}}</passphrase>
               </server>
             </servers>
           </settings>
