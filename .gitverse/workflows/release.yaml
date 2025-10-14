@@ -27,8 +27,8 @@ jobs:
             <servers>
               <server>
                 <id>ossrh</id>
-                <username>${OSSRH_USERNAME}</username>
-                <password>${OSSRH_TOKEN}</password>
+                <username>J0xiFl</username>
+                <password>T1NxPWD3VhcaEIBep8MfGSXlnvBP0P5GV</password>
               </server>
             </servers>
           </settings>
@@ -36,9 +36,6 @@ jobs:
 
           echo "Содержимое ~/.m2/settings.xml:"
           cat ~/.m2/settings.xml
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
 
       - name: Публикация проекта в Maven Central
         run: |
