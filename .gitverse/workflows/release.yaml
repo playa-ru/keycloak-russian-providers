@@ -15,11 +15,31 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          server-id: ossrh
-          server-username: ${{ secrets.OSSRH_USERNAME }}
-          server-password:  ${{ secrets.OSSRH_TOKEN }}
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+      - name: Создание Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml <<EOF
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                                        https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <servers>
+              <server>
+                <id>ossrh</id>
+                <username>J0xiFl</username>
+                <password>T1NxPWD3VhcaEIBep8MfGSXlnvBP0P5GV</password>
+              </server>
+              <server>
+                <id>gpg.passphrase</id>
+                <passphrase>${secrets.MAVEN_GPG_PASSPHRASE}</passphrase>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+          echo "Содержимое ~/.m2/settings.xml:"
+          cat ~/.m2/settings.xml
 
       - name: Публикация проекта в Maven Central
         run: |
