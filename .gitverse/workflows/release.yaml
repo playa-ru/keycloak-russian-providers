@@ -46,6 +46,6 @@ jobs:
           cat <(echo -e "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}") | gpg --batch --import
           cat ~/.m2/settings.xml
           ./mvnw versions:set -DnewVersion=$GITHUB_REF_NAME        
-          ./mvnw --no-transfer-progress --batch-mode -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -Dgpg.keyname=C9AAFE214609D9C5 verify gpg:sign install:install deploy
+          ./mvnw deploy -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -Dgpg.keyname=C9AAFE214609D9C5
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
