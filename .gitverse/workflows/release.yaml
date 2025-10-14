@@ -27,8 +27,8 @@ jobs:
             <servers>
               <server>
                 <id>ossrh</id>
-                <username>J0xiFl</username>
-                <password>T1NxPWD3VhcaEIBep8MfGSXlnvBP0P5GV</password>
+                <username>${{ secrets.OSSRH_USERNAME }}</username>
+                <password>${{ secrets.OSSRH_TOKEN }}</password>
               </server>
             </servers>
           </settings>
