@@ -6,3 +6,5 @@ target/
 /keycloak-russian.iml
 /log
 .m2
+/.PVS-Studio/settings.json
+/.PVS-Studio/ide-warnings.json

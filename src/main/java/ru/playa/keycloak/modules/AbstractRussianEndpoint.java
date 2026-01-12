@@ -11,7 +11,7 @@ import org.keycloak.broker.oidc.AbstractOAuth2IdentityProvider;
 import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
-import org.keycloak.broker.provider.IdentityProvider;
+import org.keycloak.broker.provider.UserAuthenticationIdentityProvider;
 import org.keycloak.broker.provider.util.IdentityBrokerState;
 import org.keycloak.http.simple.SimpleHttp;
 import org.keycloak.events.Errors;
@@ -60,7 +60,7 @@ public class AbstractRussianEndpoint {
     /**
      * Callback.
      */
-    private final IdentityProvider.AuthenticationCallback callback;
+    private final UserAuthenticationIdentityProvider.AuthenticationCallback callback;
 
     /**
      * Сервис отправки событий.
@@ -86,7 +86,7 @@ public class AbstractRussianEndpoint {
      * @param aSession  Сессия.
      */
     public AbstractRussianEndpoint(
-        final IdentityProvider.AuthenticationCallback aCallback,
+        final UserAuthenticationIdentityProvider.AuthenticationCallback aCallback,
         final EventBuilder aEvent,
         final AbstractOAuth2IdentityProvider aProvider,
         final KeycloakSession aSession

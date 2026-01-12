@@ -1,6 +1,6 @@
 package ru.playa.keycloak.modules.mailru;
 
-import org.keycloak.broker.provider.IdentityProvider;
+import org.keycloak.broker.provider.UserAuthenticationIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.http.simple.SimpleHttp;
 import org.keycloak.http.simple.SimpleHttpRequest;
@@ -47,7 +47,7 @@ public class MailRuEndpoint extends AbstractRussianEndpoint {
      * @param aSession  Сессия.
      */
     public MailRuEndpoint(
-        final IdentityProvider.AuthenticationCallback aCallback,
+        final UserAuthenticationIdentityProvider.AuthenticationCallback aCallback,
         final EventBuilder aEvent,
         final MailRuIdentityProvider aProvider,
         final KeycloakSession aSession

@@ -4,7 +4,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
-import org.keycloak.broker.provider.IdentityProvider;
+import org.keycloak.broker.provider.UserAuthenticationIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.http.HttpRequest;
 import org.keycloak.http.simple.SimpleHttp;
@@ -59,7 +59,7 @@ public class VKIDEndpoint extends AbstractRussianEndpoint {
      * @param aSession  Сессия.
      */
     public VKIDEndpoint(
-        final IdentityProvider.AuthenticationCallback aCallback,
+        final UserAuthenticationIdentityProvider.AuthenticationCallback aCallback,
         final EventBuilder aEvent,
         final VKIDIdentityProvider aProvider,
         final KeycloakSession aSession
