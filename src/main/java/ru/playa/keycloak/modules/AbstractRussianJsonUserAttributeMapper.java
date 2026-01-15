@@ -85,7 +85,6 @@ public abstract class AbstractRussianJsonUserAttributeMapper extends AbstractJso
             .stream()
             .map(String::trim)
             .filter(value -> !value.isEmpty())
-            .map(value -> value.length() > 250 ? value.substring(0, 250) : value)
             .collect(Collectors.toList());
 
         context.removeUserAttribute(attribute);
