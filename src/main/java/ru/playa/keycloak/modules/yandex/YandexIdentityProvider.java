@@ -12,12 +12,9 @@ import org.keycloak.http.simple.SimpleHttp;
 import org.keycloak.http.simple.SimpleHttpRequest;
 import org.keycloak.models.KeycloakSession;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
-import ru.playa.keycloak.modules.RussianException;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
-
-import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
@@ -26,8 +23,8 @@ import static ru.playa.keycloak.modules.RussianException.EMAIL_CAN_NOT_EMPTY_KEY
  * @author Anatoliy Pokhresnyi
  */
 public class YandexIdentityProvider
-    extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
-    implements SocialIdentityProvider<YandexIdentityProviderConfig> {
+        extends AbstractRussianOAuth2IdentityProvider<YandexIdentityProviderConfig>
+        implements SocialIdentityProvider<YandexIdentityProviderConfig> {
 
     /**
      * Запрос кода подтверждения.
@@ -83,20 +80,20 @@ public class YandexIdentityProvider
         BrokeredIdentityContext user = new BrokeredIdentityContext(getJsonProperty(node, "id"), getConfig());
 
         String email = getJsonProperty(node, "default_email");
-        if (Utils.isNullOrEmpty(email)) {
-            throw new RussianException(YandexIdentityProviderFactory.PROVIDER_ID, EMAIL_CAN_NOT_EMPTY_KEY);
-        } else {
+        if (!Utils.isNullOrEmpty(email)) {
+            user.setEmail(email);
             Utils.isHostedDomain(email, getConfig().getHostedDomain(), YandexIdentityProviderFactory.PROVIDER_ID);
         }
 
         String login = getJsonProperty(node, "login");
         if (Utils.isNullOrEmpty(login)) {
-            user.setUsername(email);
-        } else {
-            user.setUsername(login);
+            login = email;
+        }
+        if (Utils.isNullOrEmpty(login)) {
+            login = "ya." + user.getId();
         }
 
-        user.setEmail(email);
+        user.setUsername(login);
         user.setLastName(getJsonProperty(node, "last_name"));
         user.setFirstName(getJsonProperty(node, "first_name"));
 
@@ -111,11 +108,11 @@ public class YandexIdentityProvider
     protected BrokeredIdentityContext doGetFederatedIdentity(final String accessToken) {
         try {
             return extractIdentityFromProfile(
-                null,
-                SimpleHttp
-                    .create(session)
-                    .doGet(PROFILE_URL + "?oauth_token=" + accessToken)
-                    .asJson()
+                    null,
+                    SimpleHttp
+                            .create(session)
+                            .doGet(PROFILE_URL + "?oauth_token=" + accessToken)
+                            .asJson()
             );
         } catch (IOException e) {
             throw new IdentityBrokerException("Could not obtain user profile from Yandex: " + e.getMessage(), e);
