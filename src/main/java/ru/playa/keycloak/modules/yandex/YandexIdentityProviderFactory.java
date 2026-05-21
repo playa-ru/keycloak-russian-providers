@@ -50,6 +50,7 @@ public class YandexIdentityProviderFactory
                 .helpText("Comma ',' separated list of domains is supported.")
                 .type(ProviderConfigProperty.STRING_TYPE)
                 .add()
+
                 .property()
                 .name("forceConfirm")
                 .label("Force confirm")
@@ -59,6 +60,22 @@ public class YandexIdentityProviderFactory
                 .type(ProviderConfigProperty.BOOLEAN_TYPE)
                 .defaultValue(false)
                 .add()
+
+                .property()
+                .name("phoneRequired")
+                .label("Require phone number")
+                .type(ProviderConfigProperty.BOOLEAN_TYPE)
+                .defaultValue(false)
+                .add()
+
+                .property()
+                .name("phoneNumberAttribute")
+                .label("Store phone number in attribute")
+                .helpText("If empty, do not store phone at all")
+                .type(ProviderConfigProperty.STRING_TYPE)
+
+                .add()
+
                 .build();
     }
 

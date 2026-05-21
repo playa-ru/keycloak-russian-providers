@@ -10,11 +10,15 @@ import org.keycloak.broker.social.SocialIdentityProvider;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.http.simple.SimpleHttp;
 import org.keycloak.http.simple.SimpleHttpRequest;
+import org.keycloak.models.FederatedIdentityModel;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserModel;
 import ru.playa.keycloak.modules.AbstractRussianOAuth2IdentityProvider;
 import ru.playa.keycloak.modules.Utils;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Провайдер OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
@@ -93,6 +97,31 @@ public class YandexIdentityProvider
             login = "ya." + user.getId();
         }
 
+        String phone = null;
+        JsonNode defaultPhone = node.get("default_phone");
+        if (defaultPhone != null && !defaultPhone.isNull()) {
+            var numberNode = defaultPhone.get("number");
+            if (numberNode != null && !numberNode.isNull()) {
+                phone = numberNode.asText();
+            }
+        }
+
+        if (getConfig().isPhoneRequired() && phone == null) {
+            boolean isNewUser = session.users().getUserByFederatedIdentity(
+                    session.getContext().getRealm(),
+                    new FederatedIdentityModel(getConfig().getAlias(), user.getId(), null)
+            ) == null;
+
+            if (isNewUser) {
+                throw new IdentityBrokerException("Phone number is required for Yandex registration")
+                        .withMessageCode("identityProviderPhoneRequiredMessage");
+            }
+        }
+        var phoneAttribute = getConfig().phoneNumberAttribute();
+        if (phoneAttribute != null && !phoneAttribute.isEmpty()) {
+            user.setUserAttribute(phoneAttribute, phone);
+        }
+
         user.setUsername(login);
         user.setLastName(getJsonProperty(node, "last_name"));
         user.setFirstName(getJsonProperty(node, "first_name"));
@@ -128,6 +157,36 @@ public class YandexIdentityProvider
         return builder;
     }
 
+
+    @Override
+    public void updateBrokeredUser(
+            final KeycloakSession session,
+            final RealmModel realm,
+            final UserModel user,
+            final BrokeredIdentityContext context
+    ) {
+        super.updateBrokeredUser(session, realm, user, context);
+        updatePhoneAttribute(user, context);
+    }
+
+    /**
+     * Обновляет атрибут номера телефона пользователя из контекста брокерской аутентификации.
+     *
+     * @param user    Пользователь Keycloak.
+     * @param context Контекст брокерской аутентификации.
+     */
+    private void updatePhoneAttribute(final UserModel user, final BrokeredIdentityContext context) {
+        String phoneAttribute = getConfig().phoneNumberAttribute();
+        if (phoneAttribute == null || phoneAttribute.isEmpty()) {
+            return;
+        }
+        String phone = context.getUserAttribute(phoneAttribute);
+        if (phone != null) {
+            user.setAttribute(phoneAttribute, List.of(phone));
+        } else {
+            user.removeAttribute(phoneAttribute);
+        }
+    }
 
     @Override
     protected String getDefaultScopes() {

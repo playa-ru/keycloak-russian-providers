@@ -4,6 +4,8 @@ import org.keycloak.broker.oidc.OAuth2IdentityProviderConfig;
 import org.keycloak.models.IdentityProviderModel;
 import ru.playa.keycloak.modules.Utils;
 
+import java.util.Objects;
+
 /**
  * Настройки OAuth-авторизации через <a href="https://yandex.ru">Яндекс</a>.
  *
@@ -41,7 +43,27 @@ public class YandexIdentityProviderConfig
     }
 
     /**
+     * Признак того, что номер телефона обязателен при регистрации.
+     *
+     * @return Требовать ли наличие номера телефона.
+     */
+    public boolean isPhoneRequired() {
+        String phoneRequired = this.getConfig().get("phoneRequired");
+        return Objects.equals(phoneRequired, "true");
+    }
+
+    /**
+     * Название атрибута пользователя для хранения номера телефона.
+     *
+     * @return Название атрибута или null, если хранение не настроено.
+     */
+    public String phoneNumberAttribute() {
+        return this.getConfig().get("phoneNumberAttribute");
+    }
+
+    /**
      * Признак того, что у пользователя обязательно нужно запросить разрешение на доступ к аккаунту.
+     *
      * @return Использовать ли принудительное подтверждение.
      */
     public Boolean isForceConfirm() {
