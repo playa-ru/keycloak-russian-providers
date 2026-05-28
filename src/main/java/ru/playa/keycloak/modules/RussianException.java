@@ -15,7 +15,7 @@ public class RussianException extends RuntimeException {
     /**
      * Код ошибки "Не удалось получить электронную почту".
      */
-    public static final String EMAIL_CAN_NOT_EMPTY_KEY = "vk-email-can-not-empty";
+    public static final String EMAIL_CAN_NOT_EMPTY_KEY = "email-can-not-empty";
 
     /**
      * Код ошибки.

@@ -1,1 +1,2 @@
-﻿identityProviderEmailErrorMessage=For authorization through a social network, you must specify your e-mail in your social network profile.
+﻿identityProviderPhoneRequiredMessage=A phone number is required for Yandex authorization. Please add it to your Yandex profile.
+identityProviderEmailErrorMessage=For authorization through a social network, you must specify your e-mail in your social network profile.
